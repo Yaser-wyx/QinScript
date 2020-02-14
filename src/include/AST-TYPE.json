@@ -1,0 +1,7 @@
+{
+  "CALL_EXPRESSION": "CallExpression",
+  "NUMBER_LITERAL": "NumberLiteral",
+  "PROGRAM": "Program",
+  "STATEMENT": "ExpressionStatement",
+  "ID": "Identifier"
+}

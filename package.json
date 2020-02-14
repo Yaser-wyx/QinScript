@@ -1,0 +1,19 @@
+{
+  "name": "qs",
+  "version": "v0.0.1",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "dev": "npm run build && node ./out/QS.js",
+    "testLexer": "npm run build && node ./out/testLexer.js"
+  },
+  "dependencies": {
+    "@types/node": "^13.7.1",
+    "awesome-typescript-loader": "^3.4.1",
+    "fs": "^0.0.1-security",
+    "source-map-loader": "^0.2.3",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "webpack": "^3.11.0"
+  }
+}
