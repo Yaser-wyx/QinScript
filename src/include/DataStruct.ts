@@ -2,7 +2,7 @@
 import {TOKEN_TYPE} from "../lexer/Token";
 
 export class LexerToken {
-    //用于词法分析处理过程中的Token
+    //用于词法分析处理过程中辅助用的Token
     length: number;//token长度
     value: any;//token值
     tokenType: TOKEN_TYPE;//token类型

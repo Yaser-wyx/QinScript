@@ -1,6 +1,5 @@
 //语法分析器
-import {getNextToken, hasToken, initLexer, lookAheadToken} from "../lexer/Lexer";
-
+import {getNextToken, hasToken, initLexer} from "../lexer/Lexer";
 export async function parser(filePath: string) {
     let initSuccess = await initLexer(filePath);
     if (initSuccess) {
@@ -8,5 +7,4 @@ export async function parser(filePath: string) {
             console.log(getNextToken());
         }
     }
-
 }
