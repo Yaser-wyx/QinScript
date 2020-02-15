@@ -164,11 +164,11 @@ function handleSymbol(start: string): LexerToken {
             break;
         case '>':
             symbolResult.tokenType = TOKEN_TYPE.GREATER;
-            testNext(">=", [TOKEN_TYPE.SHIFT_RIGHT, TOKEN_TYPE.GREATER_EQUAL]);
+            testNext("=", [ TOKEN_TYPE.GREATER_EQUAL]);
             break;
         case '<':
             symbolResult.tokenType = TOKEN_TYPE.LESS;
-            testNext("<=", [TOKEN_TYPE.SHIFT_LEFT, TOKEN_TYPE.LESS_EQUAL]);
+            testNext("=", [ TOKEN_TYPE.LESS_EQUAL]);
             break;
         case ':':
             symbolResult.tokenType = TOKEN_TYPE.COLON;

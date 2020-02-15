@@ -23,7 +23,7 @@ import, export, module, fun, let, if, else, while, return, true, false, null
 3. 合法符号：
 
 ```
-( ) [ ] { } , ; = + - / * | & ! < > >= <= == != @ : || && .
+( ) [ ] { } , ; = + - / * | & ! < > >= <= == != @ : || && . ~
 ```
 
 4. 注释：
@@ -129,8 +129,6 @@ ID;
 函数调用语句;
 ```
 
-
-
 ## QS解释器模块介绍
 
 ​	QS解释器一共有三个模块，词法分析器、语法分析器以及解释器。
@@ -141,7 +139,7 @@ ID;
 
 - Token数据结构：
 
-```javascript
+```typescript
 class Token {
     tokenType: TOKEN_TYPE;//token的类型
     value: string;//token的值
@@ -256,30 +254,7 @@ fun bubble_sort(array , length){//冒泡排序
 ```
 ### 语法分析器
 
-- 终结符：
-    就是各个Token，具体内容在上面，可以自行向上翻看。
-    
-- 非终结符：
-```$xslt
-Program
-ModuleList
-Module
-ModuleDefine
-ModuleSelfDefine
-ModuleImportDefineList
-ModuleImportDefine
-ModuleBody
-ModuleVarDefList
-VarDefNameList
-VarDef
-Value
-ModuleFunDefList
-ParamList
-
-
-```
-
-- 语言文法：
+- 文法规则：
     - 非终结符使用双驼峰命名法。
     - 终结符全大写，并加粗。
     - E代表空字符
@@ -288,14 +263,14 @@ Program -> ModuleList
 
 <strong>模块文法:</strong>
     ModuleList -> Module ModuleList
-               | E
-    Module -> ModuleDefine ModuleBody
+                | E
+    Module -> ModuleDefine ModuleBody 
     ModuleDefine -> ModuleSelfDefine ModuleImportDefineList
     ModuleSelfDefine -> <strong>AT MODULE COLON ID SEMI</strong>
     ModuleImportDefineList -> ModuleImportDefine  ModuleImportDefineList 
                              | E
     ModuleImportDefine -> <strong>AT IMPORT COLON ID SEMI</strong>
-    ModuleBody -> ModuleStmts
+    ModuleBody -> ModuleStmts ModuleExportList
     ModuleStmts -> ModuleVarDefStmts ModuleStmts 
                 | ModuleFunDefStmts ModuleStmts
                 | E
@@ -303,6 +278,9 @@ Program -> ModuleList
                         | E
     ModuleFunDefStmts -> ModuleFunDefStmt ModuleFunDefStmts
                         | E
+    ModuleExportList -> ModuleExport ModuleExportList
+                        | E
+    ModuleExport -> <strong>AT EXPORT COLON ID SEMI</strong>
                         
 <strong>函数文法：</strong>
     ModuleFunDefStmt -> <strong>FUN ID LEFT_PAREN</strong> ParamList <strong>RIGHT_PAREN</strong> FubBody  
@@ -317,26 +295,50 @@ Program -> ModuleList
     VarDefStmt -> <strong>LET ID ASSIGN</strong> Exp <strong>SEMI</strong>
                   | VarDecStmt
     VarDecStmt -> <strong>LET ID SEMI</strong>
-​    IfStmt -> <strong>IF LEFT_PAREN</strong> Exp <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
-​              | <strong>IF LEFT_PAREN</strong> Exp <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
+​    IfStmt -> <strong>IF LEFT_PAREN</strong> Value <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
+​              | <strong>IF LEFT_PAREN</strong> Value <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
                 <strong>ELSE LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
-    WhileStmt -> <strong>WHILE LEFT_PAREN</strong> Exp <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
+    WhileStmt -> <strong>WHILE LEFT_PAREN</strong> Value <strong>RIGHT_PAREN LEFT_BRACE</strong> Stmt <strong>RIGHT_BRACE</strong>
     CallStmt -> <strong>ID LEFT_PAREN</strong> Exps <strong>RIGHT_PAREN</strong>
     Exps -> Exp | Exp <strong>COMMA</strong> Exps 
-    ReturnStmt -> <strong>RETURN </strong> Exp <strong>SEMI</strong>
+    ReturnStmt -> <strong>RETURN </strong> Value <strong>SEMI</strong>
                 | <strong>RETURN SEMI</strong>
     AssignStmt -> <strong>ID ASSIGN</strong> Value <strong>SEMI</strong>
     Exp -> Value | E
-    Value -> <strong>ID | STRING | NUMBER</strong> | CallStmt | Array | Object | CalExp
+    Value -> CallStmt | ArrayDimValue | Array | ObjectValue | Object | CalExp
+    ArrayDimValue -> <strong>ID</strong> ArraySub
+    ArraySub -> <strong>LEFT_BRACKET</strong> Value <strong>RIGHT_BRACKET</strong>
+                | <strong>LEFT_BRACKET</strong> Value <strong>RIGHT_BRACKET</strong> ArraySub
     Array -> <strong>LEFT_BRACKET</strong> Items <strong>RIGHT_BRACKET</strong>
     Items -> Item | Item <strong>COMMA</strong> Items
     Item -> <strong>NUMBER | STRING | ID |</strong> Object | Array | E
+    ObjectValue -> <strong>ID DOT</strong> ObjectValue | <strong>ID</strong>
     Object -> <strong>LEFT_BRACE</strong> KeyValueList <strong>RIGHT_BRACE</strong>
     KeyValueList -> KeyValuePair  KeyValueList
                     | E
     KeyValuePair -> Key <strong>COLON</strong> Value <strong>COMMA</strong>
-    Key -> <strong>STRING | ID</strong>
-    CalExp -> (//TODO 可计算的表达式)
+    Key -> <strong>STRING</strong>
+    CalExp -> LogicTerm <strong>LOGIC_OR</strong> CalExp
+            | LogicTerm <strong>LOGIN_AND</strong> CalExp
+            | LogicTerm
+    LogicTerm -> BitTerm <strong>BIT_AND</strong> LogicTerm
+                | BitTerm <strong>BIT_OR</strong> LogicTerm
+                | BitTerm
+    BitTerm -> RelationTerm RelationalOperator  BitTerm
+                | RelationTerm
+    RelationalOperator -> <strong>LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL</strong>
+    RelationTerm -> AdditiveTerm <strong>ADD</strong> RelationTerm
+                    | AdditiveTerm <strong>SUB</strong> RelationTerm
+                    | AdditiveTerm
+    AdditiveTerm -> Factor <strong>MUL</strong> AdditiveTerm
+                    | Factor <strong>MOD</strong> AdditiveTerm
+                    | Factor <strong>DIV</strong> AdditiveTerm
+                    | Factor
+    Factor -> <strong>BIT_NOT</strong> Term
+            | <strong>NOT</strong> Term
+            | Term
+    Term -> <strong> NUMBER | STRING | ID | TRUE | FALSE | NULL
+            | LEFT_PAREN</strong> Value <strong>RIGHT_PAREN</strong> | Value
     </pre>
 ### 解释器
 ##TODO

@@ -9,12 +9,12 @@ function isNumber(char) {
     let number = /[0-9.]/;
     return number.test(char);
 }
+
 let code = "asdf";
+
 function lookAheadXChar(x) {
-    //返回向前看的x个字符
-    return code.substr(3,x);
+    //返回向前看的x个字符 return code.substr(3, x);
+
 }
 
-let ss = lookAheadXChar(3);
-console.log(ss);
-
+console.log(lookAheadXChar())

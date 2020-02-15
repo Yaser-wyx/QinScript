@@ -35,8 +35,6 @@ export enum TOKEN_TYPE {
     BIT_AND,// &
     BIT_OR,// |
     BIT_NOT,// ~
-    SHIFT_LEFT,// <<
-    SHIFT_RIGHT,// >>
 
     //关系运算符
     EQUAL,//==
@@ -56,6 +54,7 @@ export enum TOKEN_TYPE {
     ELSE,
     WHILE,
     RETURN,
+
     TRUE,
     FALSE,
     NULL,
