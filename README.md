@@ -23,7 +23,7 @@ import, export, module, fun, let, if, else, while, return, true, false, null
 3. 合法符号：
 
 ```
-( ) [ ] { } , ; = + - / * | & ! < > >= <= == != @ : || && . ~
+( ) [ ] { } , ; = + - / * | & ! < > >= <= == != @ : || && . ~ %
 ```
 
 4. 注释：
