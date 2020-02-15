@@ -1,6 +1,6 @@
 //报错处理程序
-import {LexerToken} from "../include/DataStruct";
 import {kill} from "../utils";
+import {LexerToken} from "../lexer/Token";
 
 let errorNum = 0;
 

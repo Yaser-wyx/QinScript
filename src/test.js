@@ -16,5 +16,11 @@ function lookAheadXChar(x) {
     //返回向前看的x个字符 return code.substr(3, x);
 
 }
-
-console.log(lookAheadXChar())
+let index = 0;
+while (true){
+    index++;
+    if (index===1000){
+        console.log(index)
+        process.exit();
+    }
+}

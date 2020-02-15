@@ -79,6 +79,25 @@ export const keywordTable = {//关键字表
     null: TOKEN_TYPE.NULL
 };
 
+export class LexerToken {
+    //用于词法分析处理过程中辅助用的Token
+    length: number;//token长度
+    value: any;//token值
+    tokenType: TOKEN_TYPE;//token类型
+    //报错信息
+    errorMsg?: string;
+    start?: number;
+    lineNo?: number;
+
+    constructor(length: number, value: any, tokenType: TOKEN_TYPE, errorMsg?: string) {
+        this.length = length;
+        this.value = value;
+        this.tokenType = tokenType;
+        this.errorMsg = errorMsg;
+    }
+
+}
+
 export class Token {
     tokenType: TOKEN_TYPE;//token的类型
     value: string;//token的值

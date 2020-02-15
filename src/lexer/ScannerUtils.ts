@@ -40,17 +40,3 @@ export function isKeyword(char: string): boolean {
     return !!keyword;
 }
 
-export async function readSourceCode(path: string): Promise<string> {
-    //读取文件流
-    let codeSource;
-    try {
-        if (await fs.existsSync(path)) {
-            codeSource = await fs.readFileSync(path, "utf8")
-        } else {
-            printFatalError(`文件：${path}不存在！`);
-        }
-    } catch (e) {
-        printFatalError(e);
-    }
-    return codeSource;
-}
