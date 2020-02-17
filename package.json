@@ -4,7 +4,8 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "dev": "npm run build && node ./out/QS.js",
-    "testLexer": "npm run build && node ./out/testLexer.js"
+    "testLexer": "npm run build && node ./out/testLexer.js",
+    "test": "npm run build && node ./out/test.js"
   },
   "dependencies": {
     "@types/node": "^13.7.1",

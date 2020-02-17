@@ -2,7 +2,7 @@ import * as readline from "readline"
 import * as fs from "fs";
 import {printFatalError} from "../error/error";
 import {kill} from "../utils";
-import {parser} from "../parser/Parser";
+import {parser} from "../Parser/Parser";
 
 export async function readSourceCode(path: string): Promise<string> {
     //读取文件流

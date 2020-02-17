@@ -1,3 +1,3 @@
-import {cli} from "./cli/QScli";
+import {cli} from "./Cli/QScli";
 
 cli();

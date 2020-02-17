@@ -6,7 +6,8 @@ module.exports = {
   target: 'node',
   entry: { 
     'QS': './src/main.ts',
-    'testLexer':'./src/test/TestLexer.ts'
+    'testLexer':'./src/test/TestLexer.ts',
+    'test':'./src/test/test.ts'
   },
   output: {
     filename: '[name].js',

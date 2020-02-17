@@ -1,6 +1,6 @@
 //报错处理程序
 import {kill} from "../utils";
-import {LexerToken} from "../lexer/Token";
+import {LexerToken} from "../Lexer/Token";
 
 let errorNum = 0;
 

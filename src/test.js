@@ -12,15 +12,38 @@ function isNumber(char) {
 
 let code = "asdf";
 
-function lookAheadXChar(x) {
+function lookAheadXChar([a, b, c],) {
     //返回向前看的x个字符 return code.substr(3, x);
+    console.log(a + b + c);
+}
 
+let q = {
+    a: lookAheadXChar
 }
-let index = 0;
-while (true){
-    index++;
-    if (index===1000){
-        console.log(index)
-        process.exit();
-    }
+let t = [1, 2, 3, 4, 5, 6]
+let symbolTable = {
+    "module1": {
+        type: "module",
+        moduleSymbolTable:{
+            var1:{
+                type:"variable",
+                value:"",
+                varType:Boolean,
+                bind:""
+            }
+        }
+    },
+    "module2": {
+        type: "module",
+
+    },
+    "module3": {
+        type: "module",
+
+    },
 }
+/*符号表级别：
+    0：模块符号表
+    1：模块内函数与全局变量符号表
+    2：函数内局部变量符号表
+ */

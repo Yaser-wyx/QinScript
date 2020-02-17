@@ -1,6 +1,7 @@
 //语法分析器，生成抽象语法树
-import {getNextToken, hasToken, initLexer} from "../lexer/Lexer";
+import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
 function parserModuleSelfDefine() {
+
 
 }
 function parserModule() {

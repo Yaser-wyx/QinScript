@@ -1,6 +1,6 @@
 //测试词法分析器
-import {getNextToken, hasToken, initLexer} from "../lexer/Lexer";
-import {Token, TOKEN_TYPE} from "../lexer/Token";
+import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
+import {Token, TOKEN_TYPE} from "../Lexer/Token";
 
 
 function printToken(token: Token, index: number) {
