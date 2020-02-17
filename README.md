@@ -137,7 +137,7 @@ ID;
 
 ### 词法分析器
 
-​	词法分析器的源码均在[lexer文件夹](/lexer)下，主程序是Lexer.ts，词法分析器是手工编码的方式进行实现的。
+​	词法分析器的源码均在[lexer文件夹](src/Lexer)下，主程序是Lexer.ts，词法分析器是手工编码的方式进行实现的。
 
 - Token数据结构：
 
@@ -261,7 +261,7 @@ fun bubble_sort(ArrayExp , length){//冒泡排序
     - 终结符全大写，并加粗。
     - E代表空字符
 
-<html>
+<pre>
 Program -> ModuleList
 <strong>模块文法:</strong>
     ModuleList -> Module ModuleList
@@ -341,7 +341,7 @@ Program -> ModuleList
     UnaryOperator -> <strong>BIT_NOT</strong> | <strong>NOT</strong>
     UnaryExp -> Literal<strong> | ID | LEFT_PAREN</strong> ValueExp <strong>RIGHT_PAREN</strong> | ValueExp
     Literal -> <strong> NUMBER | STRING | TRUE | FALSE | NULL| LEFT_PAREN</strong>
-</html>
+</pre>
 
 ### 解释器
 ##TODO
