@@ -254,6 +254,7 @@ fun bubble_sort(ArrayExp , length){//冒泡排序
     return;
 }
 ```
+- 词法分析结果：见文件[test.out.tokens](src/test.out.tokens)中。
 ### 语法分析器
 
 - 文法规则：

@@ -1,0 +1,804 @@
+====================第1个token====================
+token.type: AT
+token.value: @
+token.length: 1
+token.lineNo: 1
+token.start: 1
+
+====================第2个token====================
+token.type: MODULE
+token.value: module
+token.length: 6
+token.lineNo: 1
+token.start: 2
+
+====================第3个token====================
+token.type: COLON
+token.value: :
+token.length: 1
+token.lineNo: 1
+token.start: 8
+
+====================第4个token====================
+token.type: ID
+token.value: qsn
+token.length: 3
+token.lineNo: 1
+token.start: 10
+
+====================第5个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 1
+token.start: 13
+
+====================第6个token====================
+token.type: AT
+token.value: @
+token.length: 1
+token.lineNo: 2
+token.start: 1
+
+====================第7个token====================
+token.type: IMPORT
+token.value: import
+token.length: 6
+token.lineNo: 2
+token.start: 2
+
+====================第8个token====================
+token.type: COLON
+token.value: :
+token.length: 1
+token.lineNo: 2
+token.start: 8
+
+====================第9个token====================
+token.type: ID
+token.value: wyx
+token.length: 3
+token.lineNo: 2
+token.start: 10
+
+====================第10个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 2
+token.start: 13
+
+====================第11个token====================
+token.type: LET
+token.value: let
+token.length: 3
+token.lineNo: 3
+token.start: 1
+
+====================第12个token====================
+token.type: ID
+token.value: a
+token.length: 1
+token.lineNo: 3
+token.start: 5
+
+====================第13个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 3
+token.start: 7
+
+====================第14个token====================
+token.type: STRING
+token.value: 测试字符串
+token.length: 5
+token.lineNo: 3
+token.start: 9
+
+====================第15个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 3
+token.start: 16
+
+====================第16个token====================
+token.type: FUN
+token.value: fun
+token.length: 3
+token.lineNo: 4
+token.start: 1
+
+====================第17个token====================
+token.type: ID
+token.value: bubble_sort
+token.length: 11
+token.lineNo: 4
+token.start: 5
+
+====================第18个token====================
+token.type: LEFT_PAREN
+token.value: (
+token.length: 1
+token.lineNo: 4
+token.start: 16
+
+====================第19个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 4
+token.start: 17
+
+====================第20个token====================
+token.type: COMMA
+token.value: ,
+token.length: 1
+token.lineNo: 4
+token.start: 23
+
+====================第21个token====================
+token.type: ID
+token.value: length
+token.length: 6
+token.lineNo: 4
+token.start: 25
+
+====================第22个token====================
+token.type: RIGHT_PAREN
+token.value: )
+token.length: 1
+token.lineNo: 4
+token.start: 31
+
+====================第23个token====================
+token.type: LEFT_BRACE
+token.value: {
+token.length: 1
+token.lineNo: 4
+token.start: 32
+
+====================第24个token====================
+token.type: LET
+token.value: let
+token.length: 3
+token.lineNo: 5
+token.start: 5
+
+====================第25个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 5
+token.start: 9
+
+====================第26个token====================
+token.type: COMMA
+token.value: ,
+token.length: 1
+token.lineNo: 5
+token.start: 10
+
+====================第27个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 5
+token.start: 12
+
+====================第28个token====================
+token.type: COMMA
+token.value: ,
+token.length: 1
+token.lineNo: 5
+token.start: 13
+
+====================第29个token====================
+token.type: ID
+token.value: tmp
+token.length: 3
+token.lineNo: 5
+token.start: 15
+
+====================第30个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 5
+token.start: 18
+
+====================第31个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 6
+token.start: 5
+
+====================第32个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 6
+token.start: 7
+
+====================第33个token====================
+token.type: ID
+token.value: length
+token.length: 6
+token.lineNo: 6
+token.start: 9
+
+====================第34个token====================
+token.type: SUB
+token.value: -
+token.length: 1
+token.lineNo: 6
+token.start: 16
+
+====================第35个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 6
+token.start: 18
+
+====================第36个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 6
+token.start: 19
+
+====================第37个token====================
+token.type: WHILE
+token.value: while
+token.length: 5
+token.lineNo: 7
+token.start: 5
+
+====================第38个token====================
+token.type: LEFT_PAREN
+token.value: (
+token.length: 1
+token.lineNo: 7
+token.start: 11
+
+====================第39个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 7
+token.start: 12
+
+====================第40个token====================
+token.type: GREATER_EQUAL
+token.value: >=
+token.length: 2
+token.lineNo: 7
+token.start: 14
+
+====================第41个token====================
+token.type: NUMBER
+token.value: 0
+token.length: 1
+token.lineNo: 7
+token.start: 17
+
+====================第42个token====================
+token.type: RIGHT_PAREN
+token.value: )
+token.length: 1
+token.lineNo: 7
+token.start: 18
+
+====================第43个token====================
+token.type: LEFT_BRACE
+token.value: {
+token.length: 1
+token.lineNo: 7
+token.start: 19
+
+====================第44个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 8
+token.start: 9
+
+====================第45个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 8
+token.start: 11
+
+====================第46个token====================
+token.type: NUMBER
+token.value: 0
+token.length: 1
+token.lineNo: 8
+token.start: 13
+
+====================第47个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 8
+token.start: 14
+
+====================第48个token====================
+token.type: WHILE
+token.value: while
+token.length: 5
+token.lineNo: 10
+token.start: 9
+
+====================第49个token====================
+token.type: LEFT_PAREN
+token.value: (
+token.length: 1
+token.lineNo: 10
+token.start: 15
+
+====================第50个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 10
+token.start: 16
+
+====================第51个token====================
+token.type: LESS
+token.value: <
+token.length: 1
+token.lineNo: 10
+token.start: 18
+
+====================第52个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 10
+token.start: 20
+
+====================第53个token====================
+token.type: RIGHT_PAREN
+token.value: )
+token.length: 1
+token.lineNo: 10
+token.start: 21
+
+====================第54个token====================
+token.type: LEFT_BRACE
+token.value: {
+token.length: 1
+token.lineNo: 10
+token.start: 22
+
+====================第55个token====================
+token.type: IF
+token.value: if
+token.length: 2
+token.lineNo: 11
+token.start: 13
+
+====================第56个token====================
+token.type: LEFT_PAREN
+token.value: (
+token.length: 1
+token.lineNo: 11
+token.start: 16
+
+====================第57个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 11
+token.start: 17
+
+====================第58个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 11
+token.start: 22
+
+====================第59个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 11
+token.start: 23
+
+====================第60个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 11
+token.start: 24
+
+====================第61个token====================
+token.type: GREATER
+token.value: >
+token.length: 1
+token.lineNo: 11
+token.start: 26
+
+====================第62个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 11
+token.start: 28
+
+====================第63个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 11
+token.start: 33
+
+====================第64个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 11
+token.start: 34
+
+====================第65个token====================
+token.type: ADD
+token.value: +
+token.length: 1
+token.lineNo: 11
+token.start: 36
+
+====================第66个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 11
+token.start: 38
+
+====================第67个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 11
+token.start: 39
+
+====================第68个token====================
+token.type: RIGHT_PAREN
+token.value: )
+token.length: 1
+token.lineNo: 11
+token.start: 40
+
+====================第69个token====================
+token.type: LEFT_BRACE
+token.value: {
+token.length: 1
+token.lineNo: 11
+token.start: 41
+
+====================第70个token====================
+token.type: ID
+token.value: tmp
+token.length: 3
+token.lineNo: 12
+token.start: 17
+
+====================第71个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 12
+token.start: 21
+
+====================第72个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 12
+token.start: 23
+
+====================第73个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 12
+token.start: 28
+
+====================第74个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 12
+token.start: 29
+
+====================第75个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 12
+token.start: 30
+
+====================第76个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 12
+token.start: 31
+
+====================第77个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 13
+token.start: 17
+
+====================第78个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 13
+token.start: 22
+
+====================第79个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 13
+token.start: 23
+
+====================第80个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 13
+token.start: 24
+
+====================第81个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 13
+token.start: 26
+
+====================第82个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 13
+token.start: 28
+
+====================第83个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 13
+token.start: 33
+
+====================第84个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 13
+token.start: 34
+
+====================第85个token====================
+token.type: ADD
+token.value: +
+token.length: 1
+token.lineNo: 13
+token.start: 36
+
+====================第86个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 13
+token.start: 38
+
+====================第87个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 13
+token.start: 39
+
+====================第88个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 13
+token.start: 40
+
+====================第89个token====================
+token.type: ID
+token.value: array
+token.length: 5
+token.lineNo: 14
+token.start: 17
+
+====================第90个token====================
+token.type: LEFT_BRACKET
+token.value: [
+token.length: 1
+token.lineNo: 14
+token.start: 22
+
+====================第91个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 14
+token.start: 23
+
+====================第92个token====================
+token.type: ADD
+token.value: +
+token.length: 1
+token.lineNo: 14
+token.start: 25
+
+====================第93个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 14
+token.start: 27
+
+====================第94个token====================
+token.type: RIGHT_BRACKET
+token.value: ]
+token.length: 1
+token.lineNo: 14
+token.start: 28
+
+====================第95个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 14
+token.start: 30
+
+====================第96个token====================
+token.type: ID
+token.value: tmp
+token.length: 3
+token.lineNo: 14
+token.start: 32
+
+====================第97个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 14
+token.start: 35
+
+====================第98个token====================
+token.type: RIGHT_BRACE
+token.value: }
+token.length: 1
+token.lineNo: 15
+token.start: 13
+
+====================第99个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 16
+token.start: 13
+
+====================第100个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 16
+token.start: 15
+
+====================第101个token====================
+token.type: ID
+token.value: j
+token.length: 1
+token.lineNo: 16
+token.start: 17
+
+====================第102个token====================
+token.type: ADD
+token.value: +
+token.length: 1
+token.lineNo: 16
+token.start: 19
+
+====================第103个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 16
+token.start: 21
+
+====================第104个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 16
+token.start: 22
+
+====================第105个token====================
+token.type: RIGHT_BRACE
+token.value: }
+token.length: 1
+token.lineNo: 17
+token.start: 9
+
+====================第106个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 18
+token.start: 9
+
+====================第107个token====================
+token.type: ASSIGN
+token.value: =
+token.length: 1
+token.lineNo: 18
+token.start: 11
+
+====================第108个token====================
+token.type: ID
+token.value: i
+token.length: 1
+token.lineNo: 18
+token.start: 13
+
+====================第109个token====================
+token.type: SUB
+token.value: -
+token.length: 1
+token.lineNo: 18
+token.start: 15
+
+====================第110个token====================
+token.type: NUMBER
+token.value: 1
+token.length: 1
+token.lineNo: 18
+token.start: 17
+
+====================第111个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 18
+token.start: 18
+
+====================第112个token====================
+token.type: RIGHT_BRACE
+token.value: }
+token.length: 1
+token.lineNo: 19
+token.start: 5
+
+====================第113个token====================
+token.type: RETURN
+token.value: return
+token.length: 6
+token.lineNo: 20
+token.start: 5
+
+====================第114个token====================
+token.type: SEMI
+token.value: ;
+token.length: 1
+token.lineNo: 20
+token.start: 11
+
+====================第115个token====================
+token.type: RIGHT_BRACE
+token.value: }
+token.length: 1
+token.lineNo: 21
+token.start: 1
