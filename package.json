@@ -5,9 +5,11 @@
     "build": "./node_modules/.bin/webpack",
     "dev": "npm run build && node ./out/QS.js",
     "testLexer": "npm run build && node ./out/testLexer.js",
-    "test": "npm run build && node ./out/test.js"
+    "testParser": "npm run build && node ./out/testParser.js",
+    "testGeneral": "npm run build && node ./out/test.js"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.149",
     "@types/node": "^13.7.1",
     "awesome-typescript-loader": "^3.4.1",
     "fs": "^0.0.1-security",

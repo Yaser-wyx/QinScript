@@ -1,23 +1,8 @@
 import * as readline from "readline"
 import * as fs from "fs";
 import {printFatalError} from "../error/error";
-import {kill} from "../utils";
 import {parser} from "../Parser/Parser";
 
-export async function readSourceCode(path: string): Promise<string> {
-    //读取文件流
-    let codeSource;
-    try {
-        if (await fs.existsSync(path)) {
-            codeSource = await fs.readFileSync(path, "utf8")
-        } else {
-            printFatalError(`文件：${path}不存在！`);
-        }
-    } catch (e) {
-        printFatalError(e);
-    }
-    return codeSource;
-}
 
 export async function readFileList(dir: string): Promise<string[]> {
     //读取文件列表

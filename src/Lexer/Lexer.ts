@@ -2,7 +2,8 @@
 import {EOF, keywordTable, LexerToken, Token, TOKEN_TYPE} from "./Token";
 import {isID, isIDStart, isKeyword, isNumber, isSpace, isSymbol} from "./ScannerUtils";
 import {printLexerError} from "../error/error";
-import {readSourceCode} from "../Cli/QScli";
+import {readFromFile} from "../utils";
+
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符
 let curTokenIndex: number;//token指针，指向下一个要读取的token
@@ -276,7 +277,7 @@ function analyzeCodeToToken() {
 export async function initLexer(file: string): Promise<boolean> {
     //初始化词法分析器
     //读取源码文件
-    code = await readSourceCode(file);
+    code = await readFromFile(file);
     code += EOF;//在文件末尾添加标记，表示结束
     curCodeIndex = 0;
     curTokenIndex = 0;

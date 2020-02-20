@@ -1,12 +1,13 @@
 
-const webpack = require('webpack')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   target: 'node',
   entry: { 
     'QS': './src/main.ts',
     'testLexer':'./src/test/TestLexer.ts',
+    'testParser':'./src/test/TestParser.ts',
     'test':'./src/test/test.ts'
   },
   output: {
@@ -25,4 +26,4 @@ module.exports = {
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
     ]
   }
-}
+};
