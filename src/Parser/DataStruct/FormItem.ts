@@ -1,5 +1,6 @@
 import {Production} from "./Production";
-import {printBuildFormError} from "../../error/error";
+import {addBuildFormError} from "../../error/error";
+import {writeToFile} from "../../Utils/utils";
 
 //TODO 如果有时间可以构造两个接口，一个是formItem，另一个是Form，以便实现面向接口编程
 export class GotoFormItem {
@@ -94,7 +95,7 @@ export class GotoForm {
         } else {
             //发生冲突
             sendFormErrorMsg(this.items[stateIndex][expected], new GotoFormItem(expected, shiftTo, stateIndex));
-        }
+        }1
     }
 
     getGotoItem(stateIndex: number, expected: string) {
@@ -110,14 +111,14 @@ export class GotoForm {
 
     print() {
         //打印Goto表
-        console.log("--------------------GotoForm--------------------");
+        let str = "--------------------GotoForm--------------------";
         this.items.forEach((item, index) => {
-            let str = "状态：" + index + "\n";
+             str = "状态：" + index + "\n";
             for (let itemKey in item) {
-                str += item[itemKey].getInfo();
+                str += item[itemKey].getInfo()+"\n";
             }
-            console.log(str);
         })
+        writeToFile(str,"Goto.table.txt");
     }
 }
 
@@ -135,7 +136,7 @@ function sendFormErrorMsg(oldItem: formItem, newItem: formItem) {
     errorMsg += oldItem.getInfo();
     errorMsg += "    新项目内容：\n";
     errorMsg += newItem.getInfo();
-    printBuildFormError(errorMsg)
+    addBuildFormError(errorMsg)
 }
 
 export class ActionForm {
@@ -173,13 +174,13 @@ export class ActionForm {
 
     print() {
         //打印Action表
-        console.log("--------------------ActionForm--------------------");
+        let str = "--------------------ActionForm--------------------\n";
         this.items.forEach((item, index) => {
-            let str = "状态：" + index + "\n";
+            str += "状态：" + index + "\n";
             for (let itemKey in item) {
-                str += item[itemKey].getInfo();
+                str += item[itemKey].getInfo() + "\n";
             }
-            console.log(str);
-        })
+        });
+        writeToFile(str, "Action.table.txt");
     }
 }

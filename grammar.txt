@@ -1,3 +1,55 @@
-S' -> S
-S -> B B
-B -> a B | b
+Program -> ModuleList
+ModuleList -> ModuleList Module
+Module -> ModuleDefine ModuleBody
+ModuleDefine -> ModuleSelfDefine ModuleImportDefineList
+ModuleSelfDefine -> AT MODULE COLON ID SEMI
+ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine
+ModuleImportDefine -> AT IMPORT COLON ID SEMI
+ModuleBody -> ModuleStmts
+ModuleStmts -> ModuleVarDefStmts ModuleStmts | ModuleFunDefStmts ModuleStmts | ModuleExportList ModuleStmts
+ModuleVarDefStmts -> ModuleVarDefStmts VarDefStmt
+ModuleFunDefStmts -> ModuleFunDefStmts FunDefStmt
+ModuleExportList -> ModuleExportList ModuleExport
+ModuleExport -> AT EXPORT COLON ID SEMI
+FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
+ParamList -> ID | ID COMMA ParamList
+BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
+Stmts -> Stmts Stmt
+Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
+VarDefStmt -> LET ID ASSIGN Exp SEMI | VarDecStmt
+VarDecStmt -> LET ID SEMI
+IfStmt -> IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt | IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt ELSE  Stmt
+WhileStmt -> WHILE LEFT_PAREN ValueExp RIGHT_PAREN  Stmt
+CallExp -> Exp  LEFT_PAREN Exps RIGHT_PAREN
+Exps -> Exp | Exp COMMA Exps
+ReturnStmt -> RETURN  ValueExp SEMI | RETURN SEMI
+AssignStmt -> ID ASSIGN ValueExp SEMI
+Exp -> ValueExp | E
+ValueExp -> CallExp | ArrayMemberExp | ArrayExp | ObjectExp | CalExp
+ArrayMemberExp -> Exp ArraySub
+ArraySub -> LEFT_BRACKET ValueExp RIGHT_BRACKET | LEFT_BRACKET ValueExp RIGHT_BRACKET ArraySub
+ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
+ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems
+ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp | E
+
+ObjectMemberExp ->  Exp  DOT ObjectMemberExp | Exp
+ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
+Properties -> Properties Property
+Property -> Key COLON ValueExp COMMA
+Key -> STRING | ID
+
+CalExp -> LogicExp LogicOperator LogicExp | LogicExp
+LogicOperator -> LOGIC_OR | LOGIN_AND
+LogicExp -> BitExp BitOperator LogicExp | BitExp
+BitOperator -> BIT_AND | BIT_OR
+BitExp -> RelationExp RelationalOperator  BitExp | RelationExp
+RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
+RelationExp -> AdditiveExp AdditiveOperator RelationExp | AdditiveExp
+AdditiveOperator -> ADD | SUB
+AdditiveExp -> FactorExp FactorOperator AdditiveExp | FactorExp
+FactorOperator -> MOD | DIV | MUL
+FactorExp -> UnaryOperator UnaryExp | UnaryExp
+UnaryOperator -> BIT_NOT | NOT
+UnaryExp -> Literal | ID | LEFT_PAREN ValueExp RIGHT_PAREN
+Literal ->  NUMBER | STRING | TRUE | FALSE | NULL| LEFT_PAREN
+

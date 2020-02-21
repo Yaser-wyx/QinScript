@@ -2,7 +2,7 @@
 import {hashCode} from "../../Utils/utils";
 
 export const EOF = "#";
-export const E = "$";//表示空字符
+export const E = "E";//表示空字符
 
 export class Production {
     key: string;//对应产生式的左边
@@ -105,7 +105,7 @@ export class Production {
                 let value = this.key + "->";
                 //如果值不存在，则遍历链表，获取值
                 this._nodeList.forEach((node, index) => {
-                    value += node;
+                    value += " "+node;
                 });
                 this.valueWithOutDot = value;
             }

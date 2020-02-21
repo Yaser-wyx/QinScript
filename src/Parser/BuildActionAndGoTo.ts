@@ -2,6 +2,7 @@
 import {ActionForm, ActionStatus, GotoForm} from "./DataStruct/FormItem";
 import {E, EOF, Production} from "./DataStruct/Production";
 import {Closure} from "./DataStruct/Closure";
+import {printBuildFormError} from "../error/error";
 
 let _ = require("lodash");
 
@@ -14,25 +15,28 @@ let symbols = new Set<string>([EOF]);//所有符号
 let LR1: object;
 let LRIndex = 0;//规范族下一个索引，也可以作为个数使用
 let productionMap = {};//key为产生式值的hashcode，value为一个解析后的产生式，用于填表中确定规约的产生式
+const productionSplit = "\n";
+const arrowSymbol = '->';
 
 function generateProduction(grammar: string) {
     //从指定文法中获取产生式，并将其结构化
-    let items = grammar.split("\n");
-    const arrow = '->';
+    let items = grammar.split(productionSplit);
     items.forEach(item => {
+        item = item.replace(/\r\n/g,"");
         if (item.length === 0) return;
         //遍历items
-        let arrowIndex = item.indexOf(arrow);
+        let arrowIndex = item.indexOf(arrowSymbol);
         let key = item.substr(0, arrowIndex).trim();
         symbols.add(key);
-        let productionRightList = item.substr(arrowIndex + arrow.length).split("|");//获取该产生式的所有子产生式
+        let productionRightList = item.substr(arrowIndex + arrowSymbol.length).split("|");//获取该产生式的所有子产生式
+
         productions[key] = new Array<Production>();//构建一个子产生式列表
         productionRightList.forEach(productionRight => {
             //遍历子产生式
             let production = new Production(key);//新建一个子产生式
+            productionRight = productionRight.trim();
             let productionRightItems = productionRight.split(" ");//使用空格分隔
             productionRightItems.forEach(productionRightItem => {
-                productionRightItem = productionRightItem.replace(/\r/, "");
                 //添加该产生式的一个节点
                 if (productionRightItem) {
                     symbols.add(productionRightItem);
@@ -155,6 +159,9 @@ function fillForm(): object | null {
                 })
             }
         }
+        actionForm.print();
+        gotoForm.print();
+        printBuildFormError();
         return {actionForm: actionForm, gotoForm: gotoForm};
     }
     return null
@@ -165,12 +172,12 @@ export function analyzeGrammar(grammar: string): object | null {
     generateProduction(grammar);
     getVAndT();//获取终结符与非终结符
     console.log("打印语法产生式");
-    printProductions(productions);//打印解析后的产生式
+    // printProductions(productions);//打印解析后的产生式
     first();//计算非终结符的first集合
-    console.log(firstSet);
+    // console.log(firstSet);
     console.log("获取LR1规范族");
     getLR1();
-    console.log(LR1);
+    // console.log(LR1);
     return fillForm();
 }
 

@@ -14,10 +14,10 @@ export async function buildLRAnalyzeForm(grammarFile: string): Promise<object | 
 
 export async function startAnalyze(grammarFile: string) {
     let forms = await buildLRAnalyzeForm(grammarFile);//构建分析表
-    if (forms) {
+    /*if (forms) {
         // @ts-ignore
         RunLr1(forms.actionForm, forms.gotoForm);
-    }
+    }*/
 }
 
 export async function parser(filePath: string, grammarFile: string): Promise<boolean> {

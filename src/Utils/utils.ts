@@ -19,6 +19,10 @@ export async function readFromFile(path: string): Promise<string> {
     return codeSource;
 }
 
+export async function writeToFile(data:string,path:string) {
+    fs.writeFileSync(path,data, 'utf8')
+}
+
 export function kill() {
     //直接杀死进程
     process.exit();
