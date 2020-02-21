@@ -1,17 +1,22 @@
 import {Production} from "./Production";
+import {printBuildFormError} from "../../error/error";
 
 //TODO 如果有时间可以构造两个接口，一个是formItem，另一个是Form，以便实现面向接口编程
 export class GotoFormItem {
     //LR分析表中Goto子表的项目
     expected: string;
-    state: number = 0;
+    stateIndex: number = 0;//状态索引
     shiftTo: number;
     errMsg: string = "";
 
-    constructor(expected: string, shiftTo: number, state: number) {
+    constructor(expected: string, shiftTo: number, stateIndex: number) {
         this.expected = expected;
-        this.state = state;
+        this.stateIndex = stateIndex;
         this.shiftTo = shiftTo;
+    }
+
+    getInfo() {
+        return "     expected: " + this.expected + "    value: " + this.shiftTo + "\n";
     }
 }
 
@@ -30,15 +35,15 @@ export class ActionFormItem {
     expected: string;//期望的字符
     reduceBy?: Production;//使用哪个产生式进行reduce
     errMsg: string = "";
-    statueNum?: number = 0;
+    stateIndex?: number = 0;
 
     get action(): ActionStatus {
         return this._action;
     }
 
-    constructor(expected: string, action: ActionStatus, statueNum?: number, shiftToOrReduceBy?: number | Production) {
+    constructor(expected: string, action: ActionStatus, stateIndex?: number, shiftToOrReduceBy?: number | Production) {
         this.expected = expected;
-        this.statueNum = statueNum;
+        this.stateIndex = stateIndex;
         this.setOperationByAction(action, shiftToOrReduceBy);
     }
 
@@ -54,6 +59,19 @@ export class ActionFormItem {
                     break;
             }
         }
+    }
+
+    getInfo() {
+        let info = "";
+        info += "     expected: " + this.expected;
+        if (this.action === ActionStatus.REDUCE) {
+            info += "    reduceBy: " + (<Production>this.reduceBy).getValue(false) + "\n"
+        } else if (this.action === ActionStatus.ACC) {
+            info += "    ACC"
+        } else {
+            info += "    shiftTo: " + this.shiftTo + "\n";
+        }
+        return info;
     }
 }
 
@@ -71,7 +89,12 @@ export class GotoForm {
         if (!this.items[stateIndex]) {
             this.items[stateIndex] = {};
         }
-        this.items[stateIndex][expected] = new GotoFormItem(expected, shiftTo, stateIndex)
+        if (!this.items[stateIndex][expected]) {
+            this.items[stateIndex][expected] = new GotoFormItem(expected, shiftTo, stateIndex)
+        } else {
+            //发生冲突
+            sendFormErrorMsg(this.items[stateIndex][expected], new GotoFormItem(expected, shiftTo, stateIndex));
+        }
     }
 
     getGotoItem(stateIndex: number, expected: string) {
@@ -91,12 +114,28 @@ export class GotoForm {
         this.items.forEach((item, index) => {
             let str = "状态：" + index + "\n";
             for (let itemKey in item) {
-                let gotoFormItem: GotoFormItem = item[itemKey];
-                str += "     expected: " + gotoFormItem.expected + "    value: " + gotoFormItem.shiftTo + "\n";
+                str += item[itemKey].getInfo();
             }
             console.log(str);
         })
     }
+}
+
+type formItem = ActionFormItem | GotoFormItem;
+
+function sendFormErrorMsg(oldItem: formItem, newItem: formItem) {
+    let errorMsg = "";
+    if (oldItem instanceof ActionFormItem) {
+        errorMsg = "    Action表发生移进规约冲突；\n";
+    } else {
+        errorMsg = "    Goto表发生移进规约冲突；\n";
+    }
+    errorMsg += "    在状态：" + oldItem.stateIndex + "    展望字符：" + oldItem.expected + " 上已有项目\n";
+    errorMsg += "    旧项目内容：\n";
+    errorMsg += oldItem.getInfo();
+    errorMsg += "    新项目内容：\n";
+    errorMsg += newItem.getInfo();
+    printBuildFormError(errorMsg)
 }
 
 export class ActionForm {
@@ -112,7 +151,12 @@ export class ActionForm {
         if (!this.items[stateIndex]) {
             this.items[stateIndex] = {};
         }
-        this.items[stateIndex][expected] = new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy)
+        if (!this.items[stateIndex][expected]) {
+            this.items[stateIndex][expected] = new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy)
+        } else {
+            //发生冲突
+            sendFormErrorMsg(this.items[stateIndex][expected], new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy));
+        }
     }
 
     getActionItem(stateIndex: number, expected: string) {
@@ -128,20 +172,12 @@ export class ActionForm {
     }
 
     print() {
-        //打印Goto表
+        //打印Action表
         console.log("--------------------ActionForm--------------------");
         this.items.forEach((item, index) => {
-            let str = "状态：" + index +"\n";
+            let str = "状态：" + index + "\n";
             for (let itemKey in item) {
-                let actionFormItem: ActionFormItem = item[itemKey];
-                str += "     expected: " + actionFormItem.expected;
-                if (actionFormItem.action === ActionStatus.REDUCE) {
-                    str += "    reduceBy: " + (<Production>actionFormItem.reduceBy).getValue(false) + "\n"
-                } else if (actionFormItem.action === ActionStatus.ACC) {
-                    str += "    ACC"
-                } else {
-                    str += "    shiftTo: " + actionFormItem.shiftTo + "\n";
-                }
+                str += item[itemKey].getInfo();
             }
             console.log(str);
         })

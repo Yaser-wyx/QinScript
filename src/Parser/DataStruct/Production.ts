@@ -1,5 +1,5 @@
 //用于构建分析表的数据结构
-import {hashCode} from "../utils";
+import {hashCode} from "../../Utils/utils";
 
 export const EOF = "#";
 export const E = "$";//表示空字符
@@ -38,6 +38,10 @@ export class Production {
         this._search = search;
         this.valueWithDot = "";
         this.getValue();
+    }
+
+    getProductionLength(): number {
+        return this._nodeList.length;
     }
 
     pushItem(item: string) {

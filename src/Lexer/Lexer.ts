@@ -1,8 +1,8 @@
 //词法分析器
-import {EOF, keywordTable, LexerToken, Token, TOKEN_TYPE} from "./Token";
-import {isID, isIDStart, isKeyword, isNumber, isSpace, isSymbol} from "./ScannerUtils";
+import {EOF, keywordTable, LexerToken, Token, TOKEN_TYPE} from "./Datastruct/Token";
+import {isID, isIDStart, isKeyword, isNumber, isSpace, isSymbol} from "../Utils/ScannerUtils";
 import {printLexerError} from "../error/error";
-import {readFromFile} from "../utils";
+import {readFromFile} from "../Utils/utils";
 
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符

@@ -1,5 +1,5 @@
 import {Production} from "./Production";
-import {hashCode} from "../utils";
+import {hashCode} from "../../Utils/utils";
 
 export class Closure {
     name: string = "";

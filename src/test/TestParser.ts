@@ -1,4 +1,7 @@
 //语法分析测试程序
-import {buildLRAnalyzeForm, parser} from "../Parser/Parser";
+import {buildLRAnalyzeForm, parser, startAnalyze} from "../Parser/Parser";
+import {GRAMMAR_FILE} from "../Cli/config";
+import {tree} from "../Utils/utils";
+import {SampleNode} from "../Parser/LR1Controller";
 
-buildLRAnalyzeForm("grammar.txt");//测试分析表生成
+startAnalyze(GRAMMAR_FILE);//测试分析表生成

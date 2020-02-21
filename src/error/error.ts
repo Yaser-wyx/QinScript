@@ -1,6 +1,6 @@
 //报错处理程序
-import {kill} from "../utils";
-import {LexerToken} from "../Lexer/Token";
+import {kill} from "../Utils/utils";
+import {LexerToken} from "../Lexer/Datastruct/Token";
 
 let errorNum = 0;
 
@@ -36,3 +36,9 @@ export function printLexerError(lexerTokens: LexerToken[], file) {
     errorNum += lexerTokens.length;
 }
 
+export function printBuildFormError(msg: string) {
+    let errorMsg = "====================LR(1)分析表构造错误====================\n";
+    errorMsg += msg;
+    errorMsg += "====================================================\n";
+    printErr(errorMsg);
+}

@@ -1,7 +1,7 @@
-//用于构建LR分析的Action与Goto表
-import {ActionForm, ActionStatus, GotoForm} from "./FormItem";
-import {E, EOF, Production} from "./Production";
-import {Closure} from "./Closure";
+//用于构建LR分析的Action与Goto子表
+import {ActionForm, ActionStatus, GotoForm} from "./DataStruct/FormItem";
+import {E, EOF, Production} from "./DataStruct/Production";
+import {Closure} from "./DataStruct/Closure";
 
 let _ = require("lodash");
 
@@ -160,7 +160,7 @@ function fillForm(): object | null {
     return null
 }
 
-export function analyzeGrammar(grammar: string) {
+export function analyzeGrammar(grammar: string): object | null {
     //开始解析语法
     generateProduction(grammar);
     getVAndT();//获取终结符与非终结符
@@ -171,11 +171,7 @@ export function analyzeGrammar(grammar: string) {
     console.log("获取LR1规范族");
     getLR1();
     console.log(LR1);
-    let forms = fillForm();
-    if (forms){
-        forms["actionForm"].print();
-        forms["gotoForm"].print();
-    }
+    return fillForm();
 }
 
 function printProductions(productions: object) {

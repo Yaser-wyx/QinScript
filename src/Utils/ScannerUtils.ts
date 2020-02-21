@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import {printFatalError} from "../error/error";
-import {keywordTable} from "./Token";
+import {keywordTable} from "../Lexer/Datastruct/Token";
 
 /**词法分析器工具包
  * 使用正则来判断读入的字符类别
