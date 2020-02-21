@@ -10,28 +10,32 @@ export class Production {
     private valueWithDot: string = "";//产生式右部含有点的值
     private valueWithOutDot: string = "";//产生式右部不含有点与展望符的值
 
-    private search: string = EOF;//展望信息，默认为EOF
+    private _search: string = EOF;//展望信息，默认为EOF
     private _nodeList: Array<string> = new Array<string>();//该产生式的node数组
     private hashWithDot: string = "";//有点的hash值
     private hashWithoutDot: string = "";//没有点的hash值
     flag: boolean = false;
 
+    get search(): string {
+        return this._search;
+    }
+
     getHashCode(needDot: boolean = true): string {
         if (needDot) {
             if (this.hashWithDot.length === 0) {
-                this.hashWithDot = hashCode(this.getValue(needDot)).toString();
+                this.hashWithDot = hashCode(this.getValue(true)).toString();
             }
             return this.hashWithDot
         } else {
             if (this.hashWithoutDot.length === 0) {
-                this.hashWithoutDot = hashCode(this.getValue(needDot)).toString();
+                this.hashWithoutDot = hashCode(this.getValue(false)).toString();
             }
             return this.hashWithoutDot
         }
     }
 
     setSearch(search: string) {
-        this.search = search;
+        this._search = search;
         this.valueWithDot = "";
         this.getValue();
     }
@@ -69,7 +73,7 @@ export class Production {
         for (let index = this.nowDotAfter + 1; index < this.nodeList.length; index++) {
             nodes.push(this.nodeList[index]);
         }
-        nodes.push(this.search);
+        nodes.push(this._search);
         return nodes;
     }
 
@@ -88,7 +92,7 @@ export class Production {
                 if (this.nowDotAfter === this._nodeList.length) {
                     value += ".";
                 }
-                value += ", " + this.search + "]";
+                value += ", " + this._search + "]";
                 this.valueWithDot = value;
             }
             return this.valueWithDot

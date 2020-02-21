@@ -3,7 +3,7 @@ import {hashCode} from "../utils";
 
 export class Closure {
     name: string = "";
-    status:number=0;
+    stateNum:number=0;//当前闭包的状态号
     innerSet: Array<Production>;//该闭包包含的产生式
     private _recognizeX: object = {};//一个映射表，表示识别了X后，到达的闭包
     flag: boolean = false;//标记，用于标记该closure是否被处理过

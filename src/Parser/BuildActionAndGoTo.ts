@@ -1,17 +1,19 @@
 //用于构建LR分析的Action与Goto表
-let _ = require("lodash");
-import {EOF, Production, E} from "./Production";
+import {ActionForm, ActionStatus, GotoForm} from "./FormItem";
+import {E, EOF, Production} from "./Production";
 import {Closure} from "./Closure";
 
-let startProduction: Array<Production> | null;
+let _ = require("lodash");
+
+let startProduction: Production;
 let productions = {};//key为产生式左部符号，value为一个数组，表示产生式右部符号(因为可能有多个右部产生式)
 let firstSet = {};//key为非终结符，value为该非终结符的first集合，是set数据结构
 let vSet = new Set<string>();//非终结符
 let tSet = new Set<string>();//终结符
 let symbols = new Set<string>([EOF]);//所有符号
 let LR1: object;
-let Action = {};
-let Goto = {};
+let LRIndex = 0;//规范族下一个索引，也可以作为个数使用
+let productionMap = {};//key为产生式值的hashcode，value为一个解析后的产生式，用于填表中确定规约的产生式
 
 function generateProduction(grammar: string) {
     //从指定文法中获取产生式，并将其结构化
@@ -37,11 +39,14 @@ function generateProduction(grammar: string) {
                     production.pushItem(productionRightItem);
                 }
             });
+            let productionHash = production.getHashCode(false);//获取产生式的hash值
+            productionMap[productionHash] = _.cloneDeep(production);//防止数据被污染，clone一份
+            if (!startProduction) {
+                startProduction = production;//初始产生式保证了只有一个
+            }
             productions[key].push(production);
         });
-        if (!startProduction) {
-            startProduction = productions[key]
-        }
+
     });
 }
 
@@ -59,15 +64,14 @@ function getVAndT() {
 function getLR1() {
 //获取LR1规范族
     if (startProduction) {
-        let startClosure = new Closure(startProduction);//计算起始节点闭包
+        let startClosure = new Closure([startProduction]);//计算起始节点闭包
         let closureSets = {};
         let closureHashMap = {};
-        let index = 0;
         let flag = false;
         let pushClosure = (newClosure: Closure) => {
-            let name = 'I' + index++;
+            let name = 'I' + LRIndex;
             newClosure.name = name;
-            newClosure.status = index;
+            newClosure.stateNum = LRIndex++;
             closureSets[name] = newClosure;
             flag = true;
             closureHashMap[newClosure.getHashCode()] = closureSets[name];
@@ -105,31 +109,55 @@ function getLR1() {
     }
 }
 
-function fillForm() {
+function fillForm(): object | null {
     //填Action与Goto表
     if (LR1) {
-        //遍历LR1规范族表
+        let actionForm = new ActionForm(LRIndex);//创建action表
+        let gotoForm = new GotoForm(LRIndex);//创建goto表
         for (let lr1Key in LR1) {
-            let closure: Closure = LR1[lr1Key];
+            //遍历LR1规范族表
+            let closure: Closure = LR1[lr1Key];//获取一个规范族
             let recognizeXKeys = Object.keys(closure.recognizeX);//获取所有可以识别的符号
             if (recognizeXKeys.length > 0) {
-                //如果不为空
-                recognizeXKeys.forEach(key => {
+                //如果不为空，代表是一个移进项目
+                recognizeXKeys.forEach(recognize => {
                     //遍历每一个符号
-                    let nextClosure = closure.getClosureAfterRecognizeX(key);
+                    let nextClosure = closure.getClosureAfterRecognizeX(recognize);//获取一个移进后的闭包项目
                     if (nextClosure) {
                         //如果存在识别X后到达的closure
-                        if (tSet.has(key)) {
-                            //如果是终结符
-
+                        if (tSet.has(recognize)) {
+                            //如果是终结符，则填action表
+                            actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT, recognize, nextClosure.stateNum);
+                        } else if (vSet.has(recognize)) {
+                            //如果非终结符，则填goto表
+                            gotoForm.setGotoItem(closure.stateNum, recognize, nextClosure.stateNum);
                         }
                     }
                 })
             } else {
-
+                //如果该规范族可识别的字符为空，代表是一个句柄，判断search来进行规约，如果search是EOF则进入接受状态acc
+                let productions: Array<Production> = closure.innerSet;//获取该闭包的产生式
+                let reduce = (stateNum: number, expected: string, production: Production) => {
+                    let productionHash = production.getHashCode(false);
+                    actionForm.setActionItem(stateNum, ActionStatus.REDUCE, expected, productionMap[productionHash]);
+                };
+                let isAcc = (production: Production) => {
+                    return production.search === EOF && production.getHashCode(false) === startProduction.getHashCode(false);
+                };
+                productions.forEach((production: Production) => {
+                    if (isAcc(production)) {
+                        //如果是ACC
+                        actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF);
+                    } else {
+                        //否则进行规约
+                        reduce(closure.stateNum, production.search, production);
+                    }
+                })
             }
         }
+        return {actionForm: actionForm, gotoForm: gotoForm};
     }
+    return null
 }
 
 export function analyzeGrammar(grammar: string) {
@@ -142,6 +170,12 @@ export function analyzeGrammar(grammar: string) {
     console.log(firstSet);
     console.log("获取LR1规范族");
     getLR1();
+    console.log(LR1);
+    let forms = fillForm();
+    if (forms){
+        forms["actionForm"].print();
+        forms["gotoForm"].print();
+    }
 }
 
 function printProductions(productions: object) {
