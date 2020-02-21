@@ -256,7 +256,7 @@ fun bubble_sort(ArrayExp , length){//冒泡排序
 ```
 - 词法分析结果：见文件[test.out.tokens](src/test.out.tokens)中。
 ### 语法分析器
-
+ 语法分析使用LR(1)分析器进行分析
 - 文法规则：
     - 非终结符使用双驼峰命名法。
     - 终结符全大写，并加粗。
