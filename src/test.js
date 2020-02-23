@@ -511,4 +511,8 @@ function analysis_alo(w_str) {
 
 
 // getValue('V={S,L,R}\nT={*,i,=}\nS->L=R\nS->R\nL->*R\nL->i\nR->L\n')
+(1 * 2 + 3).toString();
+false.toString();
+
+console.log((1 * 2 + 3).toString())
 

@@ -265,83 +265,59 @@ fun bubble_sort(ArrayExp , length){//冒泡排序
 <pre>
 Program -> ModuleList
 <strong>模块文法:</strong>
-    ModuleList -> Module ModuleList
-                | E
-    Module -> ModuleDefine ModuleBody 
+    Program -> ModuleList | E
+    ModuleList -> ModuleList Module | Module
+    Module -> ModuleDefine ModuleBody
     ModuleDefine -> ModuleSelfDefine ModuleImportDefineList
-    ModuleSelfDefine -> <strong>AT MODULE COLON ID SEMI</strong>
-    ModuleImportDefineList -> ModuleImportDefine  ModuleImportDefineList 
-                             | E
-    ModuleImportDefine -> <strong>AT IMPORT COLON ID SEMI</strong>
-    ModuleBody -> ModuleStmts 
-    ModuleStmts -> ModuleVarDefStmts ModuleStmts 
-                | ModuleFunDefStmts ModuleStmts
-                | ModuleExportList ModuleStmts
-    ModuleVarDefStmts -> VarDefStmt ModuleVarDefStmts
-                        | E
-    ModuleFunDefStmts -> FunDefStmt ModuleFunDefStmts
-                        | E
-    ModuleExportList -> ModuleExport ModuleExportList
-                        | E
-    ModuleExport -> <strong>AT EXPORT COLON ID SEMI</strong>
-
-<strong>函数文法：</strong>
-    FunDefStmt -> <strong>FUN ID LEFT_PAREN</strong> ParamList <strong>RIGHT_PAREN</strong> BlockStmt  
-    ParamList -> <strong>ID | ID COMMA </strong>ParamList
-
-<strong>语句文法：</strong>
-    BlockStmt -> <strong>LEFT_BRACE</strong> Stmts <strong>RIGHT_BRACE</strong>
-    Stmts -> Stmt Stmts
-              | E       
-    Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt
-            | AssignStmt | Exp <strong>SEMI</strong>
-    VarDefStmt -> <strong>LET ID ASSIGN</strong> Exp <strong>SEMI</strong>
-                  | VarDecStmt
-    VarDecStmt -> <strong>LET ID SEMI</strong>
-    IfStmt -> <strong>IF LEFT_PAREN</strong> ValueExp <strong>RIGHT_PAREN</strong> Stmt
-              | <strong>IF LEFT_PAREN</strong> ValueExp <strong>RIGHT_PAREN</strong> Stmt
-                <strong>ELSE </strong> Stmt 
-    WhileStmt -> <strong>WHILE LEFT_PAREN</strong> ValueExp <strong>RIGHT_PAREN </strong> Stmt 
-    CallExp -> Exp  <strong>LEFT_PAREN</strong> Exps <strong>RIGHT_PAREN</strong>
-    Exps -> Exp | Exp <strong>COMMA</strong> Exps 
-    ReturnStmt -> <strong>RETURN </strong> ValueExp <strong>SEMI</strong>
-                | <strong>RETURN SEMI</strong>
-    AssignStmt -> <strong>ID ASSIGN</strong> ValueExp <strong>SEMI</strong>
+    ModuleSelfDefine -> AT MODULE COLON ID SEMI
+    ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine
+    ModuleImportDefine -> AT IMPORT COLON ID SEMI
+    ModuleBody -> ModuleStmts
+    ModuleStmts -> ModuleStmts ModuleVarDefStmts | ModuleStmts ModuleFunDefStmts  | ModuleStmts ModuleExportList  | E
+    ModuleVarDefStmts -> ModuleVarDefStmts VarDefStmt | VarDefStmt
+    ModuleFunDefStmts -> ModuleFunDefStmts FunDefStmt | FunDefStmt
+    ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
+    ModuleExport -> AT EXPORT COLON ID SEMI
+    FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
+    ParamList -> ID | ID COMMA ParamList
+    BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
+    Stmts -> Stmts Stmt | Stmt
+    Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
+    VarDefStmt -> LET ID ASSIGN ValueExp SEMI | VarDecStmt
+    VarDecStmt -> LET ID SEMI
+    IfStmt -> IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt | IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt ELSE Stmt
+    WhileStmt -> WHILE LEFT_PAREN ValueExp RIGHT_PAREN  Stmt
+    CallExp -> Exp LEFT_PAREN Exps RIGHT_PAREN
+    Exps -> Exp | Exps COMMA Exp
+    ReturnStmt -> RETURN Exp SEMI
+    AssignStmt -> ID ASSIGN ValueExp SEMI
     Exp -> ValueExp | E
     ValueExp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
-    MemberExp -> ArrayMemberExp | ObjectMemberExp
-    ArrayMemberExp -> Exp ArraySub
-    ArraySub -> <strong>LEFT_BRACKET</strong> ValueExp <strong>RIGHT_BRACKET</strong>
-                | <strong>LEFT_BRACKET</strong> ValueExp <strong>RIGHT_BRACKET</strong> ArraySub
-    ArrayExp -> <strong>LEFT_BRACKET</strong> ArrayItems <strong>RIGHT_BRACKET</strong>
-    ArrayItems -> ArrayItem | ArrayItem <strong>COMMA</strong> ArrayItems
-    ArrayItem -> <strong>NUMBER | STRING | ID |</strong> ObjectExp | ArrayExp | E
-    ObjectMemberExp ->  Exp <strong> DOT</strong> ObjectMemberExp | Exp 
-    ObjectExp -> <strong>LEFT_BRACE</strong> Properties <strong>RIGHT_BRACE</strong>
-    Properties -> Property  Properties
-                    | E
-    Property -> Key <strong>COLON</strong> ValueExp <strong>COMMA</strong>
-    Key -> <strong>STRING | ID</strong>
-    CalExp -> LogicExp LogicOperator CalExp
-            | LogicExp
-    LogicOperator -> <strong>LOGIC_OR | LOGIN_AND</strong>
-    LogicExp -> BitExp BitOperator LogicExp
-                | BitExp
-    BitOperator -> <strong>BIT_AND | BIT_OR</strong>
-    BitExp -> RelationExp RelationalOperator  BitExp
-                | RelationExp
-    RelationalOperator -> <strong>LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL</strong>
-    RelationExp -> AdditiveExp AdditiveOperator RelationExp
-                    | AdditiveExp
-    AdditiveOperator -> <strong>ADD | SUB</strong>
-    AdditiveExp -> FactorExp FactorOperator AdditiveExp
-                    | FactorExp
-    FactorOperator -> <strong>MOD | DIV | MUL</strong>
-    FactorExp -> UnaryOperator UnaryExp
-            | UnaryExp
-    UnaryOperator -> <strong>BIT_NOT</strong> | <strong>NOT</strong>
-    UnaryExp -> Literal<strong> | ID | LEFT_PAREN</strong> ValueExp <strong>RIGHT_PAREN</strong> | ValueExp
-    Literal -> <strong> NUMBER | STRING | TRUE | FALSE | NULL| LEFT_PAREN</strong>
+    MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID
+    ArraySub -> LEFT_BRACKET ValueExp RIGHT_BRACKET | LEFT_BRACKET ValueExp RIGHT_BRACKET ArraySub
+    ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
+    ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems
+    ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp | E
+    
+    ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
+    Properties -> Properties Property | Property
+    Property -> Key COLON ValueExp COMMA
+    Key -> STRING | ID
+    
+    CalExp -> CalExp LogicOperator LogicExp | LogicExp
+    LogicOperator -> LOGIC_OR | LOGIN_AND
+    LogicExp -> LogicExp BitOperator BitExp | BitExp
+    BitOperator -> BIT_AND | BIT_OR
+    BitExp -> BitExp RelationalOperator  RelationExp | RelationExp
+    RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
+    RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
+    AdditiveOperator -> ADD | SUB
+    AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
+    FactorOperator -> MOD | DIV | MUL
+    FactorExp -> UnaryOperator UnaryExp | UnaryExp
+    UnaryOperator -> BIT_NOT | NOT
+    UnaryExp -> Literal | ID | LEFT_PAREN ValueExp RIGHT_PAREN
+    Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
 </pre>
 
 ### 解释器
