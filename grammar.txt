@@ -1,16 +1,13 @@
-Program -> ModuleList | E
+Program -> ModuleList
 ModuleList -> ModuleList Module | Module
-Module -> ModuleDefine ModuleBody
-ModuleDefine -> ModuleSelfDefine ModuleImportDefineList
+Module -> ModuleDefine ModuleStmts
+ModuleDefine ->  ModuleSelfDefine ModuleImportDefineList ModuleExportList
 ModuleSelfDefine -> AT MODULE COLON ID SEMI
-ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine
-ModuleImportDefine -> AT IMPORT COLON ID SEMI
-ModuleBody -> ModuleStmts
-ModuleStmts -> ModuleStmts ModuleVarDefStmts | ModuleStmts ModuleFunDefStmts  | ModuleStmts ModuleExportList  | E
-ModuleVarDefStmts -> ModuleVarDefStmts VarDefStmt | VarDefStmt
-ModuleFunDefStmts -> ModuleFunDefStmts FunDefStmt | FunDefStmt
-ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
-ModuleExport -> AT EXPORT COLON ID SEMI
+ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine | E
+ModuleImportDefine ->  IMPORT COLON ID SEMI
+ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | E
+ModuleExportList -> ModuleExportList ModuleExport | ModuleExport | E
+ModuleExport ->  EXPORT COLON ID SEMI
 FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ID COMMA ParamList
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
@@ -26,17 +23,15 @@ ReturnStmt -> RETURN Exp SEMI
 AssignStmt -> ID ASSIGN ValueExp SEMI
 Exp -> ValueExp | E
 ValueExp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
-MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID
+MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID DOT ID
 ArraySub -> LEFT_BRACKET ValueExp RIGHT_BRACKET | LEFT_BRACKET ValueExp RIGHT_BRACKET ArraySub
 ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
 ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems
 ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp | E
-
 ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
 Properties -> Properties Property | Property
 Property -> Key COLON ValueExp COMMA
 Key -> STRING | ID
-
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
 LogicOperator -> LOGIC_OR | LOGIN_AND
 LogicExp -> LogicExp BitOperator BitExp | BitExp
@@ -51,4 +46,3 @@ FactorExp -> UnaryOperator UnaryExp | UnaryExp
 UnaryOperator -> BIT_NOT | NOT
 UnaryExp -> Literal | ID | LEFT_PAREN ValueExp RIGHT_PAREN
 Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
-

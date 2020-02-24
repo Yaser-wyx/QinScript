@@ -4,6 +4,7 @@ import {Stack} from "./DataStruct/Stack";
 import {Production} from "./DataStruct/Production";
 import {printFatalError} from "../error/error";
 import {tree} from "../Utils/utils";
+import {lookAheadToken, lookAheadTokenType} from "../Lexer/Lexer";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 
@@ -31,12 +32,10 @@ export function RunLr1(action: ActionForm, goto: GotoForm) {
     let nodeStack: Stack<SampleNode> = new Stack();//节点栈
     symbolStack.push("#");
     statusStack.push(0);
-    let symbols = "abab#".split("");
-    //先做个测试
     let flag = true;
     while (flag) {
         // @ts-ignore
-        let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), symbols[0]);
+        let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), lookAheadTokenType());
         switch (actionItem.action) {
             case ActionStatus.ACC:
                 flag = false;
@@ -59,7 +58,7 @@ export function RunLr1(action: ActionForm, goto: GotoForm) {
                 statusStack.push(gotoItem.shiftTo);
                 break;
             case ActionStatus.SHIFT:
-                if (symbols.length > 0) {
+           /*     if (symbols.length > 0) {
                     let shift = symbols.shift();
                     // @ts-ignore
                     nodeStack.push(new SampleNode(shift));
@@ -67,7 +66,7 @@ export function RunLr1(action: ActionForm, goto: GotoForm) {
                     symbolStack.push(shift);
                     // @ts-ignore
                     statusStack.push(actionItem.shiftTo);
-                }
+                }*/
                 break;
             default:
                 printFatalError("未知错误！");

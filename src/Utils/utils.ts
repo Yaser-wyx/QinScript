@@ -19,8 +19,10 @@ export async function readFromFile(path: string): Promise<string> {
     return codeSource;
 }
 
-export async function writeToFile(data:string,path:string) {
-    fs.writeFileSync(path,data, 'utf8')
+export async function writeToFile(data: any, path: string) {
+
+    data = "打印时间："+new Date() + "\n" + data;
+    fs.writeFileSync(path, data, 'utf8')
 }
 
 export function kill() {

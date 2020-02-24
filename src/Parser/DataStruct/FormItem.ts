@@ -1,6 +1,6 @@
 import {Production} from "./Production";
 import {addBuildFormError} from "../../error/error";
-import {writeToFile} from "../../Utils/utils";
+import {hashCode, writeToFile} from "../../Utils/utils";
 
 //TODO 如果有时间可以构造两个接口，一个是formItem，另一个是Form，以便实现面向接口编程
 export class GotoFormItem {
@@ -9,11 +9,21 @@ export class GotoFormItem {
     stateIndex: number = 0;//状态索引
     shiftTo: number;
     errMsg: string = "";
+    private hashCode: number = 0;
 
     constructor(expected: string, shiftTo: number, stateIndex: number) {
         this.expected = expected;
         this.stateIndex = stateIndex;
         this.shiftTo = shiftTo;
+        this.hashCode = hashCode(this.getInfo());
+    }
+
+    getHash() {
+        return this.hashCode;
+    }
+
+    isSame(item: GotoFormItem) {
+        return item.getHash() === this.hashCode;
     }
 
     getInfo() {
@@ -37,9 +47,16 @@ export class ActionFormItem {
     reduceBy?: Production;//使用哪个产生式进行reduce
     errMsg: string = "";
     stateIndex?: number = 0;
+    hasConflict: boolean = false;
+    conflictArray: Array<ActionFormItem> = new Array<ActionFormItem>();
+    private hashCode: number = 0;
 
     get action(): ActionStatus {
         return this._action;
+    }
+
+    isSame(item: ActionFormItem) {
+        return item.getHash() === this.hashCode;
     }
 
     constructor(expected: string, action: ActionStatus, stateIndex?: number, shiftToOrReduceBy?: number | Production) {
@@ -60,6 +77,11 @@ export class ActionFormItem {
                     break;
             }
         }
+        this.hashCode = hashCode(this.getInfo());
+    }
+
+    getHash() {
+        return this.hashCode;
     }
 
     getInfo() {
@@ -94,8 +116,12 @@ export class GotoForm {
             this.items[stateIndex][expected] = new GotoFormItem(expected, shiftTo, stateIndex)
         } else {
             //发生冲突
-            sendFormErrorMsg(this.items[stateIndex][expected], new GotoFormItem(expected, shiftTo, stateIndex));
-        }1
+            let newItem = new GotoFormItem(expected, shiftTo, stateIndex);
+            if (!newItem.isSame(this.items[stateIndex][expected])) {
+                sendFormWarnMsg(this.items[stateIndex][expected], newItem);
+            }
+        }
+
     }
 
     getGotoItem(stateIndex: number, expected: string) {
@@ -111,20 +137,24 @@ export class GotoForm {
 
     print() {
         //打印Goto表
-        let str = "--------------------GotoForm--------------------";
+        let str = "--------------------GotoForm--------------------\n";
         this.items.forEach((item, index) => {
-             str = "状态：" + index + "\n";
+            str += "------------------------------------------------\n";
+
+            str += "状态：" + index + "\n";
             for (let itemKey in item) {
-                str += item[itemKey].getInfo()+"\n";
+                str += item[itemKey].getInfo() + "\n";
             }
-        })
-        writeToFile(str,"Goto.table.txt");
+            str += "------------------------------------------------\n";
+
+        });
+        writeToFile(str, "Goto.table.txt");
     }
 }
 
 type formItem = ActionFormItem | GotoFormItem;
 
-function sendFormErrorMsg(oldItem: formItem, newItem: formItem) {
+function sendFormWarnMsg(oldItem: formItem, newItem: formItem) {
     let errorMsg = "";
     if (oldItem instanceof ActionFormItem) {
         errorMsg = "    Action表发生移进规约冲突；\n";
@@ -156,7 +186,12 @@ export class ActionForm {
             this.items[stateIndex][expected] = new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy)
         } else {
             //发生冲突
-            sendFormErrorMsg(this.items[stateIndex][expected], new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy));
+            let conflictItem = new ActionFormItem(expected, action, stateIndex, shiftToOrReduceBy);
+            if (!conflictItem.isSame(this.items[stateIndex][expected])) {
+                this.items[stateIndex][expected].hasConflict = true;
+                this.items[stateIndex][expected].conflictArray.push(conflictItem);
+                sendFormWarnMsg(this.items[stateIndex][expected], conflictItem);//发出提示
+            }
         }
     }
 
@@ -176,10 +211,19 @@ export class ActionForm {
         //打印Action表
         let str = "--------------------ActionForm--------------------\n";
         this.items.forEach((item, index) => {
+            str += "------------------------------------------------\n";
             str += "状态：" + index + "\n";
             for (let itemKey in item) {
                 str += item[itemKey].getInfo() + "\n";
+                if (item[itemKey].hasConflict) {
+                    str+= "------------------------------冲突项-------------------\n";
+                    item[itemKey].conflictArray.forEach((conflictItem: ActionFormItem) => {
+                        str += conflictItem.getInfo() + "\n";
+                    })
+                    str+="-------------------------------------------------------\n"
+                }
             }
+            str += "------------------------------------------------\n";
         });
         writeToFile(str, "Action.table.txt");
     }

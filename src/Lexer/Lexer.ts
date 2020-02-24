@@ -297,7 +297,10 @@ export async function initLexer(file: string): Promise<boolean> {
 export function lookAheadToken(): Token {
     return tokens[curTokenIndex];
 }
-
+export function lookAheadTokenType(): String {
+    //向前看一个token，并获取它类型的字符串形式
+    return TOKEN_TYPE[tokens[curTokenIndex].tokenType];
+}
 export function lookAheadXToken(step: number): Token {
     return tokens[curTokenIndex + step - 1];
 }

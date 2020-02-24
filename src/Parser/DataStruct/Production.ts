@@ -90,7 +90,7 @@ export class Production {
                     if (index === this.nowDotAfter) {
                         value = value + "." + node;
                     } else {
-                        value += node;
+                        value += " "+node;
                     }
                 });
                 if (this.nowDotAfter === this._nodeList.length) {

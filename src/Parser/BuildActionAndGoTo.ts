@@ -3,6 +3,7 @@ import {ActionForm, ActionStatus, GotoForm} from "./DataStruct/FormItem";
 import {E, EOF, Production} from "./DataStruct/Production";
 import {Closure} from "./DataStruct/Closure";
 import {printBuildFormError} from "../error/error";
+import {writeToFile} from "../Utils/utils";
 
 let _ = require("lodash");
 
@@ -22,7 +23,7 @@ function generateProduction(grammar: string) {
     //从指定文法中获取产生式，并将其结构化
     let items = grammar.split(productionSplit);
     items.forEach(item => {
-        item = item.replace(/\r\n/g,"");
+        item = item.replace(/\r\n/g, "");
         if (item.length === 0) return;
         //遍历items
         let arrowIndex = item.indexOf(arrowSymbol);
@@ -62,7 +63,8 @@ function getVAndT() {
         } else {
             tSet.add(symbol);
         }
-    })
+    });
+    return;
 }
 
 function getLR1() {
@@ -118,46 +120,38 @@ function fillForm(): object | null {
     if (LR1) {
         let actionForm = new ActionForm(LRIndex);//创建action表
         let gotoForm = new GotoForm(LRIndex);//创建goto表
+        let reduce = (stateNum: number, expected: string, production: Production) => {
+            let productionHash = production.getHashCode(false);
+            actionForm.setActionItem(stateNum, ActionStatus.REDUCE, expected, productionMap[productionHash]);
+        };
+        let isAcc = (production: Production) => {
+            return production.search === EOF && production.getHashCode(false) === startProduction.getHashCode(false);
+        };
         for (let lr1Key in LR1) {
             //遍历LR1规范族表
             let closure: Closure = LR1[lr1Key];//获取一个规范族
-            let recognizeXKeys = Object.keys(closure.recognizeX);//获取所有可以识别的符号
-            if (recognizeXKeys.length > 0) {
-                //如果不为空，代表是一个移进项目
-                recognizeXKeys.forEach(recognize => {
-                    //遍历每一个符号
-                    let nextClosure = closure.getClosureAfterRecognizeX(recognize);//获取一个移进后的闭包项目
-                    if (nextClosure) {
-                        //如果存在识别X后到达的closure
-                        if (tSet.has(recognize)) {
-                            //如果是终结符，则填action表
-                            actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT, recognize, nextClosure.stateNum);
-                        } else if (vSet.has(recognize)) {
-                            //如果非终结符，则填goto表
-                            gotoForm.setGotoItem(closure.stateNum, recognize, nextClosure.stateNum);
-                        }
+            closure.innerSet.forEach((production: Production) => {
+                let needRecognize = production.getNowDotAfter();
+                let nextClosure = closure.getClosureAfterRecognizeX(needRecognize);
+                if (nextClosure) {
+                    //如果存在移进项目
+                    if (tSet.has(needRecognize) && needRecognize !== EOF) {
+                        //如果是终结符
+                        actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT, needRecognize, nextClosure.stateNum);
+                    } else if (vSet.has(needRecognize)) {
+                        //如果是非终结符
+                        gotoForm.setGotoItem(closure.stateNum, needRecognize, nextClosure.stateNum);
                     }
-                })
-            } else {
-                //如果该规范族可识别的字符为空，代表是一个句柄，判断search来进行规约，如果search是EOF则进入接受状态acc
-                let productions: Array<Production> = closure.innerSet;//获取该闭包的产生式
-                let reduce = (stateNum: number, expected: string, production: Production) => {
-                    let productionHash = production.getHashCode(false);
-                    actionForm.setActionItem(stateNum, ActionStatus.REDUCE, expected, productionMap[productionHash]);
-                };
-                let isAcc = (production: Production) => {
-                    return production.search === EOF && production.getHashCode(false) === startProduction.getHashCode(false);
-                };
-                productions.forEach((production: Production) => {
+                } else if (needRecognize === EOF) {
+                    //如果是eof，则表示是一个规约项目
                     if (isAcc(production)) {
-                        //如果是ACC
+                        //如果是终态
                         actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF);
-                    } else {
-                        //否则进行规约
+                    }else{
                         reduce(closure.stateNum, production.search, production);
                     }
-                })
-            }
+                }
+            });
         }
         actionForm.print();
         gotoForm.print();
@@ -177,7 +171,7 @@ export function analyzeGrammar(grammar: string): object | null {
     // console.log(firstSet);
     console.log("获取LR1规范族");
     getLR1();
-    // console.log(LR1);
+    writeToFile(LR1,"LR.json");
     return fillForm();
 }
 

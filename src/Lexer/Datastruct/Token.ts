@@ -4,7 +4,6 @@ export enum TOKEN_TYPE {
     NUMBER,//数字
     STRING,//字符串
     ID,//变量名
-
     //分隔符
     LEFT_PAREN,//左小括号
     RIGHT_PAREN,//右小括号
@@ -17,7 +16,6 @@ export enum TOKEN_TYPE {
     DOT,//点
     AT,//@
     COLON,//冒号
-
     //运算符
     ASSIGN,//等号
     ADD,//加
@@ -25,17 +23,14 @@ export enum TOKEN_TYPE {
     MUL,//乘
     DIV,//除
     MOD,//取模
-
     //逻辑运算
     NOT,// !
     LOGIC_OR,// ||
     LOGIN_AND,// &&
-
     //位运算
     BIT_AND,// &
     BIT_OR,// |
     BIT_NOT,// ~
-
     //关系运算符
     EQUAL,//==
     NOT_EQUAL,//!=
@@ -43,7 +38,6 @@ export enum TOKEN_TYPE {
     GREATER_EQUAL,//>=
     LESS,//<
     LESS_EQUAL,//<=
-
     //关键字
     LET,
     FUN,
@@ -54,11 +48,9 @@ export enum TOKEN_TYPE {
     ELSE,
     WHILE,
     RETURN,
-
     TRUE,
     FALSE,
     NULL,
-
     ERROR,//错误token
 }
 
@@ -95,7 +87,6 @@ export class LexerToken {
         this.tokenType = tokenType;
         this.errorMsg = errorMsg;
     }
-
 }
 
 export class Token {

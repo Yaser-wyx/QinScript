@@ -256,68 +256,63 @@ fun bubble_sort(ArrayExp , length){//冒泡排序
 ```
 - 词法分析结果：见文件[test.out.tokens](src/test.out.tokens)中。
 ### 语法分析器
- 语法分析使用LR(1)分析器进行分析
+ 语法分析使用LR(1)分析器进行分析。
 - 文法规则：
     - 非终结符使用双驼峰命名法。
-    - 终结符全大写，并加粗。
+    - 终结符全大写。
     - E代表空字符
-
 <pre>
 Program -> ModuleList
-<strong>模块文法:</strong>
-    Program -> ModuleList | E
-    ModuleList -> ModuleList Module | Module
-    Module -> ModuleDefine ModuleBody
-    ModuleDefine -> ModuleSelfDefine ModuleImportDefineList
-    ModuleSelfDefine -> AT MODULE COLON ID SEMI
-    ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine
-    ModuleImportDefine -> AT IMPORT COLON ID SEMI
-    ModuleBody -> ModuleStmts
-    ModuleStmts -> ModuleStmts ModuleVarDefStmts | ModuleStmts ModuleFunDefStmts  | ModuleStmts ModuleExportList  | E
-    ModuleVarDefStmts -> ModuleVarDefStmts VarDefStmt | VarDefStmt
-    ModuleFunDefStmts -> ModuleFunDefStmts FunDefStmt | FunDefStmt
-    ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
-    ModuleExport -> AT EXPORT COLON ID SEMI
-    FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
-    ParamList -> ID | ID COMMA ParamList
-    BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
-    Stmts -> Stmts Stmt | Stmt
-    Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
-    VarDefStmt -> LET ID ASSIGN ValueExp SEMI | VarDecStmt
-    VarDecStmt -> LET ID SEMI
-    IfStmt -> IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt | IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt ELSE Stmt
-    WhileStmt -> WHILE LEFT_PAREN ValueExp RIGHT_PAREN  Stmt
-    CallExp -> Exp LEFT_PAREN Exps RIGHT_PAREN
-    Exps -> Exp | Exps COMMA Exp
-    ReturnStmt -> RETURN Exp SEMI
-    AssignStmt -> ID ASSIGN ValueExp SEMI
-    Exp -> ValueExp | E
-    ValueExp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
-    MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID
-    ArraySub -> LEFT_BRACKET ValueExp RIGHT_BRACKET | LEFT_BRACKET ValueExp RIGHT_BRACKET ArraySub
-    ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
-    ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems
-    ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp | E
-    
-    ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
-    Properties -> Properties Property | Property
-    Property -> Key COLON ValueExp COMMA
-    Key -> STRING | ID
-    
-    CalExp -> CalExp LogicOperator LogicExp | LogicExp
-    LogicOperator -> LOGIC_OR | LOGIN_AND
-    LogicExp -> LogicExp BitOperator BitExp | BitExp
-    BitOperator -> BIT_AND | BIT_OR
-    BitExp -> BitExp RelationalOperator  RelationExp | RelationExp
-    RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
-    RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
-    AdditiveOperator -> ADD | SUB
-    AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
-    FactorOperator -> MOD | DIV | MUL
-    FactorExp -> UnaryOperator UnaryExp | UnaryExp
-    UnaryOperator -> BIT_NOT | NOT
-    UnaryExp -> Literal | ID | LEFT_PAREN ValueExp RIGHT_PAREN
-    Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
+   Program -> ModuleList
+   ModuleList -> ModuleList Module | Module
+   Module -> ModuleDefine ModuleStmts
+   ModuleDefine ->  ModuleSelfDefine ModuleImportDefineList ModuleExportList
+   ModuleSelfDefine -> AT MODULE COLON ID SEMI
+   ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine | E
+   ModuleImportDefine ->  IMPORT COLON ID SEMI
+   ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | E
+   ModuleExportList -> ModuleExportList ModuleExport | ModuleExport | E
+   ModuleExport ->  EXPORT COLON ID SEMI
+   
+   FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
+   ParamList -> ID | ID COMMA ParamList
+   BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
+   Stmts -> Stmts Stmt | Stmt
+   Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
+   VarDefStmt -> LET ID ASSIGN ValueExp SEMI | VarDecStmt
+   VarDecStmt -> LET ID SEMI
+   IfStmt -> IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt | IF LEFT_PAREN ValueExp RIGHT_PAREN Stmt ELSE Stmt
+   WhileStmt -> WHILE LEFT_PAREN ValueExp RIGHT_PAREN  Stmt
+   CallExp -> Exp LEFT_PAREN Exps RIGHT_PAREN
+   Exps -> Exp | Exps COMMA Exp
+   ReturnStmt -> RETURN Exp SEMI
+   AssignStmt -> ID ASSIGN ValueExp SEMI
+   
+   Exp -> ValueExp | E
+   ValueExp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
+   MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID DOT ID
+   ArraySub -> LEFT_BRACKET ValueExp RIGHT_BRACKET | LEFT_BRACKET ValueExp RIGHT_BRACKET ArraySub
+   ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
+   ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems
+   ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp | E
+   ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
+   Properties -> Properties Property | Property
+   Property -> Key COLON ValueExp COMMA
+   Key -> STRING | ID
+   CalExp -> CalExp LogicOperator LogicExp | LogicExp
+   LogicOperator -> LOGIC_OR | LOGIN_AND
+   LogicExp -> LogicExp BitOperator BitExp | BitExp
+   BitOperator -> BIT_AND | BIT_OR
+   BitExp -> BitExp RelationalOperator  RelationExp | RelationExp
+   RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
+   RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
+   AdditiveOperator -> ADD | SUB
+   AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
+   FactorOperator -> MOD | DIV | MUL
+   FactorExp -> UnaryOperator UnaryExp | UnaryExp
+   UnaryOperator -> BIT_NOT | NOT
+   UnaryExp -> Literal | ID | LEFT_PAREN ValueExp RIGHT_PAREN
+   Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
 </pre>
 
 ### 解释器
