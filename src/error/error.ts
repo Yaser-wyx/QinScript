@@ -44,11 +44,13 @@ export function addBuildFormError(error) {
 
 export function printBuildFormError() {
     if (formError.length > 0) {
+        console.log("分析表有冲突，请查看日志！");
         let errorMsg = "====================LR(1)分析表构造错误====================\n";
         errorMsg += formError;
         errorMsg += "====================================================\n";
         writeToFile(errorMsg, "FormError.txt")
     }else{
+        console.log("分析表无冲突！");
         writeToFile("无异常！", "FormError.txt")
     }
 }

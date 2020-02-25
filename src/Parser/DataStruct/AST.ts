@@ -32,6 +32,8 @@ export type Node =
     | Literal
     | Program
     | Module
+    | ModuleBodyStatement
+    | ModuleDefine
     | FunDeclaration
     | VariableDeclarator
     | Statement
@@ -79,10 +81,10 @@ export class Module implements ASTNode {
     }
 }
 
-export type ModuleBodyStatement = Declaration | ModuleExportDefineList
+export type ModuleBodyStatement = Declaration
 export type Declaration = VarDeclaration | FunDeclaration
 
-export type ModuleDefine = ModuleSelfDefine | ModuleImportDefineList
+export type ModuleDefine = ModuleSelfDefine | ModuleImportDefineList | ModuleExportDefineList
 
 export class ModuleSelfDefine implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_SELF_DEFINE;

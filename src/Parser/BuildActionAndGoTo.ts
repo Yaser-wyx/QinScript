@@ -1,9 +1,9 @@
 //用于构建LR分析的Action与Goto子表
-import {ActionForm, ActionStatus, GotoForm} from "./DataStruct/FormItem";
+import {ActionStatus} from "./DataStruct/FormItem";
 import {E, EOF, Production} from "./DataStruct/Production";
 import {Closure} from "./DataStruct/Closure";
 import {printBuildFormError} from "../error/error";
-import {writeToFile} from "../Utils/utils";
+import {ActionForm, GotoForm} from "./DataStruct/Form";
 
 let _ = require("lodash");
 
@@ -94,8 +94,9 @@ function getLR1() {
                     let nextRecognizeSet = new Set<string>();//待识别符号集合
                     for (let production of closureInnerSet) {
                         let nextRecognize = production.getNowDotAfter();//获取该产生式当前占位符后第一个节点的值
-                        if (nextRecognize !== EOF)
+                        if (nextRecognize !== EOF) {
                             nextRecognizeSet.add(nextRecognize);
+                        }
                     }
                     nextRecognizeSet.forEach(nextRecognize => {
                         let newClosure = Go(proceedClosure, nextRecognize);
@@ -137,7 +138,11 @@ function fillForm(): object | null {
                     //如果存在移进项目
                     if (tSet.has(needRecognize) && needRecognize !== EOF) {
                         //如果是终结符
-                        actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT, needRecognize, nextClosure.stateNum);
+                        if (needRecognize !== E) {
+                            actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT, needRecognize, nextClosure.stateNum);
+                        } else {
+                            actionForm.setActionItem(closure.stateNum, ActionStatus.SHIFT_BY_E, needRecognize, nextClosure.stateNum);
+                        }
                     } else if (vSet.has(needRecognize)) {
                         //如果是非终结符
                         gotoForm.setGotoItem(closure.stateNum, needRecognize, nextClosure.stateNum);
@@ -146,8 +151,8 @@ function fillForm(): object | null {
                     //如果是eof，则表示是一个规约项目
                     if (isAcc(production)) {
                         //如果是终态
-                        actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF);
-                    }else{
+                        actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF,production);
+                    } else {
                         reduce(closure.stateNum, production.search, production);
                     }
                 }
@@ -171,7 +176,6 @@ export function analyzeGrammar(grammar: string): object | null {
     // console.log(firstSet);
     console.log("获取LR1规范族");
     getLR1();
-    writeToFile(LR1,"LR.json");
     return fillForm();
 }
 

@@ -1,7 +1,7 @@
 //用于构建分析表的数据结构
 import {hashCode} from "../../Utils/utils";
 
-export const EOF = "#";
+export const EOF = "EOF";
 export const E = "E";//表示空字符
 
 export class Production {
@@ -19,7 +19,14 @@ export class Production {
     get search(): string {
         return this._search;
     }
-
+    copy(production:Production){
+        this.nowDotAfter = production.nowDotAfter;
+        this.valueWithOutDot = production.valueWithOutDot;
+        this._search = production._search;
+        this._nodeList = production._nodeList;
+        this.hashWithDot = production.hashWithDot;
+        this.hashWithoutDot = production.hashWithoutDot;
+    }
     getHashCode(needDot: boolean = true): string {
         if (needDot) {
             if (this.hashWithDot.length === 0) {

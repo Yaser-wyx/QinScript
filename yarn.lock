@@ -1376,6 +1376,11 @@ js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+json-js@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/json-js/-/json-js-1.1.2.tgz#ebc405aa7dfd1477ca07f2f1e1d262afc4ab49b9"
+  integrity sha1-68QFqn39FHfKB/Lx4dJir8SrSbk=
+
 json-loader@^0.5.4:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"

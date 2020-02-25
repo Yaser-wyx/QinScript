@@ -16,7 +16,7 @@ export class Stack<T> {
                 popList.push(<T>this.elements.pop());
             }
         }
-        return popList;
+        return popList.reverse();
     }
 
     isEmpty(): boolean {

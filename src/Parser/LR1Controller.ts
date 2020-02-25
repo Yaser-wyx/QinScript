@@ -1,77 +1,85 @@
 //LR1 语法分析控制器
-import {ActionForm, ActionFormItem, ActionStatus, GotoForm, GotoFormItem} from "./DataStruct/FormItem";
+import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
 import {Stack} from "./DataStruct/Stack";
-import {Production} from "./DataStruct/Production";
 import {printFatalError} from "../error/error";
-import {tree} from "../Utils/utils";
-import {lookAheadToken, lookAheadTokenType} from "../Lexer/Lexer";
+import {getNextToken, lookAheadToken} from "../Lexer/Lexer";
+import {ActionForm, GotoForm} from "./DataStruct/Form";
+import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
+import {EOF, Production} from "./DataStruct/Production";
+import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
+import {T} from "./DataStruct/V_T";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
-
-export class SampleNode {
-    readonly name: string;
-    children: Array<SampleNode>;
-
-    constructor(value: string, children: Array<SampleNode> = []) {
-        this.name = value;
-        this.children = children;
-    }
-
-    pushChild(child: SampleNode) {
-        this.children.push(child);
-    }
-}
+let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
+let statusStack: Stack<number> = new Stack();//状态栈
 
 
-export function RunLr1(action: ActionForm, goto: GotoForm) {
+export function Controller(action: ActionForm, goto: GotoForm) {
+    let wrapToken = (token: Token) => {
+        //将Token包装为V_T_Wrap
+        return new V_T_Wrap(token.tokenType, token);
+    };
     //开始分析，控制器入口
     actionForm = action;
     gotoForm = goto;
-    let symbolStack: Stack<string> = new Stack();//符号栈
-    let statusStack: Stack<number> = new Stack();//状态栈
-    let nodeStack: Stack<SampleNode> = new Stack();//节点栈
-    symbolStack.push("#");
+    let EOFToken = createSampleToken(T.EOF, EOF);
+    symbolStack.push(wrapToken(EOFToken));
     statusStack.push(0);
     let flag = true;
     while (flag) {
+        let nextToken = lookAheadToken();
         // @ts-ignore
-        let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), lookAheadTokenType());
-        switch (actionItem.action) {
-            case ActionStatus.ACC:
-                flag = false;
-                break;
-            case ActionStatus.ERROR:
-                flag = false;
-                console.log(actionItem.errMsg);
-                break;
-            case ActionStatus.REDUCE:
-                let reduceProduction = <Production>actionItem.reduceBy;
-                let popNum = reduceProduction.getProductionLength();
-                symbolStack.popX(popNum);
-                statusStack.popX(popNum);
-                let nodeList: Array<SampleNode> = nodeStack.popX(popNum);
-                let newSymbol = reduceProduction.key;//规约后的字符
-                symbolStack.push(newSymbol);
-                nodeStack.push(new SampleNode(newSymbol, nodeList));
-                // @ts-ignore
-                let gotoItem: GotoFormItem = gotoForm.getGotoItem(statusStack.peek(), newSymbol);
-                statusStack.push(gotoItem.shiftTo);
-                break;
-            case ActionStatus.SHIFT:
-           /*     if (symbols.length > 0) {
-                    let shift = symbols.shift();
-                    // @ts-ignore
-                    nodeStack.push(new SampleNode(shift));
-                    // @ts-ignore
-                    symbolStack.push(shift);
+        let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), nextToken.getTokenTypeValue());
+        if (actionItem.hasConflict) {
+            //对于冲突项，特殊处理，现在只有一个冲突项
+        } else {
+            switch (actionItem.action) {
+                case ActionStatus.ACC:
+                    console.log("语法树生成完毕");
+                    flag = false;
+                    //ACC也需要进行最后一次reduce
+                    //@ts-ignore
+                    takeReduce(actionItem.reduceBy);
+                    break;
+                case ActionStatus.ERROR:
+                    flag = false;
+                    console.log(actionItem.errMsg);
+                    break;
+                case ActionStatus.REDUCE:
+                    //规约处理
+                    //@ts-ignore
+                    takeReduce(actionItem.reduceBy);
+                    break;
+                case ActionStatus.SHIFT:
+                    //移进处理
+                    symbolStack.push(wrapToken(getNextToken()));
                     // @ts-ignore
                     statusStack.push(actionItem.shiftTo);
-                }*/
-                break;
-            default:
-                printFatalError("未知错误！");
-                break;
+                    break;
+                case ActionStatus.SHIFT_BY_E:
+                    symbolStack.push(wrapToken(createSampleToken(T.NULL,"")));
+                    // @ts-ignore
+                    statusStack.push(actionItem.shiftTo);
+                    break;
+                default:
+                    printFatalError("未知错误！");
+                    break;
+            }
         }
     }
-    console.log(tree(nodeStack.pop()));
+}
+
+function takeReduce(production: Production) {
+    //规约：根据产生式的长度，将指定长度的符号个数与状态个数弹出栈
+    if (production) {
+        //防止为空
+        let popLength = production.getProductionLength();//获取产生式长度
+        statusStack.popX(popLength);//将状态弹出
+        let V_TList: Array<V_T_Wrap> = symbolStack.popX(popLength);
+        let vtWrap = createVTByProduction(production, V_TList);
+        symbolStack.push(vtWrap);
+        // @ts-ignore
+        let gotoItem = gotoForm.getGotoItem(statusStack.peek(), vtWrap.getSymbolValue());
+        statusStack.push(gotoItem.shiftTo);
+    }
 }

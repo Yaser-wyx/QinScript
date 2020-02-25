@@ -1,8 +1,9 @@
 //词法分析器
-import {EOF, keywordTable, LexerToken, Token, TOKEN_TYPE} from "./Datastruct/Token";
+import {EOF, keywordTable, LexerToken, Token} from "./Datastruct/Token";
 import {isID, isIDStart, isKeyword, isNumber, isSpace, isSymbol} from "../Utils/ScannerUtils";
 import {printLexerError} from "../error/error";
 import {readFromFile} from "../Utils/utils";
+import {T} from "../Parser/DataStruct/V_T";
 
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符
@@ -13,12 +14,12 @@ let lineNo: number;//当前行号
 let lineIndex: number;//行中的位置
 
 let createErrorLexerPair = (errMsg, errorString) => {
-    return new LexerToken(errorString.length, errorString, TOKEN_TYPE.ERROR, errMsg);
+    return new LexerToken(errorString.length, errorString, T.ERROR, errMsg);
 };
 
 function pushToken(lexerToken: LexerToken, token: Token) {
     //将二者合并，push进指定的token列表
-    if (lexerToken.tokenType === TOKEN_TYPE.ERROR) {
+    if (lexerToken.tokenType === T.ERROR) {
         //错误的token
         lexerToken.lineNo = token.lineNo;
         lexerToken.start = token.start;
@@ -59,10 +60,10 @@ function handleNumber(start: string): LexerToken {
     }
     if (dotCnt === 0) {
         //解析整数
-        return new LexerToken(digital.length, Number.parseInt(digital), TOKEN_TYPE.NUMBER);
+        return new LexerToken(digital.length, Number.parseInt(digital), T.NUMBER);
     } else if (dotCnt === 1) {
         //解析浮点数
-        return new LexerToken(digital.length, Number.parseFloat(digital), TOKEN_TYPE.NUMBER);
+        return new LexerToken(digital.length, Number.parseFloat(digital), T.NUMBER);
     } else {
         //错误的数字
         return createErrorLexerPair("数字解析出错，数字中不能有两个及以上的小数点", digital);
@@ -72,7 +73,7 @@ function handleNumber(start: string): LexerToken {
 function handleID(start: string): LexerToken {
     //处理标识符
     let id = start;
-    let tokenType = TOKEN_TYPE.ID;//默认是用户自定义标识符
+    let tokenType = T.ID;//默认是用户自定义标识符
     while (isID(lookAheadChar())) {
         id += getNextChar();
     }
@@ -85,8 +86,8 @@ function handleID(start: string): LexerToken {
 function handleSymbol(start: string): LexerToken {
     let symbol = start;
     let symbolResult: LexerToken;
-    symbolResult = new LexerToken(1, symbol, TOKEN_TYPE.ASSIGN);//默认是等号
-    let testNext = (targetSymbolList: string, type: TOKEN_TYPE[]) => {
+    symbolResult = new LexerToken(1, symbol, T.ASSIGN);//默认是等号
+    let testNext = (targetSymbolList: string, type: T[]) => {
         //从targetSymbolList中测试下一个符号是否为其中的符号，如果是的话，则读入，并重置结果，否则不做操作
         let nextChar = lookAheadChar();
         let index = targetSymbolList.indexOf(nextChar);
@@ -101,82 +102,82 @@ function handleSymbol(start: string): LexerToken {
     switch (symbol) {
         //单独修改token类型
         case '=':
-            testNext("=", [TOKEN_TYPE.EQUAL]);
+            testNext("=", [T.EQUAL]);
             break;
         case ',':
-            symbolResult.tokenType = TOKEN_TYPE.COMMA;
+            symbolResult.tokenType = T.COMMA;
             break;
         case '[':
-            symbolResult.tokenType = TOKEN_TYPE.LEFT_BRACKET;
+            symbolResult.tokenType = T.LEFT_BRACKET;
             break;
         case ']':
-            symbolResult.tokenType = TOKEN_TYPE.RIGHT_BRACKET;
+            symbolResult.tokenType = T.RIGHT_BRACKET;
             break;
         case '{':
-            symbolResult.tokenType = TOKEN_TYPE.LEFT_BRACE;
+            symbolResult.tokenType = T.LEFT_BRACE;
             break;
         case '}':
-            symbolResult.tokenType = TOKEN_TYPE.RIGHT_BRACE;
+            symbolResult.tokenType = T.RIGHT_BRACE;
             break;
         case '(':
-            symbolResult.tokenType = TOKEN_TYPE.LEFT_PAREN;
+            symbolResult.tokenType = T.LEFT_PAREN;
             break;
         case ')':
-            symbolResult.tokenType = TOKEN_TYPE.RIGHT_PAREN;
+            symbolResult.tokenType = T.RIGHT_PAREN;
             break;
         case ';':
-            symbolResult.tokenType = TOKEN_TYPE.SEMI;
+            symbolResult.tokenType = T.SEMI;
             break;
         case '.':
-            symbolResult.tokenType = TOKEN_TYPE.DOT;
+            symbolResult.tokenType = T.DOT;
             break;
         case '@':
-            symbolResult.tokenType = TOKEN_TYPE.AT;
+            symbolResult.tokenType = T.AT;
             break;
         case '+':
-            symbolResult.tokenType = TOKEN_TYPE.ADD;
+            symbolResult.tokenType = T.ADD;
             break;
         case '-':
-            symbolResult.tokenType = TOKEN_TYPE.SUB;
+            symbolResult.tokenType = T.SUB;
             break;
         case '*':
-            symbolResult.tokenType = TOKEN_TYPE.MUL;
+            symbolResult.tokenType = T.MUL;
             break;
         case '/':
-            symbolResult.tokenType = TOKEN_TYPE.DIV;
+            symbolResult.tokenType = T.DIV;
             break;
         case '%':
-            symbolResult.tokenType = TOKEN_TYPE.MOD;
+            symbolResult.tokenType = T.MOD;
             break;
         case '!':
-            symbolResult.tokenType = TOKEN_TYPE.NOT;
-            testNext("=", [TOKEN_TYPE.NOT_EQUAL]);
+            symbolResult.tokenType = T.NOT;
+            testNext("=", [T.NOT_EQUAL]);
             break;
         case '&':
-            symbolResult.tokenType = TOKEN_TYPE.BIT_AND;
-            testNext("&", [TOKEN_TYPE.LOGIN_AND]);
+            symbolResult.tokenType = T.BIT_AND;
+            testNext("&", [T.LOGIN_AND]);
             break;
         case '|':
-            symbolResult.tokenType = TOKEN_TYPE.BIT_OR;
-            testNext("|", [TOKEN_TYPE.LOGIC_OR]);
+            symbolResult.tokenType = T.BIT_OR;
+            testNext("|", [T.LOGIC_OR]);
             break;
         case '~':
-            symbolResult.tokenType = TOKEN_TYPE.BIT_NOT;
+            symbolResult.tokenType = T.BIT_NOT;
             break;
         case '>':
-            symbolResult.tokenType = TOKEN_TYPE.GREATER;
-            testNext("=", [ TOKEN_TYPE.GREATER_EQUAL]);
+            symbolResult.tokenType = T.GREATER;
+            testNext("=", [T.GREATER_EQUAL]);
             break;
         case '<':
-            symbolResult.tokenType = TOKEN_TYPE.LESS;
-            testNext("=", [ TOKEN_TYPE.LESS_EQUAL]);
+            symbolResult.tokenType = T.LESS;
+            testNext("=", [T.LESS_EQUAL]);
             break;
         case ':':
-            symbolResult.tokenType = TOKEN_TYPE.COLON;
+            symbolResult.tokenType = T.COLON;
             break;
         default:
             //正常来说该分支是不会到达的
-            symbolResult.tokenType = TOKEN_TYPE.ERROR;
+            symbolResult.tokenType = T.ERROR;
             symbolResult.errorMsg = "非法的运算法";
     }
     return symbolResult;
@@ -196,7 +197,7 @@ function handleString(): LexerToken {
         if (nextChar === '\"') {
             //结束字符串解析
             getNextChar();//读取掉右"
-            return new LexerToken(string.length, string, TOKEN_TYPE.STRING);
+            return new LexerToken(string.length, string, T.STRING);
         }
         if (nextChar === EOF) {
             //报错
@@ -286,6 +287,10 @@ export async function initLexer(file: string): Promise<boolean> {
     lineIndex = 1;
     errorTokens = [];
     analyzeCodeToToken();
+    let EOFToken = new Token();
+    EOFToken.tokenType = T.EOF;
+    EOFToken.value = "#";
+    tokens.push(EOFToken);
     if (errorTokens.length > 0) {
         printLexerError(errorTokens, file);//打印错误信息
         return false;
@@ -297,10 +302,7 @@ export async function initLexer(file: string): Promise<boolean> {
 export function lookAheadToken(): Token {
     return tokens[curTokenIndex];
 }
-export function lookAheadTokenType(): String {
-    //向前看一个token，并获取它类型的字符串形式
-    return TOKEN_TYPE[tokens[curTokenIndex].tokenType];
-}
+
 export function lookAheadXToken(step: number): Token {
     return tokens[curTokenIndex + step - 1];
 }
