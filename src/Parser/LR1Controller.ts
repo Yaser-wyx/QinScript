@@ -8,6 +8,7 @@ import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
 import {EOF, Production} from "./DataStruct/Production";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
 import {T} from "./DataStruct/V_T";
+import {transferVTToASTNode} from "./BuildAST";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
@@ -57,7 +58,7 @@ export function Controller(action: ActionForm, goto: GotoForm) {
                     statusStack.push(actionItem.shiftTo);
                     break;
                 case ActionStatus.SHIFT_BY_E:
-                    symbolStack.push(wrapToken(createSampleToken(T.NULL,"")));
+                    symbolStack.push(wrapToken(createSampleToken(T.NULL, "")));
                     // @ts-ignore
                     statusStack.push(actionItem.shiftTo);
                     break;
@@ -81,5 +82,6 @@ function takeReduce(production: Production) {
         // @ts-ignore
         let gotoItem = gotoForm.getGotoItem(statusStack.peek(), vtWrap.getSymbolValue());
         statusStack.push(gotoItem.shiftTo);
+        transferVTToASTNode(vtWrap);//构建状态树
     }
 }

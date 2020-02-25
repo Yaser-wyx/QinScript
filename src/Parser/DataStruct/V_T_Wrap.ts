@@ -8,21 +8,28 @@ export class V_T_Wrap {
     symbolType: V_T;
     //如果是终结符则有Token，否则没有Token
     token?: Token;
-    children: Array<V_T_Wrap> = [];
-    value: string = "";
-
-    getSymbolValue(): string {
-        if (this.value.length === 0) {
+    children: object = {};
+    private _childNums:number=0;
+    getSymbolValue(isString: boolean = true): string | number {
+        if (isString) {
+            //需要string类型的值
             if (this.isT && this.token) {
                 //如果是终结符
-
-                this.value = this.token.getTokenTypeValue();
+                return this.token.getTokenTypeValue();
             } else {
                 //如果是非终结符
-                this.value = V[this.symbolType];
+                return V[this.symbolType];
+            }
+        } else {
+            //需要number类型的值
+            if (this.isT && this.token) {
+                //如果是终结符
+                return this.token.tokenType;
+            } else {
+                //如果是非终结符
+                return this.symbolType;
             }
         }
-        return this.value;
     }
 
     constructor(symbolType: V_T, token?: Token) {
@@ -36,7 +43,12 @@ export class V_T_Wrap {
     }
 
     pushChild(child: V_T_Wrap) {
-        this.children.push(child);
+        this.children[child.getSymbolValue()] = child;
+        this._childNums++;
+    }
+
+    get childNums(): number {
+        return this._childNums;
     }
 }
 

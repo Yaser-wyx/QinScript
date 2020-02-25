@@ -2,6 +2,7 @@ export enum NODE_TYPE {
     PROGRAM,//程序
     MODULE,//模块
     ID,//ID
+    MODULE_DEFINE,
     MODULE_SELF_DEFINE,//模块名定义
     MODULE_IMPORT_DEFINE_LIST,//模块导入列表定义
     MODULE_EXPORT_DEFINE_LIST,//模块导出列表定义
@@ -84,7 +85,16 @@ export class Module implements ASTNode {
 export type ModuleBodyStatement = Declaration
 export type Declaration = VarDeclaration | FunDeclaration
 
-export type ModuleDefine = ModuleSelfDefine | ModuleImportDefineList | ModuleExportDefineList
+export class ModuleDefine implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_DEFINE;
+    moduleSelfDefine:ModuleSelfDefine;
+    moduleImportDefineList?:ModuleImportDefineList;
+    moduleExportDefineList?:ModuleExportDefineList;
+
+    constructor(moduleSelfDefine: ModuleSelfDefine) {
+        this.moduleSelfDefine = moduleSelfDefine;
+    }
+}
 
 export class ModuleSelfDefine implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_SELF_DEFINE;
@@ -128,6 +138,9 @@ export class ModuleImportDefine implements ASTNode {
 export class ModuleImportDefineList implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_IMPORT_DEFINE_LIST;
     importModuleList: Array<ModuleImportDefine> = []//需要被导入的模块列表
+    pushImportModule(moduleImport: ModuleImportDefine) {
+        this.importModuleList.push(moduleImport);
+    }
 }
 
 export class FunDeclaration implements ASTNode {

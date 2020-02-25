@@ -12,8 +12,12 @@ export enum V {
     ModuleImportDefine,//模块导入定义
     VarDefStmt,
     FunDefStmt,
+    ParamList,
+    BlockStmt
 }
-
+export function getVValue(v:V) {
+    return V[v];
+}
 //终结符
 export enum T {
     //数据类型
