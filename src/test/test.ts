@@ -1,6 +1,3 @@
-import {getVValue, T, V} from "../Parser/DataStruct/V_T";
-import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
+import {main} from "../main";
 
-
-let v = V.ModuleImportDefine;
-console.log(getVValue(v));
+main();

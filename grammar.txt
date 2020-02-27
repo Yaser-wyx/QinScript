@@ -1,13 +1,13 @@
-Program -> ModuleList
-ModuleList -> ModuleList Module | Module
+Start -> Module
 Module -> ModuleDefine ModuleStmts
 ModuleDefine ->  ModuleSelfDefine | ModuleSelfDefine ModuleImportDefineList | ModuleSelfDefine ModuleExportList | ModuleSelfDefine ModuleImportDefineList ModuleExportList
 ModuleSelfDefine -> AT MODULE COLON ID SEMI
 ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine
 ModuleImportDefine -> IMPORT COLON ID SEMI
-ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | VarDefStmt | E
 ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
 ModuleExport ->  EXPORT COLON ID SEMI
+ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | VarDefStmt | E
+
 FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ID COMMA ParamList | E
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
@@ -32,7 +32,7 @@ Properties -> Properties Property | Property
 Property -> Key COLON Exp COMMA
 Key -> STRING | ID
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
-LogicOperator -> LOGIC_OR | LOGIN_AND
+LogicOperator -> LOGIC_OR | LOGIC_AND
 LogicExp -> LogicExp BitOperator BitExp | BitExp
 BitOperator -> BIT_AND | BIT_OR
 BitExp -> BitExp RelationalOperator  RelationExp | RelationExp

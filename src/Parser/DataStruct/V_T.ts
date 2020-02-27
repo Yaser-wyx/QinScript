@@ -1,7 +1,5 @@
 //非终结符
 export enum V {
-    Program,//程序
-    ModuleList,//模块列表
     Module,//模块
     ModuleDefine,
     ModuleSelfDefine,//模块名定义
@@ -13,11 +11,47 @@ export enum V {
     VarDefStmt,
     FunDefStmt,
     ParamList,
-    BlockStmt
+    BlockStmt,
+    Stmts,
+    Stmt,
+    VarDecStmt,
+    IfStmt,
+    WhileStmt,
+    CallExp,
+    Exps,
+    ReturnStmt,
+    AssignStmt,
+    Exp,
+    MemberExp,
+    ArraySub,
+    ArrayExp,
+    ArrayItems,
+    ArrayItem,
+    ObjectExp,
+    Properties,
+    Property,
+    Key,
+    CalExp,
+    LogicOperator,
+    LogicExp,
+    BitOperator,
+    BitExp,
+    RelationalOperator,
+    RelationExp,
+    AdditiveOperator,
+    AdditiveExp,
+    FactorOperator,
+    FactorExp,
+    UnaryOperator,
+    UnaryExp,
+    Literal
 }
-export function getVValue(v:V) {
+
+export function getVValue(v: V) {
     return V[v];
 }
+
+
 //终结符
 export enum T {
     //数据类型

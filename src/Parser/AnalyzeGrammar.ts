@@ -1,14 +1,9 @@
-//使用LR分析器，生成抽象语法树
-import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
-import {analyzeGrammar} from "./BuildActionAndGoTo";
 import {hashCode, readFromFile, writeToFile} from "../Utils/utils";
-import {printFatalError} from "../error/error";
-import {Controller} from "./LR1Controller";
 import {CACHE_FILE, HASH_FILE} from "../Cli/config";
+import {ActionForm, GotoForm} from "./DataStruct/Form";
+import {analyzeGrammar} from "./BuildActionAndGoTo";
 import * as fs from "fs";
 import {HashFile} from "./DataStruct/HashFile";
-import {ActionForm, GotoForm} from "./DataStruct/Form";
-import {GotoFormItem} from "./DataStruct/FormItem";
 
 export async function buildLRAnalyzeForm(grammarFile: string): Promise<object | null> {
 
@@ -73,26 +68,4 @@ async function hasCache(nowHashValue: number): Promise<boolean> {
     }
     await cleanCache();
     return false;
-}
-
-export async function startAnalyze(grammarFile: string) {
-    let forms = await buildLRAnalyzeForm(grammarFile);//构建分析表
-    if (forms) {
-        // @ts-ignore
-        Controller(forms.actionForm, forms.gotoForm);
-    }
-}
-
-export async function syntaxParser(filePath: string, grammarFile: string): Promise<boolean> {
-
-    let initSuccess = await initLexer(filePath);//初始化词法分析器
-    if (initSuccess) {//是否初始化成功
-        if (grammarFile.length === 0) {
-            printFatalError("语法文件不可为空！！！");
-        }
-        await startAnalyze(grammarFile);
-        return true;
-    } else {
-        return false;
-    }
 }

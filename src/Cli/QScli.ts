@@ -1,7 +1,7 @@
 import * as readline from "readline"
 import * as fs from "fs";
 import {printFatalError} from "../error/error";
-import {syntaxParser} from "../Parser/SyntaxParser";
+import {parseModule} from "../Parser/ParseModule";
 import {GRAMMAR_FILE} from "./config";
 
 
@@ -100,6 +100,6 @@ export function cli() {
 
 async function run(filePathList: Array<string>) {
     for (const filePath of filePathList) {
-        await syntaxParser(filePath, GRAMMAR_FILE);
+        // await parseModule(filePath);
     }
 }

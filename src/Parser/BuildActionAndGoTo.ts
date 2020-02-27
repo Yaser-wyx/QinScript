@@ -171,9 +171,7 @@ export function analyzeGrammar(grammar: string): object | null {
     generateProduction(grammar);
     getVAndT();//获取终结符与非终结符
     console.log("打印语法产生式");
-    // printProductions(productions);//打印解析后的产生式
     first();//计算非终结符的first集合
-    // console.log(firstSet);
     console.log("获取LR1规范族");
     getLR1();
     return fillForm();

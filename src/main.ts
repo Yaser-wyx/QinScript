@@ -1,2 +1,26 @@
 import {cli} from "./Cli/QScli";
-cli();
+import {buildLRAnalyzeForm} from "./Parser/AnalyzeGrammar";
+import {GRAMMAR_FILE, TEST_FILE} from "./Cli/config";
+import {parseModule} from "./Parser/ParseModule";
+import {getInterpreterInfo} from "./Interpreter/InterpreterInfo";
+import {getParsedModule} from "./Parser/BuildAST";
+import {run} from "./Interpreter/Interpreter";
+//运行文件
+
+//TODO 测试阶段，略去读取代码文件的获取，直接对指定文件读取
+export async function main() {
+    //读取语法文件，并解析出分析表
+    let forms = await buildLRAnalyzeForm(GRAMMAR_FILE);
+    if (forms) {
+        if (await parseModule(TEST_FILE, forms)) {
+            //先进行单模块的开发
+            let module = getParsedModule();
+            if (module) {
+                let interpreterInfo = getInterpreterInfo();
+                interpreterInfo.putModule(module);
+                run(interpreterInfo);
+            }
+        }
+    }
+}
+

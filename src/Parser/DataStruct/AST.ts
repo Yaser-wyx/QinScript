@@ -1,24 +1,19 @@
 export enum NODE_TYPE {
-    PROGRAM,//程序
     MODULE,//模块
     ID,//ID
-    MODULE_DEFINE,
-    MODULE_SELF_DEFINE,//模块名定义
-    MODULE_IMPORT_DEFINE_LIST,//模块导入列表定义
-    MODULE_EXPORT_DEFINE_LIST,//模块导出列表定义
-    MODULE_EXPORT_DEFINE,//模块导出定义
-    MODULE_IMPORT_DEFINE,//模块导入定义
-    VAR_DECLARATION,//变量定义
-    VAR_DECLARATOR_STMT,//变量声明语句
+    VAR_DEC_STMT,//变量定义
+    VAR_DEF_STMT,//变量声明语句
     RETURN_STMT,//返回语句
     FUN_DECLARATION,//函数定义
     EXPRESSION_STMT,//表达式语句
     IF_STMT,//if语句
     WHILE_STMT,//while语句
     CALL_EXPRESSION,//函数调用表达式
+    EXPRESSION,
     ARRAY_EXP,//数组表达式
     OBJECT_EXP,//对象表达式
     PROPERTY,//对象属性
+    UNARY_OPERATOR,
     UNARY_EXP,//一元运算符
     BINARY_EXP,//二元运算符
     ASSIGN_EXP,//赋值表达式
@@ -28,15 +23,37 @@ export enum NODE_TYPE {
     BLOCK_STMT,//块语句
 }
 
+export enum OPERATOR {
+    BIT_NOT,
+    NOT,
+    ADD,
+    SUB,
+    MOD,
+    DIV,
+    MUL,
+    LESS,
+    LESS_EQUAL,
+    EQUAL,
+    NOT_EQUAL,
+    GREATER,
+    GREATER_EQUAL,
+    BIT_AND,
+    BIT_OR,
+    LOGIC_OR,
+    LOGIC_AND
+}
+
+export enum OPERATOR_TYPE {
+    UNARY_OPERATOR,//单元运算符
+    ARITHMETIC_OPERATOR,//算数运算符
+    LOGICAL_OPERATOR,//逻辑运算符
+}
+
 export type Node =
-    ID
+    IDNode
     | Literal
-    | Program
-    | Module
-    | ModuleBodyStatement
-    | ModuleDefine
     | FunDeclaration
-    | VariableDeclarator
+    | VarDefStmt
     | Statement
     | Expression;
 
@@ -45,145 +62,44 @@ interface ASTNode {
     readonly nodeType: NODE_TYPE;//节点类型
 }
 
-export class Program implements ASTNode {
-    //该节点为整个程序的根节点
-    readonly nodeType: NODE_TYPE = NODE_TYPE.PROGRAM;
-    private _moduleList: Array<Module> = [];//模块列表
-    pushModule(module: Module) {
-        this._moduleList.push(module)
-    }
-
-    get moduleList(): Array<Module> {
-        return this._moduleList;
-    }
-}
-
-
-export class Module implements ASTNode {
-    //模块节点
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE;
-    private _moduleDefine: Array<ModuleDefine> = [];//模块定义语句
-    private _moduleBody: Array<ModuleBodyStatement> = [];//模块体下是模块语句
-
-    pushBody(child: ModuleBodyStatement) {
-        this._moduleBody.push(child);
-    }
-
-    pushDefine(define: ModuleDefine) {
-        this._moduleDefine.push(define)
-    }
-
-    get moduleDefine(): Array<ModuleDefine> {
-        return this._moduleDefine;
-    }
-
-    get moduleBody(): Array<ModuleBodyStatement> {
-        return this._moduleBody;
-    }
-}
-
-export type ModuleBodyStatement = Declaration
-export type Declaration = VarDeclaration | FunDeclaration
-
-export class ModuleDefine implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_DEFINE;
-    moduleSelfDefine:ModuleSelfDefine;
-    moduleImportDefineList?:ModuleImportDefineList;
-    moduleExportDefineList?:ModuleExportDefineList;
-
-    constructor(moduleSelfDefine: ModuleSelfDefine) {
-        this.moduleSelfDefine = moduleSelfDefine;
-    }
-}
-
-export class ModuleSelfDefine implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_SELF_DEFINE;
-    readonly moduleName: string;//当前模块名
-
-    constructor(moduleName: string) {
-        this.moduleName = moduleName;
-    }
-}
-
-export class ModuleExportDefineList implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_EXPORT_DEFINE_LIST;
-    private _ExportDefineList: Array<ModuleExportDefine> = [];//需要被导出的标识符列表
-    pushExportDefine(exportDefine: ModuleExportDefine) {
-        this._ExportDefineList.push(exportDefine);
-    }
-
-    get ExportDefineList(): Array<ModuleExportDefine> {
-        return this._ExportDefineList;
-    }
-}
-
-export class ModuleExportDefine implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_EXPORT_DEFINE;
-    ExportedID: ID;//需要被导出的标识符
-
-    constructor(ExportedID: ID) {
-        this.ExportedID = ExportedID;
-    }
-}
-
-export class ModuleImportDefine implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_IMPORT_DEFINE;
-    importedModule: string;//需要被导入的模块名
-
-    constructor(importedModule: string) {
-        this.importedModule = importedModule;
-    }
-}
-
-export class ModuleImportDefineList implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_IMPORT_DEFINE_LIST;
-    importModuleList: Array<ModuleImportDefine> = []//需要被导入的模块列表
-    pushImportModule(moduleImport: ModuleImportDefine) {
-        this.importModuleList.push(moduleImport);
-    }
-}
-
 export class FunDeclaration implements ASTNode {
 
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
-    readonly id: ID;
-    private _params: Array<ID> = [];//形参列表
+    readonly id: IDNode;
+    private _params: Array<IDNode> = [];//形参列表
     body: BlockStatement;
 
-    constructor(id: ID, body: BlockStatement) {
+    constructor(id: IDNode, body: BlockStatement) {
         this.id = id;
         this.body = body;
     }
 
-    pushParams(param: ID) {
+    pushParams(param: IDNode) {
         this._params.push(param);
     }
 
-    get params(): Array<ID> {
+    get params(): Array<IDNode> {
         return this._params;
     }
 }
 
-export class VarDeclaration implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DECLARATION;
-    private _declarations: Array<VariableDeclarator> = [];//变量定义子节点列表
+export class VarDecStmt implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEC_STMT;
+    id: IDNode;//要被声明的变量
 
-    addVarDec(varDec: VariableDeclarator) {
-        this._declarations.push(varDec);
-    }
-
-    get declarations(): Array<VariableDeclarator> {
-        return this._declarations;
+    constructor(id: IDNode) {
+        this.id = id;
     }
 }
 
-export class VariableDeclarator implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DECLARATOR_STMT;
-    id: ID;//要被声明的变量
-    init?: Expression | null;//要被初始化的值，默认为null，可以初始化为字面量
+export class VarDefStmt implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEF_STMT;
+    id: IDNode;//要被声明的变量
+    init?: Exp | null;//要被初始化的值，默认为null，可以初始化为字面量
 
-    constructor(id: ID) {
+    constructor(id: IDNode, init?: Exp) {
         this.id = id;
+        this.init = init;
     }
 }
 
@@ -193,7 +109,7 @@ export type Statement =
     | ReturnStmt
     | IfStmt
     | WhileStmt
-    | VarDeclaration
+    | VarDecStmt
 
 export class ReturnStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.RETURN_STMT;
@@ -246,17 +162,26 @@ export class ExpressionStatement implements ASTNode {
 }
 
 export type Expression =
-    ArrayExp
-    | ObjectExp
-    | AssignExp
-    | CallExp
-    | ID
+    CallExp
     | MemberExp
+    | ArrayExp
+    | ObjectExp
+    | BinaryArithmeticExp
     | UnaryExp
+    | AssignExp
+    | IDNode
     | Literal
-    | LogicExp
-    | BinaryExp
+    | BinaryLogicExp
 
+
+export class Exp implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.EXPRESSION;
+    readonly exp: Expression;
+
+    constructor(exp: Expression) {
+        this.exp = exp;
+    }
+}
 
 export class CallExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
@@ -316,7 +241,7 @@ export class ArrayExp implements ASTNode {
 
 }
 
-export class ID implements ASTNode {
+export class IDNode implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ID;
     readonly name: string;//标识符名
     constructor(name: string) {
@@ -327,10 +252,10 @@ export class ID implements ASTNode {
 
 export class AssignExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ASSIGN_EXP;
-    left: ID | MemberExp;
+    left: IDNode | MemberExp;
     right: Expression;
 
-    constructor(left: ID | MemberExp, right: Expression) {
+    constructor(left: IDNode | MemberExp, right: Expression) {
         this.left = left;
         this.right = right;
     }
@@ -351,57 +276,94 @@ export class ObjectExp implements ASTNode {
 
 export class Property implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.PROPERTY;
-    key: string | ID;
+    key: string | IDNode;
     value: Expression;
 
-    constructor(key: string | ID, value: Expression) {
+    constructor(key: string | IDNode, value: Expression) {
         this.key = key;
         this.value = value;
     }
 }
 
-export type UnaryOperator =
-    "-" | "+" | "!" | "~"
+type ArithmeticOperator =
+    OPERATOR.ADD
+    | OPERATOR.SUB
+    | OPERATOR.MUL
+    | OPERATOR.DIV
+    | OPERATOR.MOD
+    | OPERATOR.BIT_OR
+    | OPERATOR.BIT_AND ;
+
+type LogicalOperator =
+    OPERATOR.EQUAL
+    | OPERATOR.NOT_EQUAL
+    | OPERATOR.LESS
+    | OPERATOR.LESS_EQUAL
+    | OPERATOR.GREATER
+    | OPERATOR.GREATER_EQUAL
+    | OPERATOR.LOGIC_OR
+    | OPERATOR.LOGIC_AND;
+type UnaryOperator = OPERATOR.BIT_NOT | OPERATOR.NOT;
+
+export class Operator implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_OPERATOR;
+    operatorType: OPERATOR_TYPE;
+    unaryOperator?: UnaryOperator;
+    logicOperator?: LogicalOperator;
+    arithmeticOperator?: ArithmeticOperator;
+
+    constructor(operatorType: OPERATOR_TYPE, operator: OPERATOR) {
+        this.operatorType = operatorType;
+        switch (operatorType) {
+            case OPERATOR_TYPE.ARITHMETIC_OPERATOR:
+                this.arithmeticOperator = <ArithmeticOperator>operator;
+                break;
+            case OPERATOR_TYPE.LOGICAL_OPERATOR:
+                this.logicOperator = <LogicalOperator>operator;
+                break;
+            case OPERATOR_TYPE.UNARY_OPERATOR:
+                this.unaryOperator = <UnaryOperator>operator;
+                break;
+        }
+    }
+}
 
 export class UnaryExp implements ASTNode {
-    //一元运算表达式
+    //一元运算
     readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_EXP;
-    operator: UnaryOperator;
+    operator?: Operator;
     argument: Expression;
 
-    constructor(operator: UnaryOperator, argument: Expression) {
+    constructor(argument: Expression, operator?: Operator) {
         this.operator = operator;
         this.argument = argument;
     }
 }
 
-export type BinaryOperator =
-    "==" | "!=" | "<" | "<=" | ">" | ">=" | "+" | "-" | "*" | "/" | "%" | "|" | "&" ;
 
-export class BinaryExp implements ASTNode {
-    //二元运算
+export class BinaryArithmeticExp implements ASTNode {
+    //二元算数运算
     readonly nodeType: NODE_TYPE = NODE_TYPE.BINARY_EXP;
-    operator: BinaryOperator;
+    operator: Operator;
     left: Expression;
     right: Expression;
 
-    constructor(operator: BinaryOperator, left: Expression, right: Expression) {
+    constructor(operator: Operator, left: Expression, right: Expression) {
         this.operator = operator;
         this.left = left;
         this.right = right;
     }
 }
 
-export type LogicalOperator = "||" | "&&";
 
-export class LogicExp implements ASTNode {
-    //逻辑运算
+export class BinaryLogicExp implements ASTNode {
+    //二元逻辑运算
     readonly nodeType: NODE_TYPE = NODE_TYPE.LOGIC_EXP;
-    operator: LogicalOperator;
+    operator: Operator;
     left: Expression;
     right: Expression;
 
-    constructor(operator: LogicalOperator, left: Expression, right: Expression) {
+    constructor(operator: Operator, left: Expression, right: Expression) {
         this.operator = operator;
         this.left = left;
         this.right = right;

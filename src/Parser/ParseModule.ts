@@ -1,35 +1,52 @@
-//LR1 语法分析控制器
-import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
-import {Stack} from "./DataStruct/Stack";
+import {getNextToken, initLexer, lookAheadToken} from "../Lexer/Lexer";
 import {printFatalError} from "../error/error";
-import {getNextToken, lookAheadToken} from "../Lexer/Lexer";
 import {ActionForm, GotoForm} from "./DataStruct/Form";
-import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
-import {EOF, Production} from "./DataStruct/Production";
+import {Stack} from "./DataStruct/Stack";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
+import {Node} from "./DataStruct/AST";
+import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
 import {T} from "./DataStruct/V_T";
-import {transferVTToASTNode} from "./BuildAST";
+import {EOF, Production} from "./DataStruct/Production";
+import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
+import {initBuildAST, transferVTToASTNode} from "./BuildAST";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
 let statusStack: Stack<number> = new Stack();//状态栈
 
+//解析模块
+//使用LR分析器，根据已经生成的LR分析表，构建抽象语法树
+export async function parseModule(filePath: string, forms: object): Promise<boolean> {
+    let initSuccess = await initLexer(filePath);//初始化词法分析器
+    if (initSuccess) {//是否初始化成功
+        if (forms) {
+            // @ts-ignore
+            return BuildASTController(forms.actionForm, forms.gotoForm);
+        }
+    }
+    return false;
+}
 
-export function Controller(action: ActionForm, goto: GotoForm) {
+
+//LR1 语法分析控制器，用于控制语法树的生成，一个模块即为一棵语法树，返回是否构建成功
+export function BuildASTController(action: ActionForm, goto: GotoForm): boolean {
     let wrapToken = (token: Token) => {
         //将Token包装为V_T_Wrap
         return new V_T_Wrap(token.tokenType, token);
     };
     //开始分析，控制器入口
+    initBuildAST();//初始化语法树构造器
     actionForm = action;
     gotoForm = goto;
     let EOFToken = createSampleToken(T.EOF, EOF);
     symbolStack.push(wrapToken(EOFToken));
     statusStack.push(0);
     let flag = true;
+    let success = false;
     while (flag) {
         let nextToken = lookAheadToken();
         // @ts-ignore
+        //获取下一个转移的状态
         let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), nextToken.getTokenTypeValue());
         if (actionItem.hasConflict) {
             //对于冲突项，特殊处理，现在只有一个冲突项
@@ -38,12 +55,12 @@ export function Controller(action: ActionForm, goto: GotoForm) {
                 case ActionStatus.ACC:
                     console.log("语法树生成完毕");
                     flag = false;
-                    //ACC也需要进行最后一次reduce
-                    //@ts-ignore
-                    takeReduce(actionItem.reduceBy);
+                    success = true;
                     break;
                 case ActionStatus.ERROR:
+                    //生成失败
                     flag = false;
+                    success = false;
                     console.log(actionItem.errMsg);
                     break;
                 case ActionStatus.REDUCE:
@@ -68,6 +85,7 @@ export function Controller(action: ActionForm, goto: GotoForm) {
             }
         }
     }
+    return success;
 }
 
 function takeReduce(production: Production) {
@@ -85,3 +103,4 @@ function takeReduce(production: Production) {
         transferVTToASTNode(vtWrap);//构建状态树
     }
 }
+

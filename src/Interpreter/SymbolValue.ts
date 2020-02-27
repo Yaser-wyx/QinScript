@@ -13,10 +13,7 @@ export enum VAR_TYPE {
     NULL
 }
 
-export class SymbolTable {
-    //符号表
-    // moduleSymbol:Map<string,SymbolTable>
-}
+
 
 export interface SymbolValue {
     //符号表中单个对象的数据表示
