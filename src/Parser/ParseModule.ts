@@ -3,12 +3,12 @@ import {printFatalError} from "../error/error";
 import {ActionForm, GotoForm} from "./DataStruct/Form";
 import {Stack} from "./DataStruct/Stack";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
-import {Node} from "./DataStruct/AST";
+import {Node} from "./DataStruct/ASTNode";
 import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
 import {T} from "./DataStruct/V_T";
 import {EOF, Production} from "./DataStruct/Production";
 import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
-import {initBuildAST, transferVTToASTNode} from "./BuildAST";
+import {initBuildAST, pushBlock, setCurFunName, transferVTToASTNode} from "./BuildAST";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
@@ -73,6 +73,18 @@ export function BuildASTController(action: ActionForm, goto: GotoForm): boolean 
                     symbolStack.push(wrapToken(getNextToken()));
                     // @ts-ignore
                     statusStack.push(actionItem.shiftTo);
+                    //移进后处理，注意此时的nextToken指代的是当前已经移进的Token
+                    if (nextToken.tokenType === T.LEFT_BRACE) {
+                        //如果移进的是左大括号
+                        //则表示有可能需要一个block，但也有可能是object，先默认为block
+                        pushBlock();
+                    } else if (nextToken.tokenType === T.FUN) {
+                        //如果移进的是FUN关键字，表示即将创建一个函数，则设置新建函数的名字
+                        nextToken = lookAheadToken();
+                        if (nextToken.tokenType === T.ID) {
+                            setCurFunName(nextToken.value);
+                        }
+                    }
                     break;
                 case ActionStatus.SHIFT_BY_E:
                     symbolStack.push(wrapToken(createSampleToken(T.NULL, "")));

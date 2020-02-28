@@ -14,10 +14,10 @@ export async function main() {
     if (forms) {
         if (await parseModule(TEST_FILE, forms)) {
             //先进行单模块的开发
-            let module = getParsedModule();
-            if (module) {
+            let qsModule = getParsedModule();
+            if (qsModule) {
                 let interpreterInfo = getInterpreterInfo();
-                interpreterInfo.putModule(module);
+                interpreterInfo.putModule(qsModule);
                 run(interpreterInfo);
             }
         }

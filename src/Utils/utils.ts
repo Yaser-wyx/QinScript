@@ -47,6 +47,10 @@ let chars = {
     last: '└── '
 };
 
+export function createUniqueId(): string {
+    return Number(Math.random().toString().substr(2)).toString(36);
+}
+
 let toString = function (tree, pre) {
     let string = [], childrenPre = [];
     tree.forEach(function (node, index) {

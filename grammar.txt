@@ -11,14 +11,17 @@ ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | V
 FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ID COMMA ParamList | E
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
-Stmts -> Stmts Stmt | Stmt
-Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI | E
+Stmts -> Stmts Stmt | E
 VarDefStmt -> LET ID ASSIGN Exp SEMI | VarDecStmt
 VarDecStmt -> LET ID SEMI
+
+
+Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
 IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IF LEFT_PAREN Exp RIGHT_PAREN Stmt ELSE Stmt
 WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN  Stmt
-CallExp -> Exp LEFT_PAREN Exps RIGHT_PAREN
-Exps -> Exp | Exps COMMA Exp | E
+CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN
+ArgumentList -> Exp | ArgumentList COMMA Exp | E
+
 ReturnStmt -> RETURN Exp SEMI
 AssignStmt -> ID ASSIGN Exp SEMI
 Exp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
@@ -31,6 +34,8 @@ ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
 Properties -> Properties Property | Property
 Property -> Key COLON Exp COMMA
 Key -> STRING | ID
+
+
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
 LogicOperator -> LOGIC_OR | LOGIC_AND
 LogicExp -> LogicExp BitOperator BitExp | BitExp

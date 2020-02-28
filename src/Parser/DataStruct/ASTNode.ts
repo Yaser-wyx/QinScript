@@ -1,7 +1,11 @@
+//AST节点定义
+import exp = require("constants");
+
 export enum NODE_TYPE {
     MODULE,//模块
     ID,//ID
     VAR_DEC_STMT,//变量定义
+    PARAM_LIST,//函数参数列表
     VAR_DEF_STMT,//变量声明语句
     RETURN_STMT,//返回语句
     FUN_DECLARATION,//函数定义
@@ -9,7 +13,7 @@ export enum NODE_TYPE {
     IF_STMT,//if语句
     WHILE_STMT,//while语句
     CALL_EXPRESSION,//函数调用表达式
-    EXPRESSION,
+    ARGUMENT_LIST,//实参列表
     ARRAY_EXP,//数组表达式
     OBJECT_EXP,//对象表达式
     PROPERTY,//对象属性
@@ -54,6 +58,9 @@ export type Node =
     | Literal
     | FunDeclaration
     | VarDefStmt
+    | Operator
+    | ArgumentList
+    | ParamList
     | Statement
     | Expression;
 
@@ -66,16 +73,26 @@ export class FunDeclaration implements ASTNode {
 
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
     readonly id: IDNode;
-    private _params: Array<IDNode> = [];//形参列表
+    private readonly _params: ParamList;//形参列表
     body: BlockStatement;
 
-    constructor(id: IDNode, body: BlockStatement) {
+    constructor(id: IDNode, params: ParamList, body: BlockStatement) {
         this.id = id;
         this.body = body;
+        this._params = params;
     }
 
-    pushParams(param: IDNode) {
-        this._params.push(param);
+    get params(): Array<IDNode> {
+        return this._params.params;
+    }
+}
+
+export class ParamList implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.PARAM_LIST;
+    private _params: Array<IDNode> = [];
+
+    pushParam(id: IDNode) {
+        this._params.push(id);
     }
 
     get params(): Array<IDNode> {
@@ -104,7 +121,6 @@ export class VarDefStmt implements ASTNode {
 }
 
 export type Statement =
-    ExpressionStatement
     | BlockStatement
     | ReturnStmt
     | IfStmt
@@ -142,6 +158,13 @@ export class WhileStmt implements ASTNode {
 export class BlockStatement implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.BLOCK_STMT;
     private _body: Array<Statement> = [];
+    private readonly _blockID: string;
+    private readonly _blockDepth: number;
+
+    constructor(blockID: string, blockDepth: number) {
+        this._blockID = blockID;
+        this._blockDepth = blockDepth;
+    }
 
     pushStmt(statement: Statement) {
         this._body.push(statement);
@@ -150,14 +173,13 @@ export class BlockStatement implements ASTNode {
     get body(): Array<Statement> {
         return this._body;
     }
-}
 
-export class ExpressionStatement implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.EXPRESSION_STMT;
-    expression: Expression;//表达式
+    get blockID(): string {
+        return this._blockID;
+    }
 
-    constructor(expression: Expression) {
-        this.expression = expression;
+    get blockDepth(): number {
+        return this._blockDepth;
     }
 }
 
@@ -172,10 +194,11 @@ export type Expression =
     | IDNode
     | Literal
     | BinaryLogicExp
+    | Exp
 
 
 export class Exp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.EXPRESSION;
+    readonly nodeType: NODE_TYPE = NODE_TYPE.EXPRESSION_STMT;
     readonly exp: Expression;
 
     constructor(exp: Expression) {
@@ -183,21 +206,31 @@ export class Exp implements ASTNode {
     }
 }
 
-export class CallExp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
-    callee: Expression;//被调用对象表达式
-    private _args: Array<Expression> = [];//实参列表
+export class ArgumentList implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.ARGUMENT_LIST;
+    private _args: Array<Expression> = [];
 
-    constructor(callee: Expression) {
-        this.callee = callee;
-    }
-
-    pushArg(arg: Expression) {
-        this._args.push(arg);
+    pushArgs(exp: Expression) {
+        this._args.push(exp);
     }
 
     get args(): Array<Expression> {
         return this._args;
+    }
+}
+
+export class CallExp implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
+    readonly callee: IDNode;//被调用对象ID
+    private _args: ArgumentList;//实参列表节点
+
+    constructor(callee: IDNode, argumentList: ArgumentList) {
+        this.callee = callee;
+        this._args = argumentList;
+    }
+
+    get argList(): Array<Expression> {
+        return this._args.args;
     }
 }
 

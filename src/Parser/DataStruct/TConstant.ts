@@ -1,4 +1,6 @@
+//终结符常量表
 export const ID = "ID";
+export const COMMA = "COMMA";
 export const NUMBER = "NUMBER";
 export const STRING = "STRING";
 export const TRUE = "TRUE";
@@ -22,8 +24,9 @@ export const BIT_AND = "BIT_AND";
 export const LOGIC_OR = "LOGIC_OR";
 export const BIT_OR = "BIT_OR";
 export const LOGIN_AND = "LOGIN_AND";
+//运算符常量列表
 export const OPERATOR_LIST = [BIT_NOT, NOT, DIV, MOD, MUL, ADD, SUB, LESS, LESS_EQUAL, EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, BIT_AND, LOGIC_OR, BIT_OR, LOGIN_AND];
-
+export const VAR_DEF_STMT = "VarDefStmt";
 
 
 
