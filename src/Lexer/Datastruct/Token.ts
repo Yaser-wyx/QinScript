@@ -14,7 +14,8 @@ export const keywordTable = {//关键字表
     return: T.RETURN,
     true: T.TRUE,
     false: T.FALSE,
-    null: T.NULL
+    null: T.NULL,
+    static:T.STATIC
 };
 
 export class LexerToken {

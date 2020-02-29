@@ -1,16 +1,16 @@
 import {Stack} from "./DataStruct/Stack";
 import {
-    ArgumentList,
+    ArgumentList, ArraySub, AssignExp,
     BinaryArithmeticExp, BlockStatement, CallExp,
     Exp,
     Expression,
     FunDeclaration,
     IDNode,
-    Literal,
+    Literal, MemberExp,
     Node,
     OPERATOR,
     Operator,
-    OPERATOR_TYPE, ParamList, Statement,
+    OPERATOR_TYPE, ParamList, ReturnStmt, Statement,
     UnaryExp,
     VarDecStmt,
     VarDefStmt, WhileStmt
@@ -18,16 +18,16 @@ import {
 import {V_T_Wrap} from "./DataStruct/V_T_Wrap";
 import {T, V} from "./DataStruct/V_T";
 import {
-    COMMA,
+    ARRAY_SUB,
+    COMMA, EXP,
     FALSE,
     FUN_DEF_STMT,
-    ID,
+    ID, MEMBER_EXP,
     NULL,
     NUMBER,
     OPERATOR_LIST,
     STRING,
     TRUE,
-    VAR_DEF_STMT
 } from "./DataStruct/TConstant";
 import {QSModule} from "../Interpreter/Module";
 import {Token} from "../Lexer/Datastruct/Token";
@@ -129,6 +129,12 @@ let ASTBuildMap = {
     [V.ParamList]: buildParamList,
     [V.BlockStmt]: buildBlockStmt,
     [V.Stmts]: buildStmts,
+    [V.WhileStmt]: buildWhileStmt,
+    [V.CallExp]: buildCallExp,
+    [V.ArgumentList]: buildArgumentList,
+    [V.ArraySub]:buildArraySub,
+
+
 };
 
 //该文件用于构建抽象语法树每一个子节点，同时在栈中保存已经生成的语法树节点
@@ -211,7 +217,7 @@ function buildModuleStmts(vtWrap: V_T_Wrap) {
 }
 
 function buildFunDefStmt(vtWrap: V_T_Wrap) {
-    let idToken = vtWrap.getChildToken(ID);
+    let idToken = <Token>vtWrap.getChildToken(ID);
     if (idToken && idToken.value === curFunName) {
         //id存在，且与当前方法名一致
         let idNode: IDNode = new IDNode(curFunName);
@@ -304,7 +310,7 @@ function buildVarDecStmt(vtWrap: V_T_Wrap) {
     return new VarDecStmt(idNode);
 }
 
-function buildWhileStmt(vtWrap: V_T_Wrap) {
+function buildWhileStmt() {
     let whileStmtNodeList = ASTStack.popX(2);
     if (!hasNull(whileStmtNodeList)) {
         //没有空值
@@ -313,7 +319,7 @@ function buildWhileStmt(vtWrap: V_T_Wrap) {
 }
 
 function buildCallExp(vtWrap: V_T_Wrap) {
-    let idToken = vtWrap.getChildToken(ID);
+    let idToken = <Token>vtWrap.getChildToken(ID);
     if (idToken) {
         let idNode: IDNode = new IDNode(idToken.value);
         let argumentList: ArgumentList = <ArgumentList>ASTStack.pop();
@@ -347,11 +353,57 @@ function buildArgumentList(vtWrap: V_T_Wrap) {
     }
 }
 
+function buildReturnStmt(vtWrap: V_T_Wrap) {
+    if (vtWrap.childNums === 2) {
+        //没有返回值
+        return new ReturnStmt()
+    } else if (vtWrap.testChild(EXP)) {
+        //有返回值
+        let exp: Exp = <Exp>ASTStack.pop();
+        if (exp) {
+            return new ReturnStmt(exp)
+        }
+    }
+}
+
+function buildAssignStmt(vtWrap: V_T_Wrap) {
+    if (vtWrap.testChild(ID)) {
+        let idToken: Token = <Token>vtWrap.getChildToken(ID);
+        let exp: Exp = <Exp>ASTStack.pop();
+        if (exp) {
+            let idNode: IDNode = new IDNode(idToken.value);
+            return new AssignExp(idNode, exp);
+        }
+    } else if (vtWrap.testChild(MEMBER_EXP)) {
+        let nodeList = ASTStack.popX(2);
+        if (!hasNull(nodeList)) {
+            return new AssignExp(<MemberExp>nodeList[0], <Exp>nodeList[1]);
+        }
+    }
+}
+
 function buildExp() {
     let exp: Expression = <Expression>ASTStack.pop();
     if (exp) {
         //包装为表达式
         return new Exp(exp);
+    }
+}
+
+function buildMemberExp(vtWrap: V_T_Wrap) {
+}
+
+function buildArraySub(vtWrap: V_T_Wrap) {
+    if (vtWrap.testChild(ARRAY_SUB)) {
+        let arraySub: ArraySub = <ArraySub>ASTStack.pop();
+        if (arraySub) {
+            let exp: Exp = <Exp>ASTStack.pop();
+            arraySub.pushSub(exp);
+            return arraySub;
+        }
+    } else {
+        let exp: Exp = <Exp>ASTStack.pop();
+        return new ArraySub(exp);
     }
 }
 
@@ -432,7 +484,7 @@ function buildOperator(vtWrap: V_T_Wrap) {
             case T.LOGIC_OR:
                 operator = new Operator(OPERATOR_TYPE.LOGICAL_OPERATOR, OPERATOR.LOGIC_OR);
                 break;
-            case T.LOGIN_AND:
+            case T.LOGIC_AND:
                 operator = new Operator(OPERATOR_TYPE.LOGICAL_OPERATOR, OPERATOR.LOGIC_AND);
                 break;
         }
@@ -483,7 +535,7 @@ function buildFactorExp(vtWrap: V_T_Wrap) {
         let unaryExp: UnaryExp = <UnaryExp>ASTStack.pop();
         let operator: Operator = <Operator>ASTStack.pop();
         if (unaryExp && operator) {
-            unaryExp.operator = operator;
+            unaryExp.setOperator(operator);
             return unaryExp;
         }
     }

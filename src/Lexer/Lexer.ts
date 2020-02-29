@@ -1,6 +1,6 @@
 //词法分析器
 import {EOF, keywordTable, LexerToken, Token} from "./Datastruct/Token";
-import {isID, isIDStart, isKeyword, isNumber, isSpace, isSymbol} from "../Utils/ScannerUtils";
+import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "../Utils/ScannerUtils";
 import {printLexerError} from "../error/error";
 import {readFromFile} from "../Utils/utils";
 import {T} from "../Parser/DataStruct/V_T";
@@ -136,9 +136,11 @@ function handleSymbol(start: string): LexerToken {
             break;
         case '+':
             symbolResult.tokenType = T.ADD;
+            testNext("+", [T.ADD_ONE]);
             break;
         case '-':
             symbolResult.tokenType = T.SUB;
+            testNext("-", [T.SUB_ONE]);
             break;
         case '*':
             symbolResult.tokenType = T.MUL;
@@ -155,7 +157,7 @@ function handleSymbol(start: string): LexerToken {
             break;
         case '&':
             symbolResult.tokenType = T.BIT_AND;
-            testNext("&", [T.LOGIN_AND]);
+            testNext("&", [T.LOGIC_AND]);
             break;
         case '|':
             symbolResult.tokenType = T.BIT_OR;
@@ -174,6 +176,7 @@ function handleSymbol(start: string): LexerToken {
             break;
         case ':':
             symbolResult.tokenType = T.COLON;
+            testNext(":", [T.MODULE_SCOPE]);
             break;
         default:
             //正常来说该分支是不会到达的
@@ -253,7 +256,7 @@ function analyzeCodeToToken() {
             if (typeof result !== "boolean") {
                 pushToken(result, token)
             }
-        } else if (isNumber(nowChar)) {
+        } else if (isNumberStart(nowChar)) {
             //处理数字（包括正整数与浮点数）
             pushToken(handleNumber(nowChar), token);
         } else if (isIDStart(nowChar)) {
@@ -290,6 +293,7 @@ export async function initLexer(file: string): Promise<boolean> {
     let EOFToken = new Token();
     EOFToken.tokenType = T.EOF;
     EOFToken.value = "#";
+
     tokens.push(EOFToken);
     if (errorTokens.length > 0) {
         printLexerError(errorTokens, file);//打印错误信息

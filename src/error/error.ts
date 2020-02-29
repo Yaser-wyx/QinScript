@@ -37,20 +37,24 @@ export function printLexerError(lexerTokens: LexerToken[], file) {
 }
 
 let formError = "";
+let formErrorNum = 0;
 
 export function addBuildFormError(error) {
     formError += error;
+    formErrorNum++;
 }
 
 export function printBuildFormError() {
-    if (formError.length > 0) {
-        console.log("分析表有冲突，请查看日志！");
+    if (formErrorNum > 0) {
+        console.log("分析表有" + formErrorNum + "个冲突，请查看日志！");
         let errorMsg = "====================LR(1)分析表构造错误====================\n";
         errorMsg += formError;
         errorMsg += "====================================================\n";
         writeToFile(errorMsg, "FormError.txt")
-    }else{
+    } else {
         console.log("分析表无冲突！");
         writeToFile("无异常！", "FormError.txt")
     }
+    formErrorNum = 0;
+    formError = "";
 }

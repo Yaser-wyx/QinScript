@@ -1,10 +1,3 @@
-@module:qs;
-
-fun main(){
-    let temp = Stack();
-    temp.push("");
-}
-
 static fun Stack(array) {
     static let x = [];
     static let index = 0;
@@ -26,6 +19,12 @@ static fun Stack(array) {
         return index;
     }
 }
+
+fun main(){
+    let temp = Stack();
+    temp.push("");
+}
+
 static fun node(val){
     static let value = val;
     static let left;

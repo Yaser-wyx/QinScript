@@ -8,32 +8,32 @@ ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
 ModuleExport ->  EXPORT COLON ID SEMI
 ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | VarDefStmt | E
 
-FunDefStmt -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
+FunDefStmt -> FunDef | STATIC FunDefStmt
+FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
+StaticVarDefStmt -> STATIC VarDefStmt
+InnerFunDefStmt -> AT FunDef
+IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IfStmt ELSE Stmt
+CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN | ID MODULE_SCOPE CallExp | ID DOT CallExp
+AssignStmt -> ID ASSIGN Exp SEMI | ArrayMemberExp ASSIGN Exp SEMI
+ArrayMemberExp ->  ID ArraySub
+
 ParamList -> ID | ID COMMA ParamList | E
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
 Stmts -> Stmts Stmt | E
 VarDefStmt -> LET ID ASSIGN Exp SEMI | VarDecStmt
 VarDecStmt -> LET ID SEMI
 
+Stmt -> VarDefStmt | StaticVarDefStmt | InnerFunDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
 
-Stmt -> VarDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
-IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IF LEFT_PAREN Exp RIGHT_PAREN Stmt ELSE Stmt
-WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN  Stmt
-CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN
+WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt
 ArgumentList -> Exp | ArgumentList COMMA Exp | E
 
-ReturnStmt -> RETURN Exp SEMI
-AssignStmt -> ID ASSIGN Exp SEMI
-Exp -> CallExp | MemberExp | ArrayExp | ObjectExp | CalExp
-MemberExp ->  ID DOT MemberExp | ID ArraySub | ID ArraySub DOT MemberExp | ID DOT ID
+ReturnStmt -> RETURN Exp SEMI | RETURN SEMI
+Exp -> ArrayMemberExp | ArrayExp | ObjectExp | CalExp
 ArraySub -> LEFT_BRACKET Exp RIGHT_BRACKET | LEFT_BRACKET Exp RIGHT_BRACKET ArraySub
 ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
 ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems | E
-ArrayItem -> NUMBER | STRING | ID | ObjectExp | ArrayExp
-ObjectExp -> LEFT_BRACE Properties RIGHT_BRACE
-Properties -> Properties Property | Property
-Property -> Key COLON Exp COMMA
-Key -> STRING | ID
+ArrayItem -> Literal | ID | ArrayExp | CallExp
 
 
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
@@ -46,7 +46,10 @@ RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
 AdditiveOperator -> ADD | SUB
 AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
 FactorOperator -> MOD | DIV | MUL
-FactorExp -> UnaryOperator UnaryExp | UnaryExp
-UnaryOperator -> BIT_NOT | NOT
-UnaryExp -> Literal | ID | LEFT_PAREN Exp RIGHT_PAREN
+FactorExp -> UnaryOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryExp
+UnaryBeforeOperator -> BIT_NOT | NOT
+UnaryAfterOperator -> ADD_ONE | SUB_ONE
+
+UnaryExp -> Literal | ID | LEFT_PAREN Exp RIGHT_PAREN | CallExp
+
 Literal ->  NUMBER | STRING | TRUE | FALSE | NULL

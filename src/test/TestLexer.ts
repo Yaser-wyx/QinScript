@@ -2,24 +2,29 @@
 import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
 import {Token} from "../Lexer/Datastruct/Token";
 import {T} from "../Parser/DataStruct/V_T";
+import {writeToFile} from "../Utils/utils";
 
 
 function printToken(token: Token, index: number) {
-    console.log("====================第" + index + "个token====================");
-    console.log("token.type: " + T[token.tokenType]);
-    console.log("token.value: " + token.value);
-    console.log("token.length: " + token.length);
-    console.log("token.lineNo: " + token.lineNo);
-    console.log("token.start: " + token.start + '\n');
+    let data = "";
+    data += "====================第" + index + "个token====================\n";
+    data += "token.type: " + T[token.tokenType] + "\n";
+    data += "token.value: " + token.value + "\n";
+    data += "token.length: " + token.length + "\n";
+    data += "token.lineNo: " + token.lineNo + "\n";
+    data += "token.start: " + token.start + '\n';
+    return data;
 }
+
 async function testLexer(filePath) {
     await initLexer(filePath);
     let index = 0;
+    let str = "";
     while (hasToken()) {
         index++;
-        printToken(getNextToken(), index);
+        str += printToken(getNextToken(), index);
     }
-
+    await writeToFile(str, "src/test.out.tokens");
 }
 
 testLexer("src/test.qs");

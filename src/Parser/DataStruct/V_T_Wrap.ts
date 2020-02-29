@@ -2,6 +2,7 @@
 import {V, V_T} from "./V_T";
 import {Token} from "../../Lexer/Datastruct/Token";
 import {Production} from "./Production";
+import {isArray} from "util";
 
 export class V_T_Wrap {
     private _isT: boolean = false;//是否是终结符，默认是非终结符
@@ -27,16 +28,33 @@ export class V_T_Wrap {
         return !!this.children[childName];
     }
 
-    getChildToken(childName: string): Token | null {
+    getChildToken(childName: string): Token | Array<Token> | null {
+        //返回匹配成功的Token或Token列表
         if (this.children[childName]) {
-            if (this.children[childName].token) {
-                return this.children[childName].token
+            //存在
+            if (Array.isArray(this.children[childName])) {
+                //如果是数组形式
+                let tokenArray: Array<Token> = [];
+                let childArray = this.children[childName];
+                for (let i = 0; i < childArray.length; i++) {
+                    if (childArray[i].token) {
+                        tokenArray.push(childArray[i].token)
+                    }
+                }
+                return tokenArray
+            } else {
+                //普通模式
+                if (this.children[childName].token) {
+                    return this.children[childName].token
+                }
             }
         }
         return null;
     }
 
-    getChildTokenByList(childNameList: Array<string>): Token | null {
+    getChildTokenByList(childNameList: Array<string>): Token | Array<Token> | null {
+        //list中都是待识别的tokenName
+        //返回匹配成功的Token或Token列表
         for (let i = 0; i < childNameList.length; i++) {
             let value = this.getChildToken(childNameList[i]);
             if (value) {
@@ -82,8 +100,24 @@ export class V_T_Wrap {
         if (child.getSymbolValue() === "NULL") {
             this._isNull = true;
         } else {
-            this.children[child.getSymbolValue()] = child;
-            this._childNums++;
+            let childName = child.getSymbolValue();
+            if (this.children[childName]) {
+                //如果已经存在同名的child了，则将该值扩展为数组类型
+                if (Array.isArray(this.children[childName])) {
+                    //如果该节点已经是数组，则直接加入新的值
+                    this.children[childName].push(child);
+                } else {
+                    //还不是数组对象，将之扩展为数组
+                    let childArray: Array<V_T_Wrap> = [];
+                    childArray.push(this.children[childName]);
+                    childArray.push(child);
+                    this.children[childName] = childArray;
+                }
+            } else {
+                //没有同名对象，则使用普通形式
+                this.children[childName] = child;
+                this._childNums++;
+            }
         }
     }
 

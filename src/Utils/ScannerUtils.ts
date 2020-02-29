@@ -7,6 +7,10 @@ import {keywordTable} from "../Lexer/Datastruct/Token";
  * 读取指定文件流
  */
 
+export function isNumberStart(char: string): boolean {
+    let number = /[0-9]/;
+    return number.test(char);
+}
 export function isNumber(char: string): boolean {
     let number = /[0-9.]/;
     return number.test(char);
