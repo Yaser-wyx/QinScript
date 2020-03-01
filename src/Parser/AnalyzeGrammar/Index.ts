@@ -1,9 +1,9 @@
-import {hashCode, readFromFile, writeToFile} from "../Utils/utils";
-import {CACHE_FILE, HASH_FILE} from "../Cli/config";
-import {ActionForm, GotoForm} from "./DataStruct/Form";
+import {hashCode, readFromFile, writeToFile} from "../../Utils/utils";
+import {CACHE_FILE, HASH_FILE} from "../../Cli/config";
+import {ActionForm, GotoForm} from "../DataStruct/Form";
 import {analyzeGrammar} from "./BuildActionAndGoTo";
 import * as fs from "fs";
-import {HashFile} from "./DataStruct/HashFile";
+import {HashFile} from "../DataStruct/HashFile";
 
 export async function buildLRAnalyzeForm(grammarFile: string): Promise<object | null> {
 

@@ -8,48 +8,56 @@ ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
 ModuleExport ->  EXPORT COLON ID SEMI
 ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | VarDefStmt | E
 
-FunDefStmt -> FunDef | STATIC FunDefStmt
+FunDefStmt -> FunDef | STATIC FunDef
 FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
-StaticVarDefStmt -> STATIC VarDefStmt
+ParamList -> ID | ID COMMA ParamList | E
+
+Stmts -> Stmts Stmt | E
+Stmt -> BlockStmt | VariableDef | InnerFunDefStmt | IfStmt | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
+BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
+
+VariableDef -> STATIC VarDefStmt | VarDefStmt
+VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
+
+Variable -> ID | AT ID
+
 InnerFunDefStmt -> AT FunDef
 IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IfStmt ELSE Stmt
-CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN | ID MODULE_SCOPE CallExp | ID DOT CallExp
-AssignStmt -> ID ASSIGN Exp SEMI | ArrayMemberExp ASSIGN Exp SEMI
-ArrayMemberExp ->  ID ArraySub
-
-ParamList -> ID | ID COMMA ParamList | E
-BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
-Stmts -> Stmts Stmt | E
-VarDefStmt -> LET ID ASSIGN Exp SEMI | VarDecStmt
-VarDecStmt -> LET ID SEMI
-
-Stmt -> VarDefStmt | StaticVarDefStmt | InnerFunDefStmt | IfStmt | WhileStmt | ReturnStmt | BlockStmt | AssignStmt | Exp SEMI
-
 WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt
-ArgumentList -> Exp | ArgumentList COMMA Exp | E
-
 ReturnStmt -> RETURN Exp SEMI | RETURN SEMI
-Exp -> ArrayMemberExp | ArrayExp | ObjectExp | CalExp
-ArraySub -> LEFT_BRACKET Exp RIGHT_BRACKET | LEFT_BRACKET Exp RIGHT_BRACKET ArraySub
+AssignStmt -> Variable ASSIGN Exp SEMI | ArrayMemberExp ASSIGN Exp SEMI
+
+
+Exp ->  ArrayExp | ArrayMemberExp | CalExp
+
 ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET
 ArrayItems -> ArrayItem | ArrayItem COMMA ArrayItems | E
-ArrayItem -> Literal | ID | ArrayExp | CallExp
+ArrayItem -> Literal | Variable | ArrayExp | CallExp
 
+ArrayMemberExp ->  Variable ArraySub
+ArraySub -> LEFT_BRACKET Exp RIGHT_BRACKET | LEFT_BRACKET Exp RIGHT_BRACKET ArraySub
+
+CallExp -> Variable LEFT_PAREN ArgumentList RIGHT_PAREN | ID MODULE_SCOPE CallExp | ID DOT CallExp
+ArgumentList -> Exp | ArgumentList COMMA Exp | E
 
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
 LogicOperator -> LOGIC_OR | LOGIC_AND
+
 LogicExp -> LogicExp BitOperator BitExp | BitExp
 BitOperator -> BIT_AND | BIT_OR
+
 BitExp -> BitExp RelationalOperator  RelationExp | RelationExp
 RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
+
 RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
 AdditiveOperator -> ADD | SUB
+
 AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
 FactorOperator -> MOD | DIV | MUL
-FactorExp -> UnaryOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryExp
+
+FactorExp -> UnaryBeforeOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryExp
 UnaryBeforeOperator -> BIT_NOT | NOT
 UnaryAfterOperator -> ADD_ONE | SUB_ONE
 
-UnaryExp -> Literal | ID | LEFT_PAREN Exp RIGHT_PAREN | CallExp
-
+UnaryExp -> Literal | Variable | LEFT_PAREN Exp RIGHT_PAREN | CallExp
 Literal ->  NUMBER | STRING | TRUE | FALSE | NULL

@@ -1,9 +1,9 @@
 import {cli} from "./Cli/QScli";
-import {buildLRAnalyzeForm} from "./Parser/AnalyzeGrammar";
+import {buildLRAnalyzeForm} from "./Parser";
 import {GRAMMAR_FILE, TEST_FILE} from "./Cli/config";
 import {parseModule} from "./Parser/ParseModule";
 import {getInterpreterInfo} from "./Interpreter/InterpreterInfo";
-import {getParsedModule} from "./Parser/BuildAST";
+import {getParsedModule} from "./Parser";
 import {run} from "./Interpreter/Interpreter";
 //运行文件
 

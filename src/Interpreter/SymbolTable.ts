@@ -8,7 +8,7 @@ export abstract class SymbolTable {
 
     abstract pushVariable(variable: Variable);
 
-    abstract getVariable(moduleName: string, varName: string, funName?: string, blockDepth?: number, blockID?: string): Variable | null;
+    abstract getVariable(moduleName: string, varName: string, blockDepth?: number, blockID?: string): Variable | null;
 
     abstract pushFun(fun: Fun);
 
@@ -17,11 +17,11 @@ export abstract class SymbolTable {
 
 class SymbolTableInner extends SymbolTable {
 
-    getVariable(moduleName: string, varName: string, funName?: string, blockDepth?: number, blockID?: string): Variable | null {
+    getVariable(moduleName: string, varName: string, blockDepth?: number, blockID?: string): Variable | null {
         let variable: Variable | null;
-        if (funName && blockID && blockDepth) {
+        if ( blockID && blockDepth) {
             //是函数中的变量
-            variable = this.variableSymbolList[moduleName][funName][blockDepth][blockID][varName];
+            variable = this.variableSymbolList[moduleName][blockDepth][blockID][varName];
         } else {
             variable = this.variableSymbolList[moduleName][varName];
         }
@@ -55,22 +55,16 @@ class SymbolTableInner extends SymbolTable {
             //如果是模块变量
             this.variableSymbolList[varModuleName][varName] = variable;
         } else {
-            //不是模块变量，那么就是一个方法体变量
-            //@ts-ignore
-            let funName: string = variable.funName;//获取方法名
+            //不是模块变量，那么就是使用blockID与blockDepth来表示
             //@ts-ignore
             let blockDepth: number = variable.blockDepth;//获取深度
             //@ts-ignore
             let blockID: string = variable.blockID;//获取scopeID
-            if (!this.variableSymbolList[varModuleName].hasOwnProperty(funName)) {
-                //如果该方法不存在，则创建
-                this.variableSymbolList[varModuleName][funName] = new Array<object>();
-            }
-            if (!this.variableSymbolList[varModuleName][funName][blockDepth].hasOwnProperty(blockID)) {
+            if (!this.variableSymbolList[varModuleName][blockDepth].hasOwnProperty(blockID)) {
                 //如果指定深度的scope不存在
-                this.variableSymbolList[varModuleName][funName][blockDepth][blockID] = {};
+                this.variableSymbolList[varModuleName][blockDepth][blockID] = {};
             }
-            this.variableSymbolList[varModuleName][funName][blockDepth][blockID][varName] = variable;
+            this.variableSymbolList[varModuleName][blockDepth][blockID][varName] = variable;
         }
     }
 

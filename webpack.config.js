@@ -7,7 +7,7 @@ module.exports = {
   entry: { 
     'QS': './src/main.ts',
     'testLexer':'./src/test/TestLexer.ts',
-    'testParser':'./src/test/TestParser.ts',
+    'testGrammar':'./src/test/TestGrammar.ts',
     'test':'./src/test/test.ts'
   },
   output: {

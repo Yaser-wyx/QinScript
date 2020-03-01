@@ -1,10 +1,9 @@
 import * as fs from "fs";
 import {printFatalError} from "../error/error";
-import {keywordTable} from "../Lexer/Datastruct/Token";
+import {keywordTable} from "./Datastruct/Token";
 
 /**词法分析器工具包
  * 使用正则来判断读入的字符类别
- * 读取指定文件流
  */
 
 export function isNumberStart(char: string): boolean {

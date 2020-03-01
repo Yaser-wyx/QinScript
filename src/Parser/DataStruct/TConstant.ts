@@ -1,6 +1,7 @@
 //终结符常量表
 export const ID = "ID";
 export const MEMBER_EXP = "MemberExp";
+export const STATIC = "STATIC";
 export const EXP = "Exp";
 export const ARRAY_SUB = "ArraySub";
 export const COMMA = "COMMA";
@@ -9,7 +10,6 @@ export const STRING = "STRING";
 export const TRUE = "TRUE";
 export const FALSE = "FALSE";
 export const NULL = "NULL";
-export const FUN_DEF_STMT = "FunDefStmt";
 export const BIT_NOT = "BIT_NOT";
 export const NOT = "NOT";
 export const MOD = "MOD";

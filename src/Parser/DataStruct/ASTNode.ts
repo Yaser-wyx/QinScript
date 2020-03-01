@@ -2,7 +2,6 @@
 export enum NODE_TYPE {
     MODULE,//模块
     ID,//ID
-    VAR_DEC_STMT,//变量定义
     PARAM_LIST,//函数参数列表
     VAR_DEF_STMT,//变量声明语句
     RETURN_STMT,//返回语句
@@ -100,15 +99,6 @@ export class ParamList implements ASTNode {
     }
 }
 
-export class VarDecStmt implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEC_STMT;
-    readonly id: IDNode;//要被声明的变量
-
-    constructor(id: IDNode) {
-        this.id = id;
-    }
-}
-
 export class VarDefStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEF_STMT;
     readonly id: IDNode;//要被声明的变量
@@ -125,7 +115,6 @@ export type Statement =
     | ReturnStmt
     | IfStmt
     | WhileStmt
-    | VarDecStmt
 
 export class ReturnStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.RETURN_STMT;

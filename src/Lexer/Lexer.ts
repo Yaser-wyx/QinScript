@@ -1,6 +1,6 @@
 //词法分析器
 import {EOF, keywordTable, LexerToken, Token} from "./Datastruct/Token";
-import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "../Utils/ScannerUtils";
+import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "./ScannerUtils";
 import {printLexerError} from "../error/error";
 import {readFromFile} from "../Utils/utils";
 import {T} from "../Parser/DataStruct/V_T";

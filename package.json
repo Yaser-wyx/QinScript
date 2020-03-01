@@ -5,7 +5,7 @@
     "build": "./node_modules/.bin/webpack",
     "dev": "npm run build && node ./out/QS.js",
     "testLexer": "npm run build && node ./out/testLexer.js",
-    "testParser": "npm run build && node ./out/testParser.js",
+    "testGrammar": "npm run build && node ./out/testGrammar.js",
     "testGeneral": "npm run build && node ./out/test.js"
   },
   "dependencies": {

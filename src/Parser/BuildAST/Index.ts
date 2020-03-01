@@ -1,54 +1,114 @@
-import {Stack} from "./DataStruct/Stack";
+import {Stack} from "../DataStruct/Stack";
 import {
-    ArgumentList, ArraySub, AssignExp,
-    BinaryArithmeticExp, BlockStatement, CallExp,
+    ArgumentList,
+    ArraySub,
+    AssignExp,
+    BinaryArithmeticExp,
+    BlockStatement,
+    CallExp,
     Exp,
     Expression,
     FunDeclaration,
     IDNode,
-    Literal, MemberExp,
+    Literal,
+    MemberExp,
     Node,
     OPERATOR,
     Operator,
-    OPERATOR_TYPE, ParamList, ReturnStmt, Statement,
+    OPERATOR_TYPE,
+    ParamList,
+    ReturnStmt,
+    Statement,
     UnaryExp,
-    VarDecStmt,
-    VarDefStmt, WhileStmt
-} from "./DataStruct/ASTNode";
-import {V_T_Wrap} from "./DataStruct/V_T_Wrap";
-import {T, V} from "./DataStruct/V_T";
+    VarDefStmt,
+    WhileStmt
+} from "../DataStruct/ASTNode";
+import {V_T_Wrap} from "../DataStruct/V_T_Wrap";
+import {T, V} from "../DataStruct/V_T";
 import {
     ARRAY_SUB,
-    COMMA, EXP,
+    COMMA,
+    EXP,
     FALSE,
-    FUN_DEF_STMT,
-    ID, MEMBER_EXP,
+    ID,
+    MEMBER_EXP,
     NULL,
     NUMBER,
-    OPERATOR_LIST,
+    OPERATOR_LIST, STATIC,
     STRING,
-    TRUE,
-} from "./DataStruct/TConstant";
-import {QSModule} from "../Interpreter/Module";
-import {Token} from "../Lexer/Datastruct/Token";
-import {Fun} from "../Interpreter/Fun";
-import {getSymbolTable, SymbolTable} from "../Interpreter/SymbolTable";
-import {Variable} from "../Interpreter/Variable";
-import {createUniqueId} from "../Utils/utils";
+    TRUE, VAR_DEF_STMT,
+} from "../DataStruct/TConstant";
+import {QSModule} from "../../Interpreter/Module";
+import {Token} from "../../Lexer/Datastruct/Token";
+import {Fun, FUN_TYPE} from "../../Interpreter/Fun";
+import {getSymbolTable, SymbolTable} from "../../Interpreter/SymbolTable";
+import {Variable} from "../../Interpreter/Variable";
+import {createUniqueId} from "../../Utils/utils";
 
 let ASTStack: Stack<Node>;
 let blockStack: Stack<BlockStatement>;
+let funStack: Stack<Fun>;
 let hasImport = false;
 let qsModule: QSModule;
 let symbolTable: SymbolTable;
 let curScopeState: SCOPE_STATE;
-let curFunName: string = "";//当前所处方法名
 let curBlockDepth: number = 0;//当前所处scope的深度
 let curBlockID: string = "";//当前所处scope的ID
+let curFun: Fun | null;//当前的函数
+
 //构建AST时目前所处的作用域
 enum SCOPE_STATE {
     MODULE,//模块作用域
-    FUNCTION//方法作用域
+    GENERAL_FUN,//普通函数作用域
+    STATIC_FUN,//静态函数作用域
+    INNER_FUN//内部函数作用域
+}
+
+
+export function pushFun(funName: string, funType: FUN_TYPE) {
+    let newFun: Fun | null = null;
+    switch (funType) {
+        case FUN_TYPE.GENERAL:
+            curScopeState = SCOPE_STATE.GENERAL_FUN;
+            newFun = new Fun(qsModule.moduleName, funName, FUN_TYPE.GENERAL);
+            break;
+        case FUN_TYPE.INNER:
+            curScopeState = SCOPE_STATE.INNER_FUN;
+            newFun = new Fun(qsModule.moduleName, funName, FUN_TYPE.INNER);
+            break;
+        case FUN_TYPE.STATIC:
+            curScopeState = SCOPE_STATE.STATIC_FUN;
+            newFun = new Fun(qsModule.moduleName, funName, FUN_TYPE.STATIC);
+    }
+    if (newFun) {
+        curFun = newFun;
+        funStack.push(newFun);
+    }
+}
+
+function popFun() {
+    if (!funStack.isEmpty()) {
+        let fun = funStack.pop();
+        if (!funStack.isEmpty()) {
+            //栈内还有函数
+            let funTemp: Fun = <Fun>funStack.peek();
+            curFun = funTemp;
+            switch (funTemp.funType) {
+                case FUN_TYPE.GENERAL:
+                    curScopeState = SCOPE_STATE.GENERAL_FUN;
+                    break;
+                case FUN_TYPE.INNER:
+                    curScopeState = SCOPE_STATE.INNER_FUN;
+                    break;
+                case FUN_TYPE.STATIC:
+                    curScopeState = SCOPE_STATE.STATIC_FUN;
+            }
+        } else {
+            curFun = null;
+            curScopeState = SCOPE_STATE.MODULE;
+        }
+        return fun
+    }
 }
 
 export function pushBlock() {
@@ -58,11 +118,6 @@ export function pushBlock() {
     blockStack.push(blockStatement);
 }
 
-export function setCurFunName(funName: string) {
-    curFunName = funName;
-    curScopeState = SCOPE_STATE.FUNCTION;
-}
-
 function popBlock(): BlockStatement | null {
     if (!blockStack.isEmpty()) {
         let block: BlockStatement = blockStack.pop();
@@ -70,6 +125,9 @@ function popBlock(): BlockStatement | null {
             let blockTemp = blockStack.peek();
             curBlockDepth = (<BlockStatement>blockTemp).blockDepth;
             curBlockID = (<BlockStatement>blockTemp).blockID;
+        } else {
+            curBlockDepth = 0;
+            curBlockID = "";
         }
         return block;
     }
@@ -85,7 +143,6 @@ function hasNull(list: Array<Node>): boolean {
         }
     }
     return flag;
-
 }
 
 //TODO 添加错误处理机制
@@ -93,12 +150,13 @@ export function initBuildAST() {
     //初始化AST构建程序
     ASTStack = new Stack<Node>();
     blockStack = new Stack<BlockStatement>();
+    funStack = new Stack<Fun>();
     hasImport = false;
     qsModule = new QSModule();
     symbolTable = getSymbolTable();
+    curFun = null;
     curBlockDepth = 0;
     curScopeState = SCOPE_STATE.MODULE;//默认是处于模块作用域中
-    curFunName = "";
     curBlockID = "";
 }
 
@@ -108,33 +166,42 @@ let ASTBuildMap = {
     [V.ModuleImportDefine]: buildModuleImportDefine,
     [V.ModuleExport]: buildModuleExport,
     [V.ModuleStmts]: buildModuleStmts,
-    [V.Literal]: buildLiteral,
-    [V.UnaryExp]: buildUnaryExp,
-    [V.FactorExp]: buildFactorExp,
-    [V.AdditiveExp]: buildBinaryExp,
-    [V.RelationExp]: buildBinaryExp,
-    [V.BitExp]: buildBinaryExp,
-    [V.LogicExp]: buildBinaryExp,
-    [V.CalExp]: buildBinaryExp,
-    [V.Exp]: buildExp,
-    [V.VarDefStmt]: buildVarDefStmt,
-    [V.VarDecStmt]: buildVarDecStmt,
-    [V.UnaryOperator]: buildOperator,
-    [V.FactorOperator]: buildOperator,
-    [V.AdditiveOperator]: buildOperator,
-    [V.BitOperator]: buildOperator,
-    [V.LogicOperator]: buildOperator,
-    [V.RelationalOperator]: buildOperator,
     [V.FunDefStmt]: buildFunDefStmt,
+    [V.FunDef]: buildFunDef,
     [V.ParamList]: buildParamList,
-    [V.BlockStmt]: buildBlockStmt,
     [V.Stmts]: buildStmts,
+    [V.BlockStmt]: buildBlockStmt,
+    [V.VariableDef]: buildVariableDef,
+    [V.VarDefStmt]: buildVarDefStmt,
+    [V.InnerFunDefStmt]: buildInnerFunDefStmt,
+    [V.IfStmt]: buildIfStmt,
     [V.WhileStmt]: buildWhileStmt,
+    [V.ReturnStmt]: buildReturnStmt,
+    [V.AssignStmt]: buildAssignStmt,
+    [V.Exp]: buildExp,
+    [V.ArrayExp]: buildArrayExp,
+    [V.ArrayItems]: buildArrayItems,
+    [V.ArrayItem]: buildArrayItem,
+    [V.ArrayMemberExp]: buildArrayMemberExp,
+    [V.ArraySub]: buildArraySub,
     [V.CallExp]: buildCallExp,
     [V.ArgumentList]: buildArgumentList,
-    [V.ArraySub]:buildArraySub,
+    [V.CalExp]: buildBinaryExp,
 
-
+    [V.LogicOperator]: buildOperator,
+    [V.LogicExp]: buildBinaryExp,
+    [V.BitOperator]: buildOperator,
+    [V.BitExp]: buildBinaryExp,
+    [V.RelationalOperator]: buildOperator,
+    [V.RelationExp]: buildBinaryExp,
+    [V.AdditiveOperator]: buildOperator,
+    [V.AdditiveExp]: buildBinaryExp,
+    [V.FactorOperator]: buildOperator,
+    [V.FactorExp]: buildFactorExp,
+    [V.UnaryBeforeOperator]: buildOperator,
+    [V.UnaryAfterOperator]: buildOperator,
+    [V.UnaryExp]: buildUnaryExp,
+    [V.Literal]: buildLiteral,
 };
 
 //该文件用于构建抽象语法树每一个子节点，同时在栈中保存已经生成的语法树节点
@@ -162,7 +229,7 @@ function pushVariableToSymbolTable(varDef: VarDefStmt) {
         symbolTable.pushVariable(variable);
     } else {
         //处于函数作用域下
-        let variable: Variable = new Variable(varDef, qsModule.moduleName, curFunName, curBlockDepth, curBlockID);
+        let variable: Variable = new Variable(varDef, qsModule.moduleName, curBlockDepth, curBlockID);
         symbolTable.pushVariable(variable);
     }
 }
@@ -194,17 +261,8 @@ function buildModuleExport(vtWrap: V_T_Wrap) {
 function buildModuleStmts(vtWrap: V_T_Wrap) {
     if (!vtWrap.isNull) {
         //也就是说没有用空字符来进行规约
-        if (vtWrap.testChild(FUN_DEF_STMT)) {
-            //如果是用来规约函数定义到模块语句的
-            let funDef: FunDeclaration = <FunDeclaration>ASTStack.pop();
-            if (funDef) {
-                let fun: Fun = <Fun>symbolTable.getFun(qsModule.moduleName, funDef.id.name);
-                if (fun) {
-                    qsModule.pushFun(fun);
-                }
-            }
-        } else {
-            //否则就是规约模块变量定义
+        if (vtWrap.testChild(VAR_DEF_STMT)) {
+            //规约模块变量定义
             let varDef: VarDefStmt = <VarDefStmt>ASTStack.pop();
             if (varDef) {
                 let variable: Variable = <Variable>symbolTable.getVariable(qsModule.moduleName, varDef.id.name);
@@ -216,22 +274,28 @@ function buildModuleStmts(vtWrap: V_T_Wrap) {
     }
 }
 
-function buildFunDefStmt(vtWrap: V_T_Wrap) {
+function buildFunDefStmt() {
+    //将函数加入到模块中
+    let fun: Fun = <Fun>popFun();
+    if (fun) {
+        qsModule.pushFun(fun);
+    }
+}
+
+function buildFunDef(vtWrap: V_T_Wrap) {
+    //构建函数
     let idToken = <Token>vtWrap.getChildToken(ID);
-    if (idToken && idToken.value === curFunName) {
-        //id存在，且与当前方法名一致
-        let idNode: IDNode = new IDNode(curFunName);
+    if (idToken && idToken.value === (<Fun>curFun).funName) {
+        //id存在，且与当前函数名一致
+        let idNode: IDNode = new IDNode(idToken.value);
         let nodeList = ASTStack.popX(2);
         if (!hasNull(nodeList)) {
             //没有空值
-            curBlockDepth = 0;
-            curScopeState = SCOPE_STATE.MODULE;
-            curBlockID = "";
-            curFunName = "";
-            let funDecl: FunDeclaration = new FunDeclaration(idNode, <ParamList>nodeList[0], <BlockStatement>nodeList[1]);
-            let fun: Fun = new Fun(funDecl, qsModule.moduleName);
-            symbolTable.pushFun(fun);
-            return funDecl;
+            let funDeclaration: FunDeclaration = new FunDeclaration(idNode, <ParamList>nodeList[0], <BlockStatement>nodeList[1]);
+            let fun: Fun = <Fun>funStack.peek();
+            if (fun) {
+                fun.setFunDefNode(funDeclaration);
+            }
         }
     }
 }
@@ -280,34 +344,39 @@ function buildStmts(vtWrap: V_T_Wrap) {
     }
 }
 
-function buildVarDefStmt(vtWrap: V_T_Wrap) {
-    let varDefStmt: VarDefStmt | null = null;
-    if (vtWrap.childNums === 1) {
-        //只可能是VarDecStmt
-        let varDecStmt: VarDecStmt = <VarDecStmt>ASTStack.pop();
-        if (varDecStmt) {
-            varDefStmt = new VarDefStmt(varDecStmt.id)
+function buildVariableDef(vtWrap: V_T_Wrap) {
+    if (vtWrap.testChild(STATIC)) {
+        //静态变量
+        if (curScopeState === SCOPE_STATE.STATIC_FUN) {
+            //当前处于静态函数内，则可以添加静态变量
+            //静态变量直接放入静态函数的符号表中
+            let staticFun: Fun = <Fun>funStack.peek();
+            let varDefStmt: VarDefStmt = <VarDefStmt>ASTStack.pop();
+            let variable: Variable = new Variable(varDefStmt, qsModule.moduleName, curBlockDepth, curBlockID, true);
+            staticFun.pushStaticValue(variable)
+        } else {
+            console.log("静态变量只可以在静态函数中！！")
         }
     } else {
-        let expression: Exp = <Exp>ASTStack.pop();
-        if (expression) {
-            let IDToken: Token = <Token>vtWrap.getChildToken(ID);
-            if (IDToken) {
-                let idNode = new IDNode(IDToken.value);
-                varDefStmt = new VarDefStmt(idNode, expression);
-            }
-        }
-    }
-    if (varDefStmt) {
-        pushVariableToSymbolTable(varDefStmt);
-        return varDefStmt;
+        //不是静态变量，则加入到全局符号表中
     }
 }
 
-function buildVarDecStmt(vtWrap: V_T_Wrap) {
+function buildVarDefStmt(vtWrap: V_T_Wrap) {
     let idToken: Token = <Token>vtWrap.getChildToken(ID);
-    let idNode: IDNode = new IDNode(idToken.value);
-    return new VarDecStmt(idNode);
+    if (idToken) {
+        let idNode = new IDNode(idToken.value);
+        if (vtWrap.testChild(EXP)) {
+            //有初始化的值
+            let expression: Exp = <Exp>ASTStack.pop();
+            if (expression) {
+                return new VarDefStmt(idNode, expression);
+            }
+        } else {
+            //没有初始化的值
+            return new VarDefStmt(idNode)
+        }
+    }
 }
 
 function buildWhileStmt() {
@@ -390,9 +459,6 @@ function buildExp() {
     }
 }
 
-function buildMemberExp(vtWrap: V_T_Wrap) {
-}
-
 function buildArraySub(vtWrap: V_T_Wrap) {
     if (vtWrap.testChild(ARRAY_SUB)) {
         let arraySub: ArraySub = <ArraySub>ASTStack.pop();
@@ -405,6 +471,18 @@ function buildArraySub(vtWrap: V_T_Wrap) {
         let exp: Exp = <Exp>ASTStack.pop();
         return new ArraySub(exp);
     }
+}
+
+function buildArrayExp() {
+
+}
+
+function buildArrayItems(vtWrap: V_T_Wrap) {
+
+}
+
+function buildArrayItem(vtWrap: V_T_Wrap) {
+
 }
 
 function buildLiteral(vtWrap: V_T_Wrap) {
@@ -541,6 +619,15 @@ function buildFactorExp(vtWrap: V_T_Wrap) {
     }
 }
 
-function buildObjectExp(vtWrap: V_T_Wrap) {
-    popBlock();
+function buildArrayMemberExp(vtWrap: V_T_Wrap) {
+
+}
+
+
+function buildInnerFunDefStmt() {
+
+}
+
+function buildIfStmt() {
+
 }
