@@ -1,54 +1,17 @@
-@module:qs;
-
+@module:Main;
+export:x;
+let x = 12;
 fun main(){
-    let temp = Stack();
-    temp.push("");
+    let str = "hello,world!";
+    print(str);
+    print(getSum());
 }
 
-static fun Stack(array) {
-    static let x = [];
-    static let index = 0;
-    while(index < Array::len(array)){
-        x[index] = array[index];
-        index++;
+fun getSum(){
+    let index = 0;
+    let sum = 0;
+    while(index < 100){
+        sum = sum + index;
     }
-    @fun push(el){
-        x[index] = el;
-    }
-    @fun pop(){
-        index--;
-        return x[index];
-    }
-    @fun getX(){
-        return x;
-    }
-    @fun getSize(){
-        return index;
-    }
-}
-static fun node(val){
-    static let value = val;
-    static let left;
-    static let right;
-}
-
-static fun binaryTree(rootValue){
-    static let root;
-    root = node(rootValue);
-
-    @fun insert(node,nowNode){
-        if(nowNode == null){
-            nowNode = node;
-            return;
-        }
-        if(nowNode.value > node.value){
-            nowNode = nowNode.left;
-            insert(node,nowNode);
-        }else {
-            if(nowNode.value < node.value){
-                nowNode = nowNode.right;
-                insert(node,nowNode);
-            }
-        }
-    }
+    return sum;
 }

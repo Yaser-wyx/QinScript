@@ -1,8 +1,9 @@
 //终结符常量表
 export const ID = "ID";
-export const MEMBER_EXP = "MemberExp";
 export const STATIC = "STATIC";
 export const EXP = "Exp";
+export const UNARY_BEFORE_OPERATOR = "UnaryBeforeOperator";
+export const UNARY_AFTER_OPERATOR = "UnaryAfterOperator";
 export const ARRAY_SUB = "ArraySub";
 export const COMMA = "COMMA";
 export const NUMBER = "NUMBER";
@@ -27,9 +28,11 @@ export const BIT_AND = "BIT_AND";
 export const LOGIC_OR = "LOGIC_OR";
 export const BIT_OR = "BIT_OR";
 export const LOGIN_AND = "LOGIN_AND";
+export const ADD_ONE = "ADD_ONE";
+export const SUB_ONE = "SUB_ONE";
+export const MAIN = "main";
 //运算符常量列表
-export const OPERATOR_LIST = [BIT_NOT, NOT, DIV, MOD, MUL, ADD, SUB, LESS, LESS_EQUAL, EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, BIT_AND, LOGIC_OR, BIT_OR, LOGIN_AND];
-export const VAR_DEF_STMT = "VarDefStmt";
+export const OPERATOR_LIST = [ADD_ONE, SUB_ONE, BIT_NOT, NOT, DIV, MOD, MUL, ADD, SUB, LESS, LESS_EQUAL, EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, BIT_AND, LOGIC_OR, BIT_OR, LOGIN_AND];
 
 
 

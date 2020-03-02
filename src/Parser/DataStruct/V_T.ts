@@ -1,5 +1,7 @@
 //非终结符
 export enum V {
+    Module,
+    ModuleDefine,
     ModuleStmts,
     ModuleSelfDefine,
     ModuleImportDefineList,
@@ -14,6 +16,7 @@ export enum V {
     Stmts,
     Stmt,
     VariableDef,
+    VariableExp,
     InnerFunDefStmt,
     IfStmt,
     WhileStmt,

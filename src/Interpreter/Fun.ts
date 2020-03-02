@@ -1,4 +1,4 @@
-import {FunDeclaration, IDNode} from "../Parser/DataStruct/ASTNode";
+import {BlockStmt, FunDeclaration, IDNode} from "../Parser/DataStruct/ASTNode";
 import {Variable} from "./Variable";
 
 export enum FUN_TYPE {//函数类型
@@ -9,7 +9,7 @@ export enum FUN_TYPE {//函数类型
 
 //AST中FunDeclaration的包装类
 export class Fun {//普通函数
-    private _funDefNode?: FunDeclaration;//悬挂的函数内部节点
+    private _funBlock?: BlockStmt;//悬挂的函数内部节点
     private readonly _funName: string;//当前函数名
     private readonly _moduleName: string;//所处模块名
     private _paramList: Array<string> = [];//形参列表
@@ -46,7 +46,7 @@ export class Fun {//普通函数
         this._moduleName = moduleName;
         this._funType = funType;
         if (funDefNode) {
-            this._funDefNode = funDefNode;
+            this._funBlock = funDefNode.body;
             funDefNode.params.forEach((id: IDNode) => {
                 this._paramList.push(id.name);
             })
@@ -54,7 +54,7 @@ export class Fun {//普通函数
     }
 
     setFunDefNode(funDefNode: FunDeclaration) {
-        this._funDefNode = funDefNode;
+        this._funBlock = funDefNode.body;
         funDefNode.params.forEach((id: IDNode) => {
             this._paramList.push(id.name);
         })
@@ -66,9 +66,9 @@ export class Fun {//普通函数
     }
 
 
-    get funDefNode(): FunDeclaration | null {
-        if (this._funDefNode)
-            return this._funDefNode;
+    get funBlock(): BlockStmt | null {
+        if (this._funBlock)
+            return this._funBlock;
         return null;
     }
 

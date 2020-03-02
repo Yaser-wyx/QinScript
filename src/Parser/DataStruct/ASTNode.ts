@@ -2,6 +2,7 @@
 export enum NODE_TYPE {
     MODULE,//模块
     ID,//ID
+    VARIABLE_EXP,
     PARAM_LIST,//函数参数列表
     VAR_DEF_STMT,//变量声明语句
     RETURN_STMT,//返回语句
@@ -12,14 +13,10 @@ export enum NODE_TYPE {
     CALL_EXPRESSION,//函数调用表达式
     ARGUMENT_LIST,//实参列表
     ARRAY_EXP,//数组表达式
-    OBJECT_EXP,//对象表达式
-    PROPERTY,//对象属性
     UNARY_OPERATOR,
     UNARY_EXP,//一元运算符
     BINARY_EXP,//二元运算符
-    ASSIGN_EXP,//赋值表达式
-    LOGIC_EXP,//逻辑表达式
-    MEMBER_EXP,//成员表达式
+    ASSIGN_STMT,//赋值表达式
     ARRAY_SUB,//数组下标
     LITERAL,//字面量
     BLOCK_STMT,//块语句
@@ -29,6 +26,8 @@ export enum OPERATOR {
     BIT_NOT,
     NOT,
     ADD,
+    ADD_ONE,
+    SUB_ONE,
     SUB,
     MOD,
     DIV,
@@ -52,16 +51,12 @@ export enum OPERATOR_TYPE {
 }
 
 export type Node =
-    IDNode
-    | Literal
     | FunDeclaration
-    | VarDefStmt
-    | Operator
     | ArgumentList
     | ParamList
     | ArraySub
-    | Statement
-    | Expression;
+    | Operator
+    | Statement;
 
 interface ASTNode {
     //抽象语法树节点接口
@@ -73,9 +68,9 @@ export class FunDeclaration implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
     readonly id: IDNode;
     private readonly _params: ParamList;//形参列表
-    readonly body: BlockStatement;
+    readonly body: BlockStmt;
 
-    constructor(id: IDNode, params: ParamList, body: BlockStatement) {
+    constructor(id: IDNode, params: ParamList, body: BlockStmt) {
         this.id = id;
         this.body = body;
         this._params = params;
@@ -111,7 +106,10 @@ export class VarDefStmt implements ASTNode {
 }
 
 export type Statement =
-    | BlockStatement
+    AssignStmt
+    | Expression
+    | BlockStmt
+    | VarDefStmt
     | ReturnStmt
     | IfStmt
     | WhileStmt
@@ -154,7 +152,7 @@ export class WhileStmt implements ASTNode {
     }
 }
 
-export class BlockStatement implements ASTNode {
+export class BlockStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.BLOCK_STMT;
     private _body: Array<Statement> = [];
     private readonly _blockID: string;
@@ -184,15 +182,11 @@ export class BlockStatement implements ASTNode {
 
 export type Expression =
     CallExp
-    | MemberExp
     | ArrayExp
-    | ObjectExp
-    | BinaryArithmeticExp
+    | BinaryExp
     | UnaryExp
-    | AssignExp
-    | IDNode
     | Literal
-    | BinaryLogicExp
+    | VariableExp
     | Exp
 
 
@@ -220,7 +214,7 @@ export class ArgumentList implements ASTNode {
 
 export class CallExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
-    readonly callee: IDNode;//被调用对象ID
+    readonly callee: IDNode;//有两种调用，一种是ID()，另一种是@ID()
     private _args: ArgumentList;//实参列表节点
 
     constructor(callee: IDNode, argumentList: ArgumentList) {
@@ -233,47 +227,6 @@ export class CallExp implements ASTNode {
     }
 }
 
-export enum MEMBER_TYPE {
-    ARRAY_MEMBER,// ID ArraySub
-    OBJECT_MEMBER,//ID DOT ID
-    OBJECT_MEMBER_LIST,//ID DOT MemberExp
-    ARRAY_OBJECT_MEMBER//ID ArraySub DOT MemberExp
-}
-
-export class MemberExp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.MEMBER_EXP;
-    readonly idBeforeDot: IDNode;
-    private idAfterDot?: IDNode;
-    private arraySub?: ArraySub;
-    private memberExp?: MemberExp;
-    private memberType?: MEMBER_TYPE;
-
-    constructor(idBeforeDot: IDNode) {
-        this.idBeforeDot = idBeforeDot;
-    }
-
-    setArrayMember(arraySub: ArraySub) {
-        this.memberType = MEMBER_TYPE.ARRAY_MEMBER;
-        this.arraySub = arraySub;
-    }
-
-    setObjectMember(idAfterDot: IDNode) {
-        this.memberType = MEMBER_TYPE.OBJECT_MEMBER;
-        this.idAfterDot = idAfterDot;
-    }
-
-    setArrayObjectMember(arraySub: ArraySub, memberExp: MemberExp) {
-        this.memberType = MEMBER_TYPE.ARRAY_OBJECT_MEMBER;
-        this.memberExp = memberExp;
-        this.arraySub = arraySub;
-    }
-
-    setObjectMemberList(memberEXP: MemberExp) {
-        this.memberType = MEMBER_TYPE.OBJECT_MEMBER_LIST;
-        this.memberExp = memberEXP;
-    }
-
-}
 
 export class ArraySub implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_SUB;
@@ -305,7 +258,17 @@ export class ArrayExp implements ASTNode {
     get elements(): Array<Expression> {
         return this._elements;
     }
+}
 
+export class VariableExp implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_EXP;
+    private readonly isStatic: boolean;
+    private readonly id: IDNode;
+
+    constructor(id: IDNode, isStatic: boolean = false) {
+        this.isStatic = isStatic;
+        this.id = id;
+    }
 }
 
 export class IDNode implements ASTNode {
@@ -317,38 +280,14 @@ export class IDNode implements ASTNode {
 }
 
 
-export class AssignExp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.ASSIGN_EXP;
-    readonly left: IDNode | MemberExp;
+export class AssignStmt implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.ASSIGN_STMT;
+    readonly left: VariableExp;
     readonly right: Expression;
 
-    constructor(left: IDNode | MemberExp, right: Expression) {
+    constructor(left: VariableExp, right: Expression) {
         this.left = left;
         this.right = right;
-    }
-}
-
-export class ObjectExp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.OBJECT_EXP;
-    private _properties: Array<Property> = [];
-
-    pushProperty(property: Property) {
-        this._properties.push(property)
-    }
-
-    get properties(): Array<Property> {
-        return this._properties;
-    }
-}
-
-export class Property implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.PROPERTY;
-    readonly key: string | IDNode;
-    readonly value: Expression;
-
-    constructor(key: string | IDNode, value: Expression) {
-        this.key = key;
-        this.value = value;
     }
 }
 
@@ -370,7 +309,7 @@ type LogicalOperator =
     | OPERATOR.GREATER_EQUAL
     | OPERATOR.LOGIC_OR
     | OPERATOR.LOGIC_AND;
-type UnaryOperator = OPERATOR.BIT_NOT | OPERATOR.NOT;
+type UnaryOperator = OPERATOR.BIT_NOT | OPERATOR.NOT | OPERATOR.ADD_ONE | OPERATOR.SUB_ONE;
 
 export class Operator implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_OPERATOR;
@@ -419,24 +358,9 @@ export class UnaryExp implements ASTNode {
 }
 
 
-export class BinaryArithmeticExp implements ASTNode {
+export class BinaryExp implements ASTNode {
     //二元算数运算
     readonly nodeType: NODE_TYPE = NODE_TYPE.BINARY_EXP;
-    readonly operator: Operator;
-    readonly left: Expression;
-    readonly right: Expression;
-
-    constructor(operator: Operator, left: Expression, right: Expression) {
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
-    }
-}
-
-
-export class BinaryLogicExp implements ASTNode {
-    //二元逻辑运算
-    readonly nodeType: NODE_TYPE = NODE_TYPE.LOGIC_EXP;
     readonly operator: Operator;
     readonly left: Expression;
     readonly right: Expression;

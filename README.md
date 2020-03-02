@@ -252,19 +252,23 @@ FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ID COMMA ParamList | E
 
 Stmts -> Stmts Stmt | E
-Stmt -> BlockStmt | VariableDef  | ReturnStmt | AssignStmt | Exp SEMI
+Stmt -> BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
 
 VariableDef -> VarDefStmt
 VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
 
-Variable -> ID
+VariableExp -> ID 
 
+
+WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt
 ReturnStmt -> RETURN Exp SEMI | RETURN SEMI
-AssignStmt -> Variable ASSIGN Exp SEMI 
+AssignStmt -> VariableExp ASSIGN Exp SEMI | ArrayMemberExp ASSIGN Exp SEMI
+
 Exp ->  CalExp
 
-CallExp -> Variable LEFT_PAREN ArgumentList RIGHT_PAREN
+
+CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN 
 ArgumentList -> Exp | ArgumentList COMMA Exp | E
 
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
@@ -286,7 +290,7 @@ FactorExp -> UnaryBeforeOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryE
 UnaryBeforeOperator -> BIT_NOT | NOT
 UnaryAfterOperator -> ADD_ONE | SUB_ONE
 
-UnaryExp -> Literal | Variable | LEFT_PAREN Exp RIGHT_PAREN | CallExp
+UnaryExp -> Literal | VariableExp | LEFT_PAREN Exp RIGHT_PAREN | CallExp
 Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
 ```
 
@@ -301,7 +305,7 @@ Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
 - [x] [文法设计（初稿）](grammar.txt)
 - [x] 词法分析
 - [x] LR1分析表构建
-- [ ] AST部分构建
+- [x] AST部分构建
 - [ ] 解释器部分构建
 - [ ] 语言功能的部分实现
 
