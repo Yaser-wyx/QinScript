@@ -1,4 +1,6 @@
 //AST节点定义
+import exp = require("constants");
+
 export enum NODE_TYPE {
     MODULE,//模块
     ID,//ID
@@ -23,10 +25,11 @@ export enum NODE_TYPE {
 }
 
 export enum OPERATOR {
-    BIT_NOT,
+    null,
     NOT,
     ADD,
     ADD_ONE,
+    BIT_NOT,
     SUB_ONE,
     SUB,
     MOD,
@@ -66,40 +69,40 @@ interface ASTNode {
 export class FunDeclaration implements ASTNode {
 
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
-    readonly id: IDNode;
+    readonly id: string;
     private readonly _params: ParamList;//形参列表
     readonly body: BlockStmt;
 
-    constructor(id: IDNode, params: ParamList, body: BlockStmt) {
+    constructor(id: string, params: ParamList, body: BlockStmt) {
         this.id = id;
         this.body = body;
         this._params = params;
     }
 
-    get params(): Array<IDNode> {
+    get params(): Array<string> {
         return this._params.params;
     }
 }
 
 export class ParamList implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.PARAM_LIST;
-    private _params: Array<IDNode> = [];
+    private _params: Array<string> = [];
 
-    pushParam(id: IDNode) {
+    pushParam(id: string) {
         this._params.push(id);
     }
 
-    get params(): Array<IDNode> {
+    get params(): Array<string> {
         return this._params;
     }
 }
 
 export class VarDefStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEF_STMT;
-    readonly id: IDNode;//要被声明的变量
+    readonly id: string;//要被声明的变量
     readonly init?: Exp | null;//要被初始化的值，默认为null，可以初始化为字面量
 
-    constructor(id: IDNode, init?: Exp) {
+    constructor(id: string, init?: Exp) {
         this.id = id;
         this.init = init;
     }
@@ -157,10 +160,17 @@ export class BlockStmt implements ASTNode {
     private _body: Array<Statement> = [];
     private readonly _blockID: string;
     private readonly _blockDepth: number;
+    private readonly _fatherBlock: BlockStmt | null;//父block
 
-    constructor(blockID: string, blockDepth: number) {
+    constructor(blockID: string, blockDepth: number, fatherBlock: BlockStmt | null) {
         this._blockID = blockID;
         this._blockDepth = blockDepth;
+        this._fatherBlock = fatherBlock;
+    }
+
+
+    get fatherBlock(): BlockStmt | null {
+        return this._fatherBlock;
     }
 
     pushStmt(statement: Statement) {
@@ -214,10 +224,10 @@ export class ArgumentList implements ASTNode {
 
 export class CallExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
-    readonly callee: IDNode;//有两种调用，一种是ID()，另一种是@ID()
+    readonly callee: string;//有两种调用，一种是ID()，另一种是@ID()
     private _args: ArgumentList;//实参列表节点
 
-    constructor(callee: IDNode, argumentList: ArgumentList) {
+    constructor(callee: string, argumentList: ArgumentList) {
         this.callee = callee;
         this._args = argumentList;
     }
@@ -262,23 +272,22 @@ export class ArrayExp implements ASTNode {
 
 export class VariableExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_EXP;
-    private readonly isStatic: boolean;
-    private readonly id: IDNode;
+    private readonly _isStatic: boolean;
+    private readonly _varName: string;
 
-    constructor(id: IDNode, isStatic: boolean = false) {
-        this.isStatic = isStatic;
-        this.id = id;
+    constructor(_varName: string, isStatic: boolean = false) {
+        this._isStatic = isStatic;
+        this._varName = _varName;
+    }
+
+    get isStatic(): boolean {
+        return this._isStatic;
+    }
+
+    get varName(): string {
+        return this._varName;
     }
 }
-
-export class IDNode implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.ID;
-    readonly name: string;//标识符名
-    constructor(name: string) {
-        this.name = name;
-    }
-}
-
 
 export class AssignStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ASSIGN_STMT;
@@ -291,7 +300,7 @@ export class AssignStmt implements ASTNode {
     }
 }
 
-type ArithmeticOperator =
+export type ArithmeticOperator =
     OPERATOR.ADD
     | OPERATOR.SUB
     | OPERATOR.MUL
@@ -300,7 +309,7 @@ type ArithmeticOperator =
     | OPERATOR.BIT_OR
     | OPERATOR.BIT_AND ;
 
-type LogicalOperator =
+export type LogicalOperator =
     OPERATOR.EQUAL
     | OPERATOR.NOT_EQUAL
     | OPERATOR.LESS
@@ -309,7 +318,8 @@ type LogicalOperator =
     | OPERATOR.GREATER_EQUAL
     | OPERATOR.LOGIC_OR
     | OPERATOR.LOGIC_AND;
-type UnaryOperator = OPERATOR.BIT_NOT | OPERATOR.NOT | OPERATOR.ADD_ONE | OPERATOR.SUB_ONE;
+
+type UnaryOperator = OPERATOR.NOT | OPERATOR.ADD_ONE | OPERATOR.SUB_ONE | OPERATOR.BIT_NOT ;
 
 export class Operator implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_OPERATOR;
@@ -338,11 +348,20 @@ export class UnaryExp implements ASTNode {
     //一元运算
     readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_EXP;
     private _operator?: Operator;
+    private _isPreOperator: boolean = false;
     readonly argument: Expression;
 
     constructor(argument: Expression, operator?: Operator) {
         this._operator = operator;
         this.argument = argument;
+    }
+
+    get isPreOperator(): boolean {
+        return this._isPreOperator;
+    }
+
+    set isPreOperator(value: boolean) {
+        this._isPreOperator = value;
     }
 
     setOperator(operator: Operator) {

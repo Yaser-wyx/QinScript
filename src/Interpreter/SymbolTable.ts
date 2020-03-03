@@ -1,6 +1,7 @@
 import {Variable} from "./Variable";
 import {Fun} from "./Fun";
 import {hashCode} from "../Utils/utils";
+import {BlockStmt} from "../Parser/DataStruct/ASTNode";
 
 //符号表，全局唯一
 export abstract class SymbolTable {
@@ -9,7 +10,7 @@ export abstract class SymbolTable {
 
     abstract pushVariable(variable: Variable);
 
-    abstract getVariable(moduleName: string, varName: string, blockDepth?: number, blockID?: string): Variable | null;
+    abstract getVariable(moduleName: string, varName: string, block?: BlockStmt): Variable | null;
 
     abstract pushFun(fun: Fun);
 
@@ -19,26 +20,33 @@ export abstract class SymbolTable {
 class SymbolTableInner extends SymbolTable {
     private addedVariableHashSet: Set<number> = new Set<number>();//已经添加的变量的hash值
     private addedFunHashSet: Set<number> = new Set<number>();//已经添加的函数的hash值
-    getVariable(moduleName: string, varName: string, blockDepth?: number, blockID?: string): Variable | null {
-        if (blockID && blockDepth) {
-            //局部变量
-            let variableHash = hashCode(moduleName + blockDepth + blockID + varName);
-            if (this.addedVariableHashSet.has(variableHash)) {
-                return this.variableSymbolTable[moduleName].localVar[blockDepth][blockID][varName];
-            } else {
-                console.log(varName + "不存在！");
-                return null;
-            }
-        } else {
-            //模块变量
-            let variableHash = hashCode(moduleName + varName);
-            if (this.addedVariableHashSet.has(variableHash)) {
-                return this.variableSymbolTable[moduleName].moduleVar[varName];
-            } else {
-                console.log(varName + "不存在！");
-                return null;
+    getVariable(moduleName: string, varName: string, block?: BlockStmt): Variable | null {
+        //根据参数来获取变量
+        // 如果block存在，则从指定block向上查找，一直到模块变量
+        //如果不存在，则直接查找模块变量
+        //如果全部没有找到，则返回null
+        if (block) {
+            //查找局部变量
+            let curBlock: BlockStmt | null = block;
+            while (curBlock) {
+                //如果当前block存在
+                let variableHash = hashCode(moduleName + curBlock.blockDepth + curBlock.blockID + varName);
+                if (this.addedVariableHashSet.has(variableHash)) {
+                    //可以直接获取，返回获取的结果数据
+                    return this.variableSymbolTable[moduleName].localVar[curBlock.blockDepth][curBlock.blockID][varName];
+                }
+                curBlock = curBlock.fatherBlock;//查看父block
             }
         }
+
+        //模块变量
+        let variableHash = hashCode(moduleName + varName);
+        if (this.addedVariableHashSet.has(variableHash)) {
+            return this.variableSymbolTable[moduleName].moduleVar[varName];
+        } else {
+            return null;
+        }
+
     }
 
     pushFun(fun: Fun) {
@@ -102,6 +110,7 @@ class SymbolTableInner extends SymbolTable {
                 }
                 //添加变量
                 this.variableSymbolTable[moduleName].localVar[blockDepth][blockID][varName] = variable;
+                this.addedVariableHashSet.add(variableHash);
             }
         }
     }
@@ -113,7 +122,6 @@ class SymbolTableInner extends SymbolTable {
         } else {
             //没有指定函数
             //todo 报错
-            console.log(funName + "不存在");
             return null;
         }
 

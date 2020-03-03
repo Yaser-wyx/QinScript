@@ -10,7 +10,7 @@ ModuleStmts -> ModuleStmts VariableDef | ModuleStmts FunDefStmt  | FunDefStmt | 
 
 FunDefStmt -> FunDef
 FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
-ParamList -> ID | ID COMMA ParamList | E
+ParamList -> ID | ParamList COMMA ID | E
 
 Stmts -> Stmts Stmt | E
 Stmt -> BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
@@ -47,7 +47,7 @@ AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
 FactorOperator -> MOD | DIV | MUL
 
 FactorExp -> UnaryBeforeOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryExp
-UnaryBeforeOperator -> BIT_NOT | NOT
+UnaryBeforeOperator -> BIT_NOT | NOT | ADD_ONE | SUB_ONE
 UnaryAfterOperator -> ADD_ONE | SUB_ONE
 
 UnaryExp -> Literal | VariableExp | LEFT_PAREN Exp RIGHT_PAREN | CallExp

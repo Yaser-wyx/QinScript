@@ -1,4 +1,4 @@
-import {BlockStmt, FunDeclaration, IDNode} from "../Parser/DataStruct/ASTNode";
+import {BlockStmt, FunDeclaration} from "../Parser/DataStruct/ASTNode";
 import {Variable} from "./Variable";
 
 export enum FUN_TYPE {//函数类型
@@ -12,10 +12,11 @@ export class Fun {//普通函数
     private _funBlock?: BlockStmt;//悬挂的函数内部节点
     private readonly _funName: string;//当前函数名
     private readonly _moduleName: string;//所处模块名
-    private _paramList: Array<string> = [];//形参列表
+    private _paramList: Array<string> = [];//形参名列表
     private readonly _funType: FUN_TYPE;
-    private staticSymbolTable: object = {};
-
+    private _staticSymbolTable: object = {};
+    private _easySymbolTable:object={};//简易符号表，用于存放形参对应的数据
+    private _isReturn:boolean=false;
     pushStaticValue(staticValue: Variable | Fun) {
         let symbolName: string;
         if (staticValue instanceof Variable) {
@@ -23,22 +24,45 @@ export class Fun {//普通函数
         } else {
             symbolName = staticValue.funName;
         }
-        if (!this.staticSymbolTable.hasOwnProperty(symbolName)) {
-            this.staticSymbolTable[symbolName] = staticValue;
+        if (!this._staticSymbolTable.hasOwnProperty(symbolName)) {
+            this._staticSymbolTable[symbolName] = staticValue;
         }else{
             console.log("静态变量或内部方法有重名！")
         }
     }
 
     getStaticValue(symbolName: string): Variable | Fun | null {
-        if (this.staticSymbolTable.hasOwnProperty(symbolName)) {
-            return this.staticSymbolTable[symbolName];
+        if (this._staticSymbolTable.hasOwnProperty(symbolName)) {
+            return this._staticSymbolTable[symbolName];
         }
         return null;
     }
 
+    get isReturn(): boolean {
+        return this._isReturn;
+    }
+
+    set isReturn(value: boolean) {
+        this._isReturn = value;
+    }
+
     get funType(): FUN_TYPE {
         return this._funType;
+    }
+
+
+
+    set staticSymbolTable(value: object) {
+        this._staticSymbolTable = value;
+    }
+
+    getVariableFromEasySymbolTable(varName:string): Variable {
+
+        return this._easySymbolTable[varName];
+    }
+
+    set easySymbolTable(value: object) {
+        this._easySymbolTable = value;
     }
 
     constructor(moduleName: string, funName: string, funType: FUN_TYPE, funDefNode?: FunDeclaration) {
@@ -47,16 +71,16 @@ export class Fun {//普通函数
         this._funType = funType;
         if (funDefNode) {
             this._funBlock = funDefNode.body;
-            funDefNode.params.forEach((id: IDNode) => {
-                this._paramList.push(id.name);
+            funDefNode.params.forEach((name: string) => {
+                this._paramList.push(name);
             })
         }
     }
 
     setFunDefNode(funDefNode: FunDeclaration) {
         this._funBlock = funDefNode.body;
-        funDefNode.params.forEach((id: IDNode) => {
-            this._paramList.push(id.name);
+        funDefNode.params.forEach((id: string) => {
+            this._paramList.push(id);
         })
     }
 

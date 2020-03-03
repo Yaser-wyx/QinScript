@@ -27,9 +27,9 @@ export class Stack<T> {
         return this.popX(1)[0];
     }
 
-    peek(): T | undefined {
+    peek(): T | null {
         if (this.elements.length === 0) {
-            return undefined;
+            return null;
         } else {
             return this.elements[this.elements.length - 1];
         }

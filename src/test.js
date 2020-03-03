@@ -1,13 +1,2 @@
-let symbol={
-    moduleName:{
-        moduleVar:{
-            //存模块变量
-            varName:"asdasd",
-        },
-        localVar:[{
-            blockID:{
-                varName:"asdda"
-            }
-        },{},{}]
-    }
-}
+let x = true;
+console.log(1&2)
