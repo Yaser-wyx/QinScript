@@ -232,10 +232,36 @@ ID;
 3. 使用命令行到项目根目录下。
 4. 执行`yarn install`进行依赖安装。
 5. 执行`yarn run dev`运行。
+
+
+
+
 ## 开发计划
 
 ### 当前开发状态：
 **第一阶段已完成。**
+
+- 当前阶段运行样例
+```js
+@module:Main;
+let res=100;
+fun main(){
+    let max = res;
+    res = 0;
+    getSum(max);
+    print(res);
+}
+fun getSum(max){
+    while(max>0){
+        res = res + max;
+        max--;
+    }
+}
+```
+- 输出结果：
+
+![Snipaste_2020-03-05_20-04-54](Snipaste_2020-03-05_20-04-54.png)
+
 
 ### 第一阶段
 
