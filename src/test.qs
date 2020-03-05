@@ -3,7 +3,7 @@ let res=100;
 fun main(){
     let max = res;
     res = 0;
-    getSum(max+res);
+    getSum(max);
     print(res);
 }
 fun getSum(max){
