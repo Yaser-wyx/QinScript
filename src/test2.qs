@@ -1,3 +1,6 @@
+@module:Main;
+import:Array;
+//栈
 static fun Stack(array) {
     static let x = [];
     static let index = 0;
@@ -30,7 +33,7 @@ static fun node(val){
     static let left;
     static let right;
 }
-
+//二叉树
 static fun binaryTree(rootValue){
     static let root;
     root = node(rootValue);

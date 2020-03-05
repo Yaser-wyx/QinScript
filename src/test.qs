@@ -1,11 +1,14 @@
 @module:Main;
-
+let res=100;
 fun main(){
-    let str = getSum(6,2,3,4);
+    let max = res;
+    res = 0;
+    getSum(max+res);
+    print(res);
 }
-
-fun getSum(a,b,c,d){
-    let res;
-    res = a * b == c * d;
-    return res;
+fun getSum(max){
+    while(max>0){
+        res = res + max;
+        max--;
+    }
 }

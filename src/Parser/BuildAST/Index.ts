@@ -9,7 +9,7 @@ import {
     Exp,
     Expression,
     FunDeclaration,
-    Literal,
+    Literal, ModuleFunDefStmt,
     Node,
     NODE_TYPE,
     OPERATOR,
@@ -19,7 +19,7 @@ import {
     ReturnStmt,
     Statement,
     UnaryExp,
-    VarDefStmt,
+    VarDefStmt, VariableDef,
     VariableExp,
     WhileStmt
 } from "../DataStruct/ASTNode";
@@ -44,17 +44,18 @@ import {
 import {QSModule} from "../../Interpreter/Module";
 import {Token} from "../../Lexer/Datastruct/Token";
 import {Fun, FUN_TYPE} from "../../Interpreter/Fun";
-import {getSymbolTable, SymbolTable} from "../../Interpreter/SymbolTable";
+import {getGlobalSymbolTable, GlobalSymbolTable} from "../../Interpreter/SymbolTable";
 import {Variable} from "../../Interpreter/Variable";
 import {createUniqueId, kill} from "../../Utils/utils";
 import {getInterpreterInfo, InterpreterInfo} from "../../Interpreter/InterpreterInfo";
+import {printInfo, printWarn, printBuildASTError} from "../../error/error";
 
 let ASTStack: Stack<Node>;
 let blockStack: Stack<BlockStmt>;
 let funStack: Stack<Fun>;
 let hasImport = false;
 let qsModule: QSModule;
-let symbolTable: SymbolTable;
+let globalSymbolTable: GlobalSymbolTable;
 let curScopeState: SCOPE_STATE;
 let curBlockDepth: number = 0;//当前所处scope的深度
 let curBlockID: string = "";//当前所处scope的ID
@@ -150,8 +151,8 @@ function hasNull(list: Array<Node>): boolean {
     return flag;
 }
 
-//TODO 添加错误处理机制
 export function initBuildAST() {
+    printInfo("初始化语法树构造器...");
     //初始化AST构建程序
     interpreterInfo = getInterpreterInfo();
     ASTStack = new Stack<Node>();
@@ -159,7 +160,7 @@ export function initBuildAST() {
     funStack = new Stack<Fun>();
     hasImport = false;
     qsModule = new QSModule();
-    symbolTable = getSymbolTable();
+    globalSymbolTable = getGlobalSymbolTable();
     curFun = null;
     curBlockDepth = 0;
     curScopeState = SCOPE_STATE.MODULE;//默认是处于模块作用域中
@@ -171,7 +172,7 @@ let ASTBuildMap = {
     [V.ModuleSelfDefine]: buildModuleSelfDefine,
     [V.ModuleImportDefine]: buildModuleImportDefine,
     [V.ModuleExport]: buildModuleExport,
-    [V.FunDefStmt]: buildFunDefStmt,
+    [V.FunDefStmt]: buildModuleFunDefStmt,
     [V.FunDef]: buildFunDef,
     [V.ParamList]: buildParamList,
     [V.Stmts]: buildStmts,
@@ -216,44 +217,29 @@ export function getParsedModule(): QSModule {
 }
 
 export function transferVTToASTNode(vtWrap: V_T_Wrap) {
-    //将vtWrap转化为AST上的节点，只用于直接推导，因为此处是构建状态树，所以传来的必定是非终结符
-    let call: Function = ASTBuildMap[vtWrap.getSymbolValue(false)];
+    //将vtWrap转化为AST上的节点
+    let call: Function = ASTBuildMap[vtWrap.getSymbolValue(false)];//从映射表获取对应的方法
     if (call) {
-        let node: Node | undefined = call(vtWrap);
+        let node: Node | undefined = call(vtWrap);//执行并获取节点数据
         if (node)
             ASTStack.push(node);
     }
 }
 
 
-function notSupport() {
-    console.log("代码中有暂不支持的语法元素，请检查代码！");
+function notSupport(notSupportEl: string) {
+    printWarn("当前还不支持" + notSupportEl + "语法，请删除，或等待后续版本！");
     kill();
 }
 
 
-function pushVariableToSymbolTable(varDef: VarDefStmt) {
-    //将变量统一加入到符号表中
-    //判断当前所处的作用域
-    if (curScopeState === SCOPE_STATE.MODULE) {
-        //处于模块作用域中
-        let variable: Variable = new Variable(qsModule.moduleName, varDef.id, varDef.init);
-        symbolTable.pushVariable(variable);
-    } else if (curScopeState === SCOPE_STATE.GENERAL_FUN) {
-        //处于普通函数作用域下
-        let variable: Variable = new Variable(qsModule.moduleName, varDef.id, varDef.init, curBlockDepth, curBlockID);
-        symbolTable.pushVariable(variable);
-    } else {
-        //TODO 暂不支持静态函数与内部函数
-    }
-}
-
 //以下为各个非终结符节点的构建方式，同时添加程序的语义
-
 function buildModuleSelfDefine(vtWrap: V_T_Wrap) {
     let moduleName: Token = <Token>vtWrap.getChildToken(ID);
     if (moduleName) {
         qsModule.moduleName = moduleName.value;
+    } else {
+        printBuildASTError("当前模块名缺失！");
     }
 }
 
@@ -261,6 +247,8 @@ function buildModuleImportDefine(vtWrap: V_T_Wrap) {
     let importModule: Token = <Token>vtWrap.getChildToken(ID);
     if (importModule) {
         qsModule.pushImport(importModule.value);
+    } else {
+        printBuildASTError("要导入的模块名缺失！")
     }
 }
 
@@ -268,34 +256,41 @@ function buildModuleExport(vtWrap: V_T_Wrap) {
     let exportName: Token = <Token>vtWrap.getChildToken(ID);
     if (exportName) {
         qsModule.pushExport(exportName.value);
+    } else {
+        printBuildASTError("要导出的元素名缺失！")
     }
 }
 
-function buildFunDefStmt() {
-    //将函数加入到符号表中
-    let fun: Fun = <Fun>popFun();
-    if (fun) {
-        symbolTable.pushFun(fun);
-        if (fun.funName === MAIN) {
+function buildModuleFunDefStmt() {
+    //构建模块函数定义节点
+    let funDeclaration: FunDeclaration = <FunDeclaration>ASTStack.pop();
+    if (funDeclaration) {
+        globalSymbolTable.pushFun(funDeclaration.id, qsModule.moduleName);
+        //TODO 先不管静态函数
+        let funDefStmt: ModuleFunDefStmt = new ModuleFunDefStmt(funDeclaration, qsModule.moduleName);
+        qsModule.pushModuleFunDef(funDefStmt);//将函数加入到模块中
+        if (funDefStmt.getFunName() === MAIN) {
             //main函数入口
-            interpreterInfo.setEnter(fun);
+            interpreterInfo.setEnter(funDefStmt);
         }
+    } else {
+        printBuildASTError("运行时错误，函数定义节点丢失！");
     }
 }
 
 function buildFunDef(vtWrap: V_T_Wrap) {
-    //构建函数
+    //构建基础的函数定义节点
     let idToken = <Token>vtWrap.getChildToken(ID);
-    if (idToken && idToken.value === (<Fun>curFun).funName) {
-        //id存在，且与当前函数名一致
+    if (idToken) {
+        //id存在
         let nodeList = ASTStack.popX(2);
         if (!hasNull(nodeList)) {
             //没有空值
-            let funDeclaration: FunDeclaration = new FunDeclaration(idToken.value, <ParamList>nodeList[0], <BlockStmt>nodeList[1]);
-            if (curFun) {
-                curFun.setFunDefNode(funDeclaration);
-            }
+            return new FunDeclaration(idToken.value, <ParamList>nodeList[0], <BlockStmt>nodeList[1]);
         }
+        printBuildASTError("运行时错误，函数参数列表与函数体节点丢失！");
+    } else {
+        printBuildASTError("函数名缺失！");
     }
 }
 
@@ -317,6 +312,8 @@ function buildParamList(vtWrap: V_T_Wrap) {
                 paramList.pushParam(idToken.value);
                 return paramList;
             }
+        } else {
+            printBuildASTError("形参列表参数名缺失！");
         }
     } else {
         return new ParamList();//返回一个空的paramList用于占位
@@ -331,7 +328,11 @@ function buildStmts(vtWrap: V_T_Wrap) {//将所有的stmt添加到栈顶的block
             let blockStatement: BlockStmt = <BlockStmt>blockStack.peek();
             if (blockStatement) {
                 blockStatement.pushStmt(stmt);
+            } else {
+                printBuildASTError("运行时错误，block节点丢失！");
             }
+        } else {
+            printBuildASTError("运行时错误，语句节点丢失！");
         }
     }
 }
@@ -341,6 +342,8 @@ function buildBlockStmt() {
     let blockStatement: BlockStmt = <BlockStmt>popBlock();
     if (blockStatement) {
         return blockStatement;
+    } else {
+        printBuildASTError("运行时错误，block节点丢失！");
     }
 }
 
@@ -361,10 +364,20 @@ function buildVariableDef(vtWrap: V_T_Wrap) {
            }*/
     } else {
         //不是静态变量，则加入到全局符号表中
-        let varDefStmt: VarDefStmt = <VarDefStmt>ASTStack.pop();
+        let varDefStmt: any = <VarDefStmt>ASTStack.pop();
         if (varDefStmt instanceof VarDefStmt) {
-            pushVariableToSymbolTable(varDefStmt);
-            return varDefStmt;
+            let variableDef: VariableDef = new VariableDef(varDefStmt, true);
+            if (curScopeState === SCOPE_STATE.MODULE) {
+                //处于模块作用域中，则将模块变量加入到全局符号表中
+                let variable: Variable = new Variable(qsModule.moduleName, variableDef);
+                globalSymbolTable.pushVariable(variable);
+                qsModule.pushModuleVar(varDefStmt.id);
+            } else {
+                //否则就是局部变量，添加到AST中
+                return variableDef;
+            }
+        } else {
+            printBuildASTError("运行时错误，语法树节点无法匹配，当前需要VarDefStmt节点，获取到的是" + varDefStmt.constructor.name);
         }
     }
 }
@@ -373,6 +386,8 @@ function buildVariableExp(vtWrap: V_T_Wrap) {
     let idToken: Token = <Token>vtWrap.getChildToken(ID);
     if (idToken) {
         return new VariableExp(idToken.value);
+    }else{
+        printBuildASTError("变量名缺失！")
     }
 }
 
@@ -390,6 +405,8 @@ function buildVarDefStmt(vtWrap: V_T_Wrap) {
             //没有初始化的值
             return new VarDefStmt(idToken.value)
         }
+    }else{
+        printBuildASTError("变量定义时，变量名缺失！");
     }
 }
 
@@ -398,6 +415,8 @@ function buildWhileStmt() {
     if (!hasNull(whileStmtNodeList)) {
         //没有空值
         return new WhileStmt(<Expression>whileStmtNodeList[0], <Statement>whileStmtNodeList[1]);
+    }else{
+        printBuildASTError("运行时错误，while节点的Exp与stmt节点丢失！");
     }
 }
 
@@ -408,6 +427,8 @@ function buildCallExp(vtWrap: V_T_Wrap) {
         if (argumentList instanceof ArgumentList) {
             return new CallExp(idToken.value, argumentList);
         }
+    }else{
+        printBuildASTError("函数调用时，函数名缺失！");
     }
 }
 
@@ -453,8 +474,9 @@ function buildAssignStmt() {
     let variableExp: VariableExp = <VariableExp>ASTStack.pop();
     if (exp instanceof Exp && variableExp instanceof VariableExp) {
         return new AssignStmt(variableExp, exp);
+    }else{
+        printBuildASTError("赋值语句构建失败！");
     }
-
 }
 
 function buildExp() {
@@ -462,6 +484,8 @@ function buildExp() {
     if (exp) {
         //包装为表达式
         return new Exp(exp);
+    }else{
+        printBuildASTError("运行时错误，exp节点丢失！");
     }
 }
 
@@ -549,6 +573,8 @@ function buildOperator(vtWrap: V_T_Wrap) {
         if (operator) {
             return operator;
         }
+    }else{
+        printBuildASTError("运算符号缺失 ！");
     }
 }
 
@@ -619,26 +645,26 @@ function buildLiteral(vtWrap: V_T_Wrap) {
 }
 
 function buildArrayExp() {
-    notSupport()
+    notSupport("数组")
 }
 
 function buildArrayItems(vtWrap: V_T_Wrap) {
-    notSupport()
+    notSupport("数组")
 }
 
 function buildArrayItem(vtWrap: V_T_Wrap) {
-    notSupport()
+    notSupport("数组")
 }
 
 function buildArrayMemberExp(vtWrap: V_T_Wrap) {
-    notSupport()
+    notSupport("数组")
 }
 
 
 function buildInnerFunDefStmt() {
-    notSupport()
+    notSupport("内部函数")
 }
 
 function buildIfStmt() {
-    notSupport()
+    notSupport("IF语句")
 }

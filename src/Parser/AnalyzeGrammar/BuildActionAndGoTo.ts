@@ -2,7 +2,7 @@
 import {ActionStatus} from "../DataStruct/FormItem";
 import {E, EOF, Production} from "../DataStruct/Production";
 import {Closure} from "../DataStruct/Closure";
-import {printBuildFormError} from "../../error/error";
+import {printBuildFormError, printInfo} from "../../error/error";
 import {ActionForm, GotoForm} from "../DataStruct/Form";
 
 let _ = require("lodash");
@@ -99,7 +99,7 @@ function getLR1() {
                         }
                     }
                     nextRecognizeSet.forEach(nextRecognize => {
-                        let newClosure = Go(proceedClosure, nextRecognize);
+                        let newClosure = Goto(proceedClosure, nextRecognize);
                         if (closureHashMap[newClosure.getHashCode()]) {
                             //如果当前闭包在接受一个符号计算后的新闭包是已经存在的，则直接建立连接，不再将该闭包加入
                             proceedClosure.addClosureAfterRecognizeX(nextRecognize, closureHashMap[newClosure.getHashCode()]);
@@ -151,16 +151,16 @@ function fillForm(): object | null {
                     //如果是eof，则表示是一个规约项目
                     if (isAcc(production)) {
                         //如果是终态
-                        actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF,production);
+                        actionForm.setActionItem(closure.stateNum, ActionStatus.ACC, EOF, production);
                     } else {
                         reduce(closure.stateNum, production.search, production);
                     }
                 }
             });
         }
+        printInfo("分析表构建完成，开始输出分析表数据到文件。");
         actionForm.print();
         gotoForm.print();
-        printBuildFormError();
         return {actionForm: actionForm, gotoForm: gotoForm};
     }
     return null
@@ -168,13 +168,17 @@ function fillForm(): object | null {
 
 export function analyzeGrammar(grammar: string): object | null {
     //开始解析语法
-    generateProduction(grammar);
+    printInfo("开始解析语法...");
+    printInfo("读取语法并结构化产生式...");
+    generateProduction(grammar);//读取产生式
+    printInfo("获取终结符与非终结符...");
     getVAndT();//获取终结符与非终结符
-    console.log("打印语法产生式");
+    printInfo("计算非终结符first集合...");
     first();//计算非终结符的first集合
-    console.log("获取LR1规范族");
-    getLR1();
-    return fillForm();
+    printInfo("获取LR1规范族...");
+    getLR1();//获取LR1规范族
+    printInfo("填写LR1分析表...");
+    return fillForm();//填写LR分析表
 }
 
 function printProductions(productions: object) {
@@ -186,19 +190,18 @@ function printProductions(productions: object) {
     }
 }
 
-function calculateClosure(calClosure: Closure): Closure {
-    //计算一条产生式的闭包，needCalculateProduction已经是点前进过的值，Productions是原始产生式集合
+function calculateClosure(calClosure: Closure): Closure {//LR1 closure算法
     let newClosure: Closure = _.cloneDeep(calClosure);//复制一份闭包集合，不修改原有集合
-    newClosure.resetProductionFlag();
+    newClosure.resetProductionFlag();//重置闭包中所有产生式的标志位
     let newClosureSet = newClosure.innerSet;
-    let hashSet = new Set<string>();
-    let flag: boolean = true;
-    let pushProduction = ((production: Production) => {
+    let hashSet = new Set<string>();//用来记录所有已经在闭包中的产生式的hash值
+    let flag: boolean = true;//flag表示闭包是否有更新
+    let pushProduction = ((production: Production) => {//添加产生式到新建的闭包中
         newClosureSet.push(production);
         hashSet.add(production.getHashCode());
         flag = true
     });
-    let isInArray = ((production: Production) => {
+    let isInClosure = ((production: Production) => {//是否在闭包中
         return hashSet.has(production.getHashCode());
     });
     while (flag) {
@@ -206,22 +209,21 @@ function calculateClosure(calClosure: Closure): Closure {
         newClosureSet.forEach(production => {
             //production为需要计算闭包的产生式
             //遍历闭包集合
-            if (!production.flag) {
-                production.flag = true;
-                let notT = production.getNowDotAfter();//获取占位符后的第一个非终结符
-                if (vSet.has(notT)) {
-                    //不为空
+            if (!production.flag) {//如果没有处理过
+                production.flag = true;//标记为已处理
+                let notT = production.getNowDotAfter();//获取占位符.后的第一个符号
+                if (vSet.has(notT)) {//判断是否为非终结符
+                    //如果是非终结符
                     let vProductions: Array<Production> = productions[notT];//获取该非终结符对应的产生式组
                     if (vProductions) {
-                        //不为空
                         for (let vProduction of vProductions) {
                             //遍历该非终结符对应的产生式组
-                            let nodesToCalFirst = production.getNodeToCalFirst();//计算搜索符，需要从production中搜索
-                            let searchFirstSet = getSearchFirstSet(nodesToCalFirst);
-                            searchFirstSet.forEach(search => {
+                            let nodesToCalFirst = production.getNodeToCalFirst();//为了计算搜索符，先获取所有可能的符号
+                            let searchFirstSet = getSearchFirstSet(nodesToCalFirst);//计算搜索符
+                            searchFirstSet.forEach(search => {//遍历所有搜索符
                                 let newProduction = _.cloneDeep(vProduction);
                                 newProduction.setSearch(search);
-                                if (!isInArray(newProduction)) {
+                                if (!isInClosure(newProduction)) {
                                     pushProduction(newProduction);
                                 }
                             });
@@ -236,7 +238,7 @@ function calculateClosure(calClosure: Closure): Closure {
 }
 
 function getSearchFirstSet(nodes: Array<string>): Set<string> {
-    let searchSet = new Set<string>();
+    let searchSet = new Set<string>();//搜索符集合
     for (let node of nodes) {
         //遍历每一个节点
         if (vSet.has(node)) {
@@ -244,12 +246,12 @@ function getSearchFirstSet(nodes: Array<string>): Set<string> {
             let fSet: Set<string> = firstSet[node];//获取该非终结符的first集合
             if (fSet) {
                 fSet.forEach(value => {
-                    if (value != E) {
+                    if (value != E) {//将所有非空字符加入
                         searchSet.add(value);
                     }
                 });
                 if (!fSet.has(E)) {
-                    //如果没有E
+                    //如果没有E，则不需要再往下搜索
                     break;
                 }
             }
@@ -261,7 +263,7 @@ function getSearchFirstSet(nodes: Array<string>): Set<string> {
     return searchSet;
 }
 
-function Go(closure: Closure, recognize: string): Closure {
+function Goto(closure: Closure, recognize: string): Closure {//LR1 Goto函数
     //从closureCollection识别一个符号后的新闭包
     let newClosure: Closure;//生成的新闭包
     let newProductionList = new Array<Production>();//需要计算闭包的产生式列表

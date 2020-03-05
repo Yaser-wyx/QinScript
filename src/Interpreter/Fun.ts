@@ -1,5 +1,6 @@
-import {BlockStmt, FunDeclaration} from "../Parser/DataStruct/ASTNode";
-import {Variable} from "./Variable";
+import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
+import {Variable, VarTypePair} from "./Variable";
+import {FunSymbolTable} from "./SymbolTable";
 
 export enum FUN_TYPE {//函数类型
     GENERAL,//普通函数
@@ -9,66 +10,33 @@ export enum FUN_TYPE {//函数类型
 
 //AST中FunDeclaration的包装类
 export class Fun {//普通函数
-    private _funBlock?: BlockStmt;//悬挂的函数内部节点
+    private readonly _funBlock?: BlockStmt;//悬挂的函数内部节点
     private readonly _funName: string;//当前函数名
     private readonly _moduleName: string;//所处模块名
     private _paramList: Array<string> = [];//形参名列表
     private readonly _funType: FUN_TYPE;
-    private _staticSymbolTable: object = {};
-    private _easySymbolTable:object={};//简易符号表，用于存放形参对应的数据
-    private _isReturn:boolean=false;
-    pushStaticValue(staticValue: Variable | Fun) {
-        let symbolName: string;
-        if (staticValue instanceof Variable) {
-            symbolName = staticValue.variableName;
-        } else {
-            symbolName = staticValue.funName;
-        }
-        if (!this._staticSymbolTable.hasOwnProperty(symbolName)) {
-            this._staticSymbolTable[symbolName] = staticValue;
-        }else{
-            console.log("静态变量或内部方法有重名！")
-        }
+    private _funSymbolTable: FunSymbolTable;//函数符号表，用于存放函数的局部变量，静态变量以及内部函数
+    private _returnValue: any = null;
+    private _rearOperator: number = 0;//后置运算数量
+
+
+    get rearOperator(): number {
+        return this._rearOperator;
     }
 
-    getStaticValue(symbolName: string): Variable | Fun | null {
-        if (this._staticSymbolTable.hasOwnProperty(symbolName)) {
-            return this._staticSymbolTable[symbolName];
-        }
-        return null;
+    addRearOperator() {
+        this._rearOperator++;
     }
 
-    get isReturn(): boolean {
-        return this._isReturn;
-    }
-
-    set isReturn(value: boolean) {
-        this._isReturn = value;
-    }
-
-    get funType(): FUN_TYPE {
-        return this._funType;
-    }
-
-
-
-    set staticSymbolTable(value: object) {
-        this._staticSymbolTable = value;
-    }
-
-    getVariableFromEasySymbolTable(varName:string): Variable {
-
-        return this._easySymbolTable[varName];
-    }
-
-    set easySymbolTable(value: object) {
-        this._easySymbolTable = value;
+    subRearOperator() {
+        this._rearOperator--;
     }
 
     constructor(moduleName: string, funName: string, funType: FUN_TYPE, funDefNode?: FunDeclaration) {
         this._funName = funName;
         this._moduleName = moduleName;
         this._funType = funType;
+        this._funSymbolTable = new FunSymbolTable();
         if (funDefNode) {
             this._funBlock = funDefNode.body;
             funDefNode.params.forEach((name: string) => {
@@ -77,15 +45,31 @@ export class Fun {//普通函数
         }
     }
 
-    setFunDefNode(funDefNode: FunDeclaration) {
-        this._funBlock = funDefNode.body;
-        funDefNode.params.forEach((id: string) => {
-            this._paramList.push(id);
-        })
+    getVariable(varName: string, blockStatement: BlockStmt) {
+        return this._funSymbolTable.getVariable(this._moduleName, varName, blockStatement);
+    }
+
+    pushVariable(blockStatement: BlockStmt, varTypePair: VarTypePair) {
+        //添加变量到函数符号表中
+        let variable: Variable = new Variable(this._moduleName);
+        variable.initLocalVar(varTypePair, blockStatement);
+        this._funSymbolTable.pushVariable(variable);
+    }
+
+
+    get returnValue(): any {
+        return this._returnValue;
+    }
+
+    set returnValue(value: any) {
+        this._returnValue = value;
+    }
+
+    get funType(): FUN_TYPE {
+        return this._funType;
     }
 
     get moduleName(): string {
-
         return this._moduleName;
     }
 
@@ -105,3 +89,7 @@ export class Fun {//普通函数
     }
 }
 
+export function createFunByModuleFunDefStmt(moduleFunDefStmt: ModuleFunDefStmt) {
+    let funType: FUN_TYPE = moduleFunDefStmt.isStatic ? FUN_TYPE.STATIC : FUN_TYPE.GENERAL;
+    return new Fun(moduleFunDefStmt.moduleName, moduleFunDefStmt.getFunName(), funType, moduleFunDefStmt.funDeclaration);
+}

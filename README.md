@@ -1,10 +1,10 @@
 # QS
 
-[toc]
-
 ## 简介
 
-QS是一门面向过程的脚本语言，语法参考了JS与C，属于个人实验性质项目。
+QS全名QinScript，是一门面向过程的脚本语言，语法参考了JS与C，属于个人实验性质项目。
+
+*关于名字由来：Qin是我女友的姓（秦），因为是脚本语言，所以又在后面加了个Script，这就构成了QinScript*
 
 ## 语言元素
 
@@ -216,103 +216,71 @@ ID;
 
 ### 语法分析器 
 
-语法分析源码在[parser文件夹下](src/Parser)，主程序是[ParseModule.ts](src/Parser/ParseModule.ts)使用LR1语法分析方法，主要分为两个部分，一个部分是[解析器](src/Parser/AnalyzeGrammar/Index.ts)，用于解析[语法文件](grammar.txt)，并生成对应的LR1分析表，另一部分是[语法树生成器](src/Parser/BuildAST/Index.ts)，用于构建语法树，供解释器执行时使用。
+语法分析源码在[parser文件夹下](src/Parser)，主程序是[ParseModule.ts](src/Parser/ParseModule.ts)，使用LR1语法分析方法，主要分为两个部分，一个部分是[解析器](src/Parser/AnalyzeGrammar/Index.ts)，用于解析[语法文件](grammar.txt)，并生成对应的LR1分析表，另一部分是[语法树生成器](src/Parser/BuildAST/Index.ts)，用于构建语法树，供解释器执行时使用。
 
 ### 解释器
 
-#### TODO
-
+解释器源码在[Interpreter文件夹](src/Interpreter)下，主程序是[Interpreter.ts](src/Interpreter/Interpreter.ts)。
 ### 虚拟机
 
 #### TODO
 
+## 运行方式
+
+1. 安装[node.js](https://nodejs.org/en/)。
+2. 安装[Yarn](https://classic.yarnpkg.com/en/)。
+3. 使用命令行到项目根目录下。
+4. 执行`yarn install`进行依赖安装。
+5. 执行`yarn run dev`运行。
 ## 开发计划
 
+###当前开发状态：
+**第一阶段已完成。**
 ### 第一阶段
 
 #### 任务
 
 第一阶段的任务主要是：文法设计、词法分析、LR1分析表构建、语法树部分构建、解释器部分构建，部分语言功能的实现。
 
-语法树完成以下节点的构建：
+该阶段主要保证项目的整体可运行性，构建基础设施，带有测试目的。
 
-```
-Start -> Module
-Module -> ModuleDefine ModuleStmts
-ModuleDefine ->  ModuleSelfDefine | ModuleSelfDefine ModuleImportDefineList | ModuleSelfDefine ModuleExportList | ModuleSelfDefine ModuleImportDefineList ModuleExportList
-ModuleSelfDefine -> AT MODULE COLON ID SEMI
-ModuleImportDefineList -> ModuleImportDefineList ModuleImportDefine | ModuleImportDefine
-ModuleImportDefine -> IMPORT COLON ID SEMI
-ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
-ModuleExport ->  EXPORT COLON ID SEMI
-ModuleStmts -> ModuleStmts VarDefStmt | ModuleStmts FunDefStmt  | FunDefStmt | VarDefStmt | E
+#### 需要完成的功能
 
-FunDefStmt -> FunDef
-FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
-ParamList -> ID | ID COMMA ParamList | E
-
-Stmts -> Stmts Stmt | E
-Stmt -> BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
-BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
-
-VariableDef -> VarDefStmt
-VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
-
-VariableExp -> ID 
-
-
-WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt
-ReturnStmt -> RETURN Exp SEMI | RETURN SEMI
-AssignStmt -> VariableExp ASSIGN Exp SEMI | ArrayMemberExp ASSIGN Exp SEMI
-
-Exp ->  CalExp
-
-
-CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN 
-ArgumentList -> Exp | ArgumentList COMMA Exp | E
-
-CalExp -> CalExp LogicOperator LogicExp | LogicExp
-LogicOperator -> LOGIC_OR | LOGIC_AND
-
-LogicExp -> LogicExp BitOperator BitExp | BitExp
-BitOperator -> BIT_AND | BIT_OR
-
-BitExp -> BitExp RelationalOperator  RelationExp | RelationExp
-RelationalOperator -> LESS | LESS_EQUAL | EQUAL | NOT_EQUAL | GREATER | GREATER_EQUAL
-
-RelationExp -> RelationExp AdditiveOperator AdditiveExp | AdditiveExp
-AdditiveOperator -> ADD | SUB
-
-AdditiveExp -> AdditiveExp FactorOperator FactorExp | FactorExp
-FactorOperator -> MOD | DIV | MUL
-
-FactorExp -> UnaryBeforeOperator UnaryExp | UnaryExp UnaryAfterOperator | UnaryExp
-UnaryBeforeOperator -> BIT_NOT | NOT
-UnaryAfterOperator -> ADD_ONE | SUB_ONE
-
-UnaryExp -> Literal | VariableExp | LEFT_PAREN Exp RIGHT_PAREN | CallExp
-Literal ->  NUMBER | STRING | TRUE | FALSE | NULL
-```
-
-需要完成的功能
-
+- 整体结构上，仅支持单模块，不支持多模块导入等功能。
 - 数据类型上暂时支持：string、number、boolean与null
-- 语句方面，暂时支持：普通函数定义、模块变量与局部变量定义、call语句、block语句、assign语句、return语句、可计算表达式（calExp）。
-- 实现原生函数print()
+- 语句方面，暂时支持：普通函数定义、模块变量与局部变量定义、call语句、block语句、assign语句、while语句、return语句、可计算表达式（calExp）。
+- 标准库方面，实现原生函数print()
 
 #### 进度
 
-- [x] [文法设计（初稿）](grammar.txt)
+- [x] [文法设计（初稿）](grammar.temp.txt)
 - [x] 词法分析
 - [x] LR1分析表构建
 - [x] AST部分构建
-- [ ] 解释器部分构建
-- [ ] 语言功能的部分实现
+- [x] 解释器部分构建
+- [x] 语言功能的部分实现
 
 ### 第二阶段
 
-- 计划实现AST的全部构建，解释器的部分构建，语言功能上除静态函数外全部实现
+- 计划实现AST的全部构建，解释器的全部构建，实现全部语言功能，包含一个QS标准库，发布正式版V1
 
 ### 第三阶段
 
-- QS语言的完整实现
+- 设计并实现虚拟机，包括设计一套字节码，编写字节码执行器、GC、以及JIT。
+
+## 参考资料
+
+### 书籍：
+
+- [编译器设计](https://book.douban.com/subject/20436488/)
+- [自制编程语言 基于C语言](https://book.douban.com/subject/30311070/)
+
+### 视频：
+
+- [编译原理](https://www.icourse163.org/course/NUDT-1003101005)
+
+### Git项目：
+
+- https://github.com/Xiang1993/jack-compiler
+- https://github.com/dejavudwh/C2j-Compiler
+- https://github.com/Yaser-wyx/the-super-tiny-compiler-modified

@@ -2,13 +2,14 @@
 import exp = require("constants");
 
 export enum NODE_TYPE {
-    MODULE,//模块
-    ID,//ID
     VARIABLE_EXP,
     PARAM_LIST,//函数参数列表
-    VAR_DEF_STMT,//变量声明语句
+    VARIABLE_DEF,//模块变量，局部变量或静态变量定义语句
+    VAR_DEF_STMT,//基础变量声明语句
     RETURN_STMT,//返回语句
-    FUN_DECLARATION,//函数定义
+    MODULE_FUN_DECLARATION,//模块函数定义
+    FUN_DECLARATION,//基础函数定义
+
     EXPRESSION_STMT,//表达式语句
     IF_STMT,//if语句
     WHILE_STMT,//while语句
@@ -66,6 +67,37 @@ interface ASTNode {
     readonly nodeType: NODE_TYPE;//节点类型
 }
 
+//模块函数的定义节点，区分是静态函数，还是普通函数
+export class ModuleFunDefStmt implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_FUN_DECLARATION;
+    private readonly _isStatic: boolean;
+    private readonly _moduleName: string;//所属的模块名
+    private readonly _funDeclaration: FunDeclaration;
+
+    constructor(funDeclaration: FunDeclaration, moduleName: string, isStatic: boolean = false) {
+        this._moduleName = moduleName;
+        this._isStatic = isStatic;
+        this._funDeclaration = funDeclaration;
+    }
+
+    get moduleName(): string {
+        return this._moduleName;
+    }
+
+    getFunName() {
+        return this._funDeclaration.id;
+    }
+
+    get isStatic(): boolean {
+        return this._isStatic;
+    }
+
+    get funDeclaration(): FunDeclaration {
+        return this._funDeclaration;
+    }
+}
+
+//函数定义节点，不区分是何种函数，可以是静态函数、普通函数或内部函数
 export class FunDeclaration implements ASTNode {
 
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
@@ -97,6 +129,21 @@ export class ParamList implements ASTNode {
     }
 }
 
+export class VariableDef implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_DEF;
+    //默认是局部变量
+    readonly isStatic: boolean;//是否是静态变量
+    readonly isModuleVar: boolean;//是否是模块变量
+    readonly VarDefStmt: VarDefStmt;//变量定义语句
+
+
+    constructor(VarDefStmt: VarDefStmt, isModuleVar: boolean = false, isStatic: boolean = false) {
+        this.isStatic = isStatic;
+        this.isModuleVar = isModuleVar;
+        this.VarDefStmt = VarDefStmt;
+    }
+}
+
 export class VarDefStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEF_STMT;
     readonly id: string;//要被声明的变量
@@ -113,6 +160,7 @@ export type Statement =
     | Expression
     | BlockStmt
     | VarDefStmt
+    | VariableDef
     | ReturnStmt
     | IfStmt
     | WhileStmt
@@ -319,7 +367,7 @@ export type LogicalOperator =
     | OPERATOR.LOGIC_OR
     | OPERATOR.LOGIC_AND;
 
-type UnaryOperator = OPERATOR.NOT | OPERATOR.ADD_ONE | OPERATOR.SUB_ONE | OPERATOR.BIT_NOT ;
+export type UnaryOperator = OPERATOR.NOT | OPERATOR.ADD_ONE | OPERATOR.SUB_ONE | OPERATOR.BIT_NOT ;
 
 export class Operator implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.UNARY_OPERATOR;

@@ -6,7 +6,7 @@ export const E = "E";//表示空字符
 
 export class Production {
     key: string;//对应产生式的左边
-    private nowDotAfter: number = 0;//当前原点后面的第一个终结符或非终结符
+    private nowDotAfter: number = 0;//当前原点后面的第一个终结符或非终结符索引
     private valueWithDot: string = "";//产生式右部含有点的值
     private valueWithOutDot: string = "";//产生式右部不含有点与展望符的值
 
@@ -14,7 +14,7 @@ export class Production {
     private _nodeList: Array<string> = new Array<string>();//该产生式的node数组
     private hashWithDot: string = "";//有点的hash值
     private hashWithoutDot: string = "";//没有点的hash值
-    flag: boolean = false;
+    flag: boolean = false;//产生式标志位，如果为true，表示已经处理过了
 
     get search(): string {
         return this._search;

@@ -1,13 +1,12 @@
 //词法分析器
 import {EOF, keywordTable, LexerToken, Token} from "./Datastruct/Token";
 import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "./ScannerUtils";
-import {printLexerError} from "../error/error";
+import {printErr, printInfo, printLexerError} from "../error/error";
 import {readFromFile} from "../Utils/utils";
 import {T} from "../Parser/DataStruct/V_T";
 
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符
-let curTokenIndex: number;//token指针，指向下一个要读取的token
 let tokens: Array<Token>;//所有token列表
 let errorTokens: Array<LexerToken>;//所有出错的token
 let lineNo: number;//当前行号
@@ -272,6 +271,8 @@ function analyzeCodeToToken() {
             //换行符
             lineNo++;
             lineIndex = 1;
+        }else{
+            pushToken(createErrorLexerPair("无法识别的Token",nowChar), token);
         }
         skipSpace();//跳过所有空格
     }
@@ -281,15 +282,18 @@ function analyzeCodeToToken() {
 export async function initLexer(file: string): Promise<boolean> {
     //初始化词法分析器
     //读取源码文件
+    printInfo("初始化词法分析器...");
+    printInfo("读取源码文件...");
     code = await readFromFile(file);
     code += EOF;//在文件末尾添加标记，表示结束
     curCodeIndex = 0;
-    curTokenIndex = 0;
     tokens = [];
     lineNo = 1;
     lineIndex = 1;
     errorTokens = [];
+    printInfo("解析Token...");
     analyzeCodeToToken();
+    printInfo("Token解析完成！");
     let EOFToken = new Token();
     EOFToken.tokenType = T.EOF;
     EOFToken.value = "#";
@@ -304,17 +308,18 @@ export async function initLexer(file: string): Promise<boolean> {
 
 
 export function lookAheadToken(): Token {
-    return tokens[curTokenIndex];
+    return tokens[0];
 }
 
 export function lookAheadXToken(step: number): Token {
-    return tokens[curTokenIndex + step - 1];
+    return tokens[step - 1];
 }
 
 export function hasToken(): boolean {
-    return curTokenIndex < tokens.length;
+    return tokens.length!==0;
 }
 
 export function getNextToken(): Token {
-    return tokens[curTokenIndex++];
+    // @ts-ignore
+    return tokens.shift();
 }

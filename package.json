@@ -1,5 +1,5 @@
 {
-  "name": "qs",
+  "name": "QinScript",
   "version": "v0.0.1",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
@@ -12,6 +12,7 @@
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.7.1",
     "awesome-typescript-loader": "^3.4.1",
+    "colors": "^1.4.0",
     "fs": "^0.0.1-security",
     "source-map-loader": "^0.2.3",
     "tslint": "^5.9.1",

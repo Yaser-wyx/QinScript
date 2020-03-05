@@ -1,5 +1,5 @@
 import {writeToFile} from "../../Utils/utils";
-import {addBuildFormError, printBuildFormError, printFatalError} from "../../error/error";
+import {addBuildFormError, printBuildFormError, printFatalError, printWarn} from "../../error/error";
 import {E, Production} from "./Production";
 import {ActionFormItem, ActionStatus, GotoFormItem} from "./FormItem";
 
@@ -29,14 +29,21 @@ export class GotoForm {
     }
 
     static buildGotoFromCache(cache: GotoForm) {
-        let newGoto = new GotoForm(cache.items.length);
-        cache.items.forEach((item: object) => {
-            for (let itemKey in item) {
-                let gotoItem: GotoFormItem = item[itemKey];
-                newGoto.setGotoItem(gotoItem.stateIndex, gotoItem.expected, gotoItem.shiftTo);
-            }
-        });
-        return newGoto;
+        let newGoto: GotoForm = new GotoForm(cache.items.length);
+        try {
+            cache.items.forEach((item: object) => {
+                for (let itemKey in item) {
+                    let gotoItem: GotoFormItem = item[itemKey];
+                    newGoto.setGotoItem(gotoItem.stateIndex, gotoItem.expected, gotoItem.shiftTo);
+                }
+            });
+            return newGoto;
+        } catch (e) {
+            printWarn("Goto表缓存文件转换出现失败！");
+            return false;
+        }
+
+
     }
 
     getGotoItem(stateIndex: number, expected: string): GotoFormItem {
@@ -45,7 +52,7 @@ export class GotoForm {
             //如果存在
             return item;
         } else {
-            this.errorItem.errMsg = "当前状态：" + stateIndex + " 无法匹配" + expected + ";";
+            this.errorItem.errMsg = "Goto表读取错误，当前状态：" + stateIndex + " 无法匹配" + expected + ";";
             return this.errorItem;
         }
     }
@@ -94,38 +101,42 @@ export class ActionForm {
     }
 
     static buildActionFromCache(cache: ActionForm) {
-        let newAction = new ActionForm(cache.items.length);
-        let getProduction = (actionItem) => {
-            let production = new Production(actionItem.reduceBy.key);
-            production.copy(actionItem.reduceBy);
-            return production;
-        }
-        cache.items.forEach((item: object) => {
-            for (let itemKey in item) {
-                let actionItem = item[itemKey];
-                switch (actionItem._action) {
-                    case ActionStatus.SHIFT_BY_E:
-                        //@ts-ignore
-                        newAction.setActionItem(actionItem.stateIndex, ActionStatus.SHIFT_BY_E, actionItem.expected, actionItem.shiftTo);
-                        break;
-                    case ActionStatus.SHIFT:
-                        //@ts-ignore
-                        newAction.setActionItem(actionItem.stateIndex, ActionStatus.SHIFT, actionItem.expected, actionItem.shiftTo);
-                        break;
-                    case ActionStatus.REDUCE:
-                        //@ts-ignore
-                        newAction.setActionItem(actionItem.stateIndex, ActionStatus.REDUCE, actionItem.expected, getProduction(actionItem));
-                        break;
-                    case ActionStatus.ACC:
-                        //@ts-ignore
-                        newAction.setActionItem(actionItem.stateIndex, ActionStatus.ACC, actionItem.expected, getProduction(actionItem));
-                        break;
-                    default:
-                        printFatalError("缓存文件转换出现失败！")
+        try {
+            let newAction: ActionForm | boolean = new ActionForm(cache.items.length);
+            let getProduction = (actionItem) => {
+                let production = new Production(actionItem.reduceBy.key);
+                production.copy(actionItem.reduceBy);
+                return production;
+            };
+            cache.items.forEach((item: object) => {
+                for (let itemKey in item) {
+                    let actionItem = item[itemKey];
+                    switch (actionItem._action) {
+                        case ActionStatus.SHIFT_BY_E:
+                            //@ts-ignore
+                            newAction.setActionItem(actionItem.stateIndex, ActionStatus.SHIFT_BY_E, actionItem.expected, actionItem.shiftTo);
+                            break;
+                        case ActionStatus.SHIFT:
+                            //@ts-ignore
+                            newAction.setActionItem(actionItem.stateIndex, ActionStatus.SHIFT, actionItem.expected, actionItem.shiftTo);
+                            break;
+                        case ActionStatus.REDUCE:
+                            //@ts-ignore
+                            newAction.setActionItem(actionItem.stateIndex, ActionStatus.REDUCE, actionItem.expected, getProduction(actionItem));
+                            break;
+                        case ActionStatus.ACC:
+                            //@ts-ignore
+                            newAction.setActionItem(actionItem.stateIndex, ActionStatus.ACC, actionItem.expected, getProduction(actionItem));
+                            break;
+                    }
                 }
-            }
-        });
-        return newAction;
+            });
+            return newAction;
+        } catch (e) {
+            printWarn("Action缓存文件转换出现失败！");
+            return false;
+        }
+
     }
 
     setActionItem(stateIndex: number, action: ActionStatus, expected: string, shiftToOrReduceBy?: number | Production) {
@@ -142,7 +153,7 @@ export class ActionForm {
                 //如果发生了冲突，且与之前的不是同一个，则将新的冲突项加入
                 item.hasConflict = true;
                 item.conflictArray.push(conflictItem);
-                sendFormWarnMsg(item, conflictItem);//发出提示
+                sendFormWarnMsg(item, conflictItem);//发出冲突项提示
             }
         }
     }
@@ -158,11 +169,10 @@ export class ActionForm {
             if (item) {
                 return item;
             }
-            //失败状态
-            this.errorItem.errMsg = "当前状态：" + stateIndex + " 无法匹配" + expected + ";";
+            //失败信息
+            this.errorItem.errMsg = "Action表读取失败，当前状态：" + stateIndex + " 无法匹配：" + expected;
             return this.errorItem;
         }
-
     }
 
     print() {
@@ -177,7 +187,7 @@ export class ActionForm {
                     str += "------------------------------冲突项-------------------\n";
                     item[itemKey].conflictArray.forEach((conflictItem: ActionFormItem) => {
                         str += conflictItem.getInfo() + "\n";
-                    })
+                    });
                     str += "-------------------------------------------------------\n"
                 }
             }

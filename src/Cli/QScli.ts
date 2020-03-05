@@ -27,7 +27,7 @@ export async function readFileList(dir: string): Promise<string[]> {
 }
 
 export function cli() {
-    let version = "QingScript Version 1.0"
+    let version = "QinScript Version 1.0"
     console.log(version);
     console.log("该项目仅供学习使用，请勿用于任何实际项目中，否则后果自负！");
     console.log("-------------------------------------------------");

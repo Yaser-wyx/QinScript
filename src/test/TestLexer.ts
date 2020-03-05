@@ -3,6 +3,7 @@ import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
 import {Token} from "../Lexer/Datastruct/Token";
 import {T} from "../Parser/DataStruct/V_T";
 import {writeToFile} from "../Utils/utils";
+import {TEST_FILE} from "../Cli/config";
 
 
 function printToken(token: Token, index: number) {
@@ -27,4 +28,4 @@ async function testLexer(filePath) {
     await writeToFile(str, "src/test.out.tokens");
 }
 
-testLexer("src/test.qs");
+testLexer(TEST_FILE);

@@ -28,7 +28,6 @@ async function read() {
     })
     await writeToFile(vData, "V.txt", false);
     await writeToFile(tData, "T.txt", false);
-
-
 }
 
+read();

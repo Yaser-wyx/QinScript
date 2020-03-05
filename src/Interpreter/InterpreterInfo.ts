@@ -1,18 +1,17 @@
 import {QSModule} from "./Module";
 import {Fun} from "./Fun";
-import {SymbolTable} from "./SymbolTable";
 import {kill} from "../Utils/utils";
 import {MAIN} from "../Parser/DataStruct/TConstant";
-import {printFatalError} from "../error/error";
-import {BlockStmt} from "../Parser/DataStruct/ASTNode";
+import {printFatalError, printInterpreterError} from "../error/error";
+import {BlockStmt, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
 
 let interpreterInfo: InterpreterInfo;
 
 export class InterpreterInfo {
     private _moduleMap: Map<string, QSModule> = new Map<string, QSModule>();//模块映射表
-    protected _curModuleName: string | null = null;//当前模块名
-    protected _enter: Fun | null = null;//入口方法
-    private _curFun: Fun | null = null;//当前所处方法名
+    protected _curModule: QSModule | null = null;//当前模块
+    protected _enter: ModuleFunDefStmt | null = null;//入口方法
+    private _curFun: Fun | null = null;//当前所处函数
     private _curBlock: BlockStmt | null = null;//当前所处scope的深度
 
     //添加模块
@@ -28,23 +27,23 @@ export class InterpreterInfo {
         return null;
     }
 
-    setEnter(enter: Fun) {
-        if (this._enter && this._enter.funName === MAIN) {
-            printFatalError("main函数只能有一个！");
+    setEnter(enter: ModuleFunDefStmt) {
+        if (this._enter && this._enter.getFunName() === MAIN) {
+            printInterpreterError("main函数只能有一个！");
         }
         this._enter = enter
     }
 
-    get enter(): Fun | null {
+    get enter(): ModuleFunDefStmt | null {
         return this._enter;
     }
 
-    setCurModule(moduleName: string) {
-        this._curModuleName = moduleName;
+    setCurModule(moduleName: QSModule) {
+        this._curModule = moduleName;
     }
 
-    get curModuleName(): string | null {
-        return this._curModuleName;
+    get curModule(): QSModule | null {
+        return this._curModule;
     }
 
     get moduleMap(): Map<string, QSModule> {

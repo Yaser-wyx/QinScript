@@ -10,7 +10,7 @@ ModuleStmts -> ModuleStmts VariableDef | ModuleStmts FunDefStmt  | FunDefStmt | 
 
 FunDefStmt -> FunDef | STATIC FunDef
 FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
-ParamList -> ID | ID COMMA ParamList | E
+ParamList -> ID | ParamList COMMA ID | E
 
 Stmts -> Stmts Stmt | E
 Stmt -> BlockStmt | VariableDef | InnerFunDefStmt | IfStmt | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
