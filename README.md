@@ -234,8 +234,9 @@ ID;
 5. 执行`yarn run dev`运行。
 ## 开发计划
 
-###当前开发状态：
+### 当前开发状态：
 **第一阶段已完成。**
+
 ### 第一阶段
 
 #### 任务
@@ -284,3 +285,7 @@ ID;
 - https://github.com/Xiang1993/jack-compiler
 - https://github.com/dejavudwh/C2j-Compiler
 - https://github.com/Yaser-wyx/the-super-tiny-compiler-modified
+
+### 博客：
+
+- https://www.cnblogs.com/secoding/p/11393720.html
