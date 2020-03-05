@@ -4,7 +4,7 @@
 
 QS全名QinScript，是一门面向过程的脚本语言，语法参考了JS与C，属于个人实验性质项目。
 
-*关于名字由来：Qin是我女友的姓（秦），因为是脚本语言，所以又在后面加了个Script，这就构成了QinScript*
+*关于名字由来：51696ee698afe68891e5a5b3e58f8be79a84e5a793efbc88e7a7a6efbc89efbc8ce59ba0e4b8bae698afe8849ae69cace8afade8a880efbc8ce68980e4bba5e58f88e59ca8e5908ee99da2e58aa0e4ba86e4b8aa536372697074efbc8ce8bf99e5b0b1e69e84e68890e4ba8651696e5363726970740a*
 
 ## 语言元素
 
