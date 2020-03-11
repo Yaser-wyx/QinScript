@@ -1,2 +1,10 @@
-打印时间：Thu Mar 05 2020 18:19:53 GMT+0800 (China Standard Time)
-无异常！
+打印时间：Wed Mar 11 2020 20:45:39 GMT+0800 (China Standard Time)
+
+====================LR(1)分析表构造错误====================
+    Action表发生移进规约冲突；
+    在状态：652    展望字符：ELSE 上已有项目
+    旧项目内容：
+     expected: ELSE    reduceBy: Stmt-> IfStmt
+    新项目内容：
+     expected: ELSE    shiftTo: 503
+====================================================

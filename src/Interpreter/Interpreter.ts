@@ -10,7 +10,7 @@ import {
     BlockStmt,
     CallExp,
     Exp,
-    Expression,
+    Expression, IfStmt,
     Literal,
     LogicalOperator,
     ModuleFunDefStmt,
@@ -112,17 +112,6 @@ function getFun(funName: string) {
     if (funDefStmt) {
         return createFunByModuleFunDefStmt(funDefStmt);
     }
-    return null;
-}
-
-function getAndPushFun(funName: string) {
-    //用函数名获取函数
-    let fun = getFun(funName);
-    if (fun) {
-        pushFun(fun);
-        return fun;
-    }
-    //获取失败
     return null;
 }
 
@@ -264,18 +253,26 @@ function runReturnStmt(returnStmt: ReturnStmt) {
     }
 }
 
-function runIfStmt() {
+function runIfStmt(ifStmt: IfStmt) {
+    //读取测试条件
+    let testVal = runExpression(ifStmt.test);//获取结果值
+    let statement;//要执行的语句
+    if (testVal.value) {
+        statement = ifStmt.consequent;
+    } else {
+        statement = ifStmt.alternate;//可能为null
+    }
+    if (statement) {
+        let runner = statementExecutorMap[statement.nodeType];//获取执行器
+        runner(statement);//执行
+    }
 
 }
 
 function runWhileStmt(whileStmt: WhileStmt) {
     let getTestRes = () => {
         let testRes: VarTypePair = runExpression(whileStmt.test);
-        if (testRes.type === VARIABLE_TYPE.BOOLEAN) {
-            return testRes.value
-        } else {
-            return false;
-        }
+        return testRes.value
     };
     while (getTestRes()) {
         statementExecutorMap[whileStmt.body.nodeType](whileStmt.body);

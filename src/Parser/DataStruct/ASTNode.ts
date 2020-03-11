@@ -182,13 +182,29 @@ export class ReturnStmt implements ASTNode {
 
 export class IfStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.IF_STMT;
-    readonly test: Expression;//测试条件
-    readonly consequent: Statement;//测试条件成立，则执行
-    readonly alternate?: Statement | null;//测试条件不成立，则执行
-
+    private readonly _test: Expression;//测试条件
+    private readonly _consequent: Statement;//测试条件成立，则执行
+    private _alternate: Statement | null = null;//测试条件不成立，则执行
     constructor(test: Expression, consequent: Statement) {
-        this.test = test;
-        this.consequent = consequent;
+        this._test = test;
+        this._consequent = consequent;
+    }
+
+
+    get test(): CallExp | ArrayExp | BinaryExp | UnaryExp | Literal | VariableExp | Exp {
+        return this._test;
+    }
+
+    get consequent(): AssignStmt | CallExp | ArrayExp | BinaryExp | UnaryExp | Literal | VariableExp | Exp | BlockStmt | VarDefStmt | VariableDef | ReturnStmt | IfStmt | WhileStmt {
+        return this._consequent;
+    }
+
+    get alternate(): Statement | null {
+        return this._alternate;
+    }
+
+    set alternate(value: Statement | null) {
+        this._alternate = value;
     }
 }
 

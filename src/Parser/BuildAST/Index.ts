@@ -8,7 +8,7 @@ import {
     CallExp,
     Exp,
     Expression,
-    FunDeclaration,
+    FunDeclaration, IfStmt,
     Literal, ModuleFunDefStmt,
     Node,
     NODE_TYPE,
@@ -39,7 +39,7 @@ import {
     STRING,
     TRUE,
     UNARY_BEFORE_OPERATOR,
-    UNARY_AFTER_OPERATOR,
+    UNARY_AFTER_OPERATOR, ELSE,
 } from "../DataStruct/TConstant";
 import {QSModule} from "../../Interpreter/Module";
 import {Token} from "../../Lexer/Datastruct/Token";
@@ -386,7 +386,7 @@ function buildVariableExp(vtWrap: V_T_Wrap) {
     let idToken: Token = <Token>vtWrap.getChildToken(ID);
     if (idToken) {
         return new VariableExp(idToken.value);
-    }else{
+    } else {
         printBuildASTError("变量名缺失！")
     }
 }
@@ -405,7 +405,7 @@ function buildVarDefStmt(vtWrap: V_T_Wrap) {
             //没有初始化的值
             return new VarDefStmt(idToken.value)
         }
-    }else{
+    } else {
         printBuildASTError("变量定义时，变量名缺失！");
     }
 }
@@ -415,7 +415,7 @@ function buildWhileStmt() {
     if (!hasNull(whileStmtNodeList)) {
         //没有空值
         return new WhileStmt(<Expression>whileStmtNodeList[0], <Statement>whileStmtNodeList[1]);
-    }else{
+    } else {
         printBuildASTError("运行时错误，while节点的Exp与stmt节点丢失！");
     }
 }
@@ -427,7 +427,7 @@ function buildCallExp(vtWrap: V_T_Wrap) {
         if (argumentList instanceof ArgumentList) {
             return new CallExp(idToken.value, argumentList);
         }
-    }else{
+    } else {
         printBuildASTError("函数调用时，函数名缺失！");
     }
 }
@@ -474,7 +474,7 @@ function buildAssignStmt() {
     let variableExp: VariableExp = <VariableExp>ASTStack.pop();
     if (exp instanceof Exp && variableExp instanceof VariableExp) {
         return new AssignStmt(variableExp, exp);
-    }else{
+    } else {
         printBuildASTError("赋值语句构建失败！");
     }
 }
@@ -484,7 +484,7 @@ function buildExp() {
     if (exp) {
         //包装为表达式
         return new Exp(exp);
-    }else{
+    } else {
         printBuildASTError("运行时错误，exp节点丢失！");
     }
 }
@@ -573,7 +573,7 @@ function buildOperator(vtWrap: V_T_Wrap) {
         if (operator) {
             return operator;
         }
-    }else{
+    } else {
         printBuildASTError("运算符号缺失 ！");
     }
 }
@@ -653,7 +653,7 @@ function buildArrayItems(vtWrap: V_T_Wrap) {
 }
 
 function buildArrayItem(vtWrap: V_T_Wrap) {
-    notSupport("数组")
+    console.log(vtWrap);
 }
 
 function buildArrayMemberExp(vtWrap: V_T_Wrap) {
@@ -665,6 +665,45 @@ function buildInnerFunDefStmt() {
     notSupport("内部函数")
 }
 
-function buildIfStmt() {
-    notSupport("IF语句")
+function buildIfStmt(vtWrap: V_T_Wrap) {
+    if (!vtWrap.testChild(ELSE)) {
+        //如果不存在else，也就是说是一个全新的分支
+        //弹出stmt与exp
+        let ifStmtList = ASTStack.popX(2);
+        if (!hasNull(ifStmtList)) {
+            //如果都存在
+            let ifStmt: IfStmt = new IfStmt(<Expression>ifStmtList[0], <Statement>ifStmtList[1]);
+            return ifStmt;
+        } else {
+            printBuildASTError("运行时错误，IF语句缺失条件或执行语句");
+        }
+    } else {
+        //如果存在else
+        //需要寻找一个ifStmt与之匹配
+        let ifElseStmtList = ASTStack.popX(2);
+        let setAlternate = (ifStmt: IfStmt, alternateSTmt: Statement) => {
+            //先找到可以放置alternate语句的位置，因为可能有多个if子句嵌套
+            while (ifStmt.alternate) {
+                //如果存在else子句
+                let alternateStmt = ifStmt.alternate;
+                if (alternateStmt.nodeType === NODE_TYPE.IF_STMT) {
+                    //如果子句是ifStmt，则继续向下查找
+                    ifStmt = <IfStmt>alternateStmt;
+                } else {
+                    //如果else子句不是ifStmt，那么就表明出现了语法错误，因为当前else已经有值了，无法再加上另一个else子句
+                    //该情况不可能出现。
+                    printBuildASTError("IF语句出现语法错误，else子句无法对应多个子语句");
+                }
+            }
+            ifStmt.alternate = alternateSTmt;
+        };
+        if (!hasNull(ifElseStmtList)) {
+            //如果都存在
+            let ifStmt: IfStmt = <IfStmt>ifElseStmtList[0];
+            setAlternate(ifStmt, <Statement>ifElseStmtList[1]);
+            return ifStmt;
+        } else {
+            printBuildASTError("运行时错误，IF语句缺失Else子句");
+        }
+    }
 }
