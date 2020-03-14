@@ -1,4 +1,4 @@
-打印时间：Wed Mar 11 2020 20:45:39 GMT+0800 (China Standard Time)
+打印时间：Fri Mar 13 2020 14:39:39 GMT+0800 (China Standard Time)
 --------------------GotoForm--------------------
 ------------------------------------------------
 状态：0
@@ -74,4032 +74,5217 @@
 
      expected: ArrayExp    value: 40
 
-     expected: ArrayMemberExp    value: 41
+     expected: CalExp    value: 41
 
-     expected: CalExp    value: 42
+     expected: LogicExp    value: 43
 
-     expected: VariableExp    value: 44
+     expected: BitExp    value: 44
 
-     expected: LogicExp    value: 45
+     expected: RelationExp    value: 45
 
-     expected: BitExp    value: 47
+     expected: AdditiveExp    value: 46
 
-     expected: RelationExp    value: 48
+     expected: FactorExp    value: 47
 
-     expected: AdditiveExp    value: 49
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: FactorExp    value: 50
+     expected: UnaryExp    value: 49
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: Literal    value: 54
 
-     expected: UnaryExp    value: 52
+     expected: VariableExp    value: 55
 
-     expected: Literal    value: 57
+     expected: CallExp    value: 57
 
-     expected: CallExp    value: 59
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：42
+状态：41
      expected: LogicOperator    value: 72
 
 ------------------------------------------------
 ------------------------------------------------
-状态：43
+状态：42
      expected: ArrayItems    value: 75
 
-     expected: ArrayItem    value: 76
+     expected: Exp    value: 77
 
-     expected: Literal    value: 78
+     expected: ArrayExp    value: 78
 
-     expected: VariableExp    value: 79
+     expected: CalExp    value: 79
 
-     expected: ArrayExp    value: 80
+     expected: LogicExp    value: 81
 
-     expected: CallExp    value: 81
+     expected: BitExp    value: 82
+
+     expected: RelationExp    value: 83
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
+
+------------------------------------------------
+------------------------------------------------
+状态：43
+     expected: BitOperator    value: 100
 
 ------------------------------------------------
 ------------------------------------------------
 状态：44
-     expected: ArraySub    value: 90
+     expected: RelationalOperator    value: 103
 
 ------------------------------------------------
 ------------------------------------------------
 状态：45
-     expected: BitOperator    value: 92
+     expected: AdditiveOperator    value: 110
 
 ------------------------------------------------
 ------------------------------------------------
-状态：47
-     expected: RelationalOperator    value: 98
+状态：46
+     expected: FactorOperator    value: 113
 
 ------------------------------------------------
 ------------------------------------------------
 状态：48
-     expected: AdditiveOperator    value: 105
+     expected: UnaryExp    value: 117
+
+     expected: Literal    value: 118
+
+     expected: VariableExp    value: 119
+
+     expected: CallExp    value: 121
+
+     expected: IDExp    value: 127
 
 ------------------------------------------------
 ------------------------------------------------
 状态：49
-     expected: FactorOperator    value: 108
+     expected: UnaryAfterOperator    value: 130
 
 ------------------------------------------------
 ------------------------------------------------
-状态：51
-     expected: UnaryExp    value: 112
+状态：56
+     expected: Exp    value: 133
 
-     expected: Literal    value: 113
+     expected: ArrayExp    value: 134
 
-     expected: VariableExp    value: 114
+     expected: CalExp    value: 135
 
-     expected: CallExp    value: 116
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：52
-     expected: UnaryAfterOperator    value: 124
+状态：63
+     expected: ArraySub    value: 156
 
 ------------------------------------------------
 ------------------------------------------------
-状态：58
-     expected: Exp    value: 127
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+状态：65
+     expected: IDExp    value: 161
 
 ------------------------------------------------
 ------------------------------------------------
 状态：69
-     expected: BlockStmt    value: 151
+     expected: BlockStmt    value: 162
 
 ------------------------------------------------
 ------------------------------------------------
 状态：72
-     expected: LogicExp    value: 154
+     expected: LogicExp    value: 165
 
-     expected: BitExp    value: 47
+     expected: BitExp    value: 44
 
-     expected: RelationExp    value: 48
+     expected: RelationExp    value: 45
 
-     expected: AdditiveExp    value: 49
+     expected: AdditiveExp    value: 46
 
-     expected: FactorExp    value: 50
+     expected: FactorExp    value: 47
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: UnaryExp    value: 52
+     expected: UnaryExp    value: 49
 
-     expected: Literal    value: 57
+     expected: Literal    value: 54
 
-     expected: VariableExp    value: 155
+     expected: VariableExp    value: 55
 
-     expected: CallExp    value: 59
+     expected: CallExp    value: 57
 
-------------------------------------------------
-------------------------------------------------
-状态：88
-     expected: ArrayItems    value: 162
-
-     expected: ArrayItem    value: 76
-
-     expected: Literal    value: 78
-
-     expected: VariableExp    value: 79
-
-     expected: ArrayExp    value: 80
-
-     expected: CallExp    value: 81
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：91
-     expected: Exp    value: 164
-
-     expected: ArrayExp    value: 165
-
-     expected: ArrayMemberExp    value: 166
-
-     expected: CalExp    value: 167
-
-     expected: VariableExp    value: 169
-
-     expected: LogicExp    value: 170
-
-     expected: BitExp    value: 172
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: CallExp    value: 180
+状态：79
+     expected: LogicOperator    value: 168
 
 ------------------------------------------------
 ------------------------------------------------
-状态：92
-     expected: BitExp    value: 187
+状态：80
+     expected: ArrayItems    value: 169
 
-     expected: RelationExp    value: 48
+     expected: Exp    value: 77
 
-     expected: AdditiveExp    value: 49
+     expected: ArrayExp    value: 78
 
-     expected: FactorExp    value: 50
+     expected: CalExp    value: 79
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: LogicExp    value: 81
 
-     expected: UnaryExp    value: 52
+     expected: BitExp    value: 82
 
-     expected: Literal    value: 57
+     expected: RelationExp    value: 83
 
-     expected: VariableExp    value: 155
+     expected: AdditiveExp    value: 84
 
-     expected: CallExp    value: 59
+     expected: FactorExp    value: 85
 
-------------------------------------------------
-------------------------------------------------
-状态：95
-     expected: ArgumentList    value: 188
+     expected: UnaryBeforeOperator    value: 86
 
-     expected: Exp    value: 189
+     expected: UnaryExp    value: 87
 
-     expected: ArrayExp    value: 191
+     expected: Literal    value: 88
 
-     expected: ArrayMemberExp    value: 192
+     expected: VariableExp    value: 89
 
-     expected: CalExp    value: 193
+     expected: CallExp    value: 91
 
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
-状态：96
-     expected: CallExp    value: 213
+状态：81
+     expected: BitOperator    value: 171
+
+------------------------------------------------
+------------------------------------------------
+状态：82
+     expected: RelationalOperator    value: 172
+
+------------------------------------------------
+------------------------------------------------
+状态：83
+     expected: AdditiveOperator    value: 173
+
+------------------------------------------------
+------------------------------------------------
+状态：84
+     expected: FactorOperator    value: 174
+
+------------------------------------------------
+------------------------------------------------
+状态：86
+     expected: UnaryExp    value: 175
+
+     expected: Literal    value: 176
+
+     expected: VariableExp    value: 177
+
+     expected: CallExp    value: 179
+
+     expected: IDExp    value: 185
+
+------------------------------------------------
+------------------------------------------------
+状态：87
+     expected: UnaryAfterOperator    value: 188
+
+------------------------------------------------
+------------------------------------------------
+状态：90
+     expected: Exp    value: 191
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：97
-     expected: CallExp    value: 215
+     expected: ArraySub    value: 192
 
 ------------------------------------------------
 ------------------------------------------------
-状态：98
-     expected: RelationExp    value: 216
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: VariableExp    value: 155
-
-     expected: CallExp    value: 59
+状态：99
+     expected: IDExp    value: 197
 
 ------------------------------------------------
 ------------------------------------------------
-状态：105
-     expected: AdditiveExp    value: 217
+状态：100
+     expected: BitExp    value: 198
 
-     expected: FactorExp    value: 50
+     expected: RelationExp    value: 45
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: AdditiveExp    value: 46
 
-     expected: UnaryExp    value: 52
+     expected: FactorExp    value: 47
 
-     expected: Literal    value: 57
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: VariableExp    value: 155
+     expected: UnaryExp    value: 49
 
-     expected: CallExp    value: 59
+     expected: Literal    value: 54
 
-------------------------------------------------
-------------------------------------------------
-状态：108
-     expected: FactorExp    value: 218
+     expected: VariableExp    value: 55
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: CallExp    value: 57
 
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: VariableExp    value: 155
-
-     expected: CallExp    value: 59
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：115
-     expected: Exp    value: 219
+状态：103
+     expected: RelationExp    value: 199
 
-     expected: ArrayExp    value: 128
+     expected: AdditiveExp    value: 46
 
-     expected: ArrayMemberExp    value: 129
+     expected: FactorExp    value: 47
 
-     expected: CalExp    value: 130
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: VariableExp    value: 132
+     expected: UnaryExp    value: 49
 
-     expected: LogicExp    value: 133
+     expected: Literal    value: 54
 
-     expected: BitExp    value: 135
+     expected: VariableExp    value: 55
 
-     expected: RelationExp    value: 136
+     expected: CallExp    value: 57
 
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：130
-     expected: LogicOperator    value: 225
+状态：110
+     expected: AdditiveExp    value: 200
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: VariableExp    value: 55
+
+     expected: CallExp    value: 57
+
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：131
-     expected: ArrayItems    value: 226
+状态：113
+     expected: FactorExp    value: 201
 
-     expected: ArrayItem    value: 76
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: Literal    value: 78
+     expected: UnaryExp    value: 49
 
-     expected: VariableExp    value: 79
+     expected: Literal    value: 54
 
-     expected: ArrayExp    value: 80
+     expected: VariableExp    value: 55
 
-     expected: CallExp    value: 81
+     expected: CallExp    value: 57
 
-------------------------------------------------
-------------------------------------------------
-状态：132
-     expected: ArraySub    value: 227
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
-状态：133
-     expected: BitOperator    value: 229
+状态：120
+     expected: Exp    value: 202
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：127
+     expected: ArraySub    value: 203
+
+------------------------------------------------
+------------------------------------------------
+状态：129
+     expected: IDExp    value: 208
 
 ------------------------------------------------
 ------------------------------------------------
 状态：135
-     expected: RelationalOperator    value: 233
+     expected: LogicOperator    value: 210
 
 ------------------------------------------------
 ------------------------------------------------
 状态：136
-     expected: AdditiveOperator    value: 234
+     expected: ArrayItems    value: 211
+
+     expected: Exp    value: 77
+
+     expected: ArrayExp    value: 78
+
+     expected: CalExp    value: 79
+
+     expected: LogicExp    value: 81
+
+     expected: BitExp    value: 82
+
+     expected: RelationExp    value: 83
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：137
-     expected: FactorOperator    value: 235
+     expected: BitOperator    value: 213
+
+------------------------------------------------
+------------------------------------------------
+状态：138
+     expected: RelationalOperator    value: 214
 
 ------------------------------------------------
 ------------------------------------------------
 状态：139
-     expected: UnaryExp    value: 236
-
-     expected: Literal    value: 237
-
-     expected: VariableExp    value: 238
-
-     expected: CallExp    value: 240
+     expected: AdditiveOperator    value: 215
 
 ------------------------------------------------
 ------------------------------------------------
 状态：140
-     expected: UnaryAfterOperator    value: 248
+     expected: FactorOperator    value: 216
 
 ------------------------------------------------
 ------------------------------------------------
 状态：142
-     expected: Exp    value: 251
+     expected: UnaryExp    value: 217
 
-     expected: ArrayExp    value: 128
+     expected: Literal    value: 218
 
-     expected: ArrayMemberExp    value: 129
+     expected: VariableExp    value: 219
 
-     expected: CalExp    value: 130
+     expected: CallExp    value: 221
 
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 227
 
 ------------------------------------------------
 ------------------------------------------------
-状态：152
-     expected: Stmts    value: 254
+状态：143
+     expected: UnaryAfterOperator    value: 230
 
 ------------------------------------------------
 ------------------------------------------------
-状态：154
-     expected: BitOperator    value: 92
+状态：146
+     expected: Exp    value: 233
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：153
+     expected: ArraySub    value: 234
+
+------------------------------------------------
+------------------------------------------------
+状态：155
+     expected: IDExp    value: 239
+
+------------------------------------------------
+------------------------------------------------
+状态：157
+     expected: ArgumentList    value: 241
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：158
-     expected: ArrayItems    value: 256
+     expected: Exp    value: 266
 
-     expected: ArrayItem    value: 76
+     expected: ArrayExp    value: 267
 
-     expected: Literal    value: 78
+     expected: CalExp    value: 268
 
-     expected: VariableExp    value: 79
+     expected: LogicExp    value: 270
 
-     expected: ArrayExp    value: 80
+     expected: BitExp    value: 271
 
-     expected: CallExp    value: 81
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：159
-     expected: ArgumentList    value: 257
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 289
 
 ------------------------------------------------
 ------------------------------------------------
 状态：160
-     expected: CallExp    value: 258
+     expected: IDExp    value: 290
 
 ------------------------------------------------
 ------------------------------------------------
-状态：161
-     expected: CallExp    value: 260
+状态：163
+     expected: Stmts    value: 291
+
+------------------------------------------------
+------------------------------------------------
+状态：165
+     expected: BitOperator    value: 100
 
 ------------------------------------------------
 ------------------------------------------------
 状态：167
-     expected: LogicOperator    value: 264
+     expected: ArrayItems    value: 293
+
+     expected: Exp    value: 77
+
+     expected: ArrayExp    value: 78
+
+     expected: CalExp    value: 79
+
+     expected: LogicExp    value: 81
+
+     expected: BitExp    value: 82
+
+     expected: RelationExp    value: 83
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：168
-     expected: ArrayItems    value: 265
+     expected: LogicExp    value: 294
 
-     expected: ArrayItem    value: 76
+     expected: BitExp    value: 82
 
-     expected: Literal    value: 78
+     expected: RelationExp    value: 83
 
-     expected: VariableExp    value: 79
+     expected: AdditiveExp    value: 84
 
-     expected: ArrayExp    value: 80
+     expected: FactorExp    value: 85
 
-     expected: CallExp    value: 81
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
-状态：169
-     expected: ArraySub    value: 266
+状态：171
+     expected: BitExp    value: 296
 
-------------------------------------------------
-------------------------------------------------
-状态：170
-     expected: BitOperator    value: 268
+     expected: RelationExp    value: 83
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：172
-     expected: RelationalOperator    value: 272
+     expected: RelationExp    value: 297
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：173
-     expected: AdditiveOperator    value: 273
+     expected: AdditiveExp    value: 298
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：174
-     expected: FactorOperator    value: 274
+     expected: FactorExp    value: 299
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
-状态：176
-     expected: UnaryExp    value: 275
+状态：178
+     expected: Exp    value: 300
 
-     expected: Literal    value: 276
+     expected: ArrayExp    value: 134
 
-     expected: VariableExp    value: 277
+     expected: CalExp    value: 135
 
-     expected: CallExp    value: 279
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：177
-     expected: UnaryAfterOperator    value: 287
-
-------------------------------------------------
-------------------------------------------------
-状态：179
-     expected: Exp    value: 290
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+状态：185
+     expected: ArraySub    value: 301
 
 ------------------------------------------------
 ------------------------------------------------
 状态：187
-     expected: RelationalOperator    value: 98
+     expected: IDExp    value: 306
 
 ------------------------------------------------
 ------------------------------------------------
 状态：193
-     expected: LogicOperator    value: 294
+     expected: ArgumentList    value: 309
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：194
-     expected: ArrayItems    value: 295
+     expected: Exp    value: 310
 
-     expected: ArrayItem    value: 76
+     expected: ArrayExp    value: 267
 
-     expected: Literal    value: 78
+     expected: CalExp    value: 268
 
-     expected: VariableExp    value: 79
+     expected: LogicExp    value: 270
 
-     expected: ArrayExp    value: 80
+     expected: BitExp    value: 271
 
-     expected: CallExp    value: 81
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：195
-     expected: ArraySub    value: 296
+     expected: IDExp    value: 311
 
 ------------------------------------------------
 ------------------------------------------------
 状态：196
-     expected: BitOperator    value: 298
+     expected: IDExp    value: 312
 
 ------------------------------------------------
 ------------------------------------------------
 状态：198
-     expected: RelationalOperator    value: 302
+     expected: RelationalOperator    value: 103
 
 ------------------------------------------------
 ------------------------------------------------
 状态：199
-     expected: AdditiveOperator    value: 303
+     expected: AdditiveOperator    value: 110
 
 ------------------------------------------------
 ------------------------------------------------
 状态：200
-     expected: FactorOperator    value: 304
+     expected: FactorOperator    value: 113
 
 ------------------------------------------------
 ------------------------------------------------
-状态：202
-     expected: UnaryExp    value: 305
+状态：204
+     expected: ArgumentList    value: 315
 
-     expected: Literal    value: 306
+     expected: Exp    value: 242
 
-     expected: VariableExp    value: 307
+     expected: ArrayExp    value: 244
 
-     expected: CallExp    value: 309
+     expected: CalExp    value: 245
 
-------------------------------------------------
-------------------------------------------------
-状态：203
-     expected: UnaryAfterOperator    value: 317
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：205
-     expected: Exp    value: 320
+     expected: Exp    value: 316
 
-     expected: ArrayExp    value: 128
+     expected: ArrayExp    value: 267
 
-     expected: ArrayMemberExp    value: 129
+     expected: CalExp    value: 268
 
-     expected: CalExp    value: 130
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 132
+     expected: BitExp    value: 271
 
-     expected: LogicExp    value: 133
+     expected: RelationExp    value: 272
 
-     expected: BitExp    value: 135
+     expected: AdditiveExp    value: 273
 
-     expected: RelationExp    value: 136
+     expected: FactorExp    value: 274
 
-     expected: AdditiveExp    value: 137
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: FactorExp    value: 138
+     expected: UnaryExp    value: 276
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Literal    value: 277
 
-     expected: UnaryExp    value: 140
+     expected: VariableExp    value: 278
 
-     expected: Literal    value: 141
+     expected: CallExp    value: 280
 
-     expected: CallExp    value: 143
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：206
+     expected: IDExp    value: 317
+
+------------------------------------------------
+------------------------------------------------
+状态：207
+     expected: IDExp    value: 318
+
+------------------------------------------------
+------------------------------------------------
+状态：210
+     expected: LogicExp    value: 319
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：213
+     expected: BitExp    value: 321
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：214
+     expected: RelationExp    value: 322
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：215
+     expected: AdditiveExp    value: 323
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：216
-     expected: AdditiveOperator    value: 105
+     expected: FactorExp    value: 324
 
-------------------------------------------------
-------------------------------------------------
-状态：217
-     expected: FactorOperator    value: 108
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：220
-     expected: ArgumentList    value: 323
+     expected: Exp    value: 325
 
-     expected: Exp    value: 189
+     expected: ArrayExp    value: 134
 
-     expected: ArrayExp    value: 191
+     expected: CalExp    value: 135
 
-     expected: ArrayMemberExp    value: 192
+     expected: LogicExp    value: 137
 
-     expected: CalExp    value: 193
+     expected: BitExp    value: 138
 
-     expected: VariableExp    value: 195
+     expected: RelationExp    value: 139
 
-     expected: LogicExp    value: 196
+     expected: AdditiveExp    value: 140
 
-     expected: BitExp    value: 198
+     expected: FactorExp    value: 141
 
-     expected: RelationExp    value: 199
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryExp    value: 143
 
-     expected: FactorExp    value: 201
+     expected: Literal    value: 144
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: VariableExp    value: 145
 
-     expected: UnaryExp    value: 203
+     expected: CallExp    value: 147
 
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：221
-     expected: CallExp    value: 324
-
-------------------------------------------------
-------------------------------------------------
-状态：222
-     expected: CallExp    value: 326
-
-------------------------------------------------
-------------------------------------------------
-状态：225
-     expected: LogicExp    value: 328
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: VariableExp    value: 329
-
-     expected: CallExp    value: 143
-
-------------------------------------------------
-------------------------------------------------
-状态：228
-     expected: Exp    value: 332
-
-     expected: ArrayExp    value: 165
-
-     expected: ArrayMemberExp    value: 166
-
-     expected: CalExp    value: 167
-
-     expected: VariableExp    value: 169
-
-     expected: LogicExp    value: 170
-
-     expected: BitExp    value: 172
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: CallExp    value: 180
+状态：227
+     expected: ArraySub    value: 326
 
 ------------------------------------------------
 ------------------------------------------------
 状态：229
-     expected: BitExp    value: 333
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: VariableExp    value: 329
-
-     expected: CallExp    value: 143
-
-------------------------------------------------
-------------------------------------------------
-状态：230
-     expected: ArgumentList    value: 334
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：231
-     expected: CallExp    value: 335
-
-------------------------------------------------
-------------------------------------------------
-状态：232
-     expected: CallExp    value: 337
-
-------------------------------------------------
-------------------------------------------------
-状态：233
-     expected: RelationExp    value: 338
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: VariableExp    value: 329
-
-     expected: CallExp    value: 143
-
-------------------------------------------------
-------------------------------------------------
-状态：234
-     expected: AdditiveExp    value: 339
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: VariableExp    value: 329
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 331
 
 ------------------------------------------------
 ------------------------------------------------
 状态：235
-     expected: FactorExp    value: 340
+     expected: ArgumentList    value: 334
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Exp    value: 242
 
-     expected: UnaryExp    value: 140
+     expected: ArrayExp    value: 244
 
-     expected: Literal    value: 141
+     expected: CalExp    value: 245
 
-     expected: VariableExp    value: 329
+     expected: LogicExp    value: 247
 
-     expected: CallExp    value: 143
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
-状态：239
-     expected: Exp    value: 341
+状态：236
+     expected: Exp    value: 335
 
-     expected: ArrayExp    value: 128
+     expected: ArrayExp    value: 267
 
-     expected: ArrayMemberExp    value: 129
+     expected: CalExp    value: 268
 
-     expected: CalExp    value: 130
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 132
+     expected: BitExp    value: 271
 
-     expected: LogicExp    value: 133
+     expected: RelationExp    value: 272
 
-     expected: BitExp    value: 135
+     expected: AdditiveExp    value: 273
 
-     expected: RelationExp    value: 136
+     expected: FactorExp    value: 274
 
-     expected: AdditiveExp    value: 137
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: FactorExp    value: 138
+     expected: UnaryExp    value: 276
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Literal    value: 277
 
-     expected: UnaryExp    value: 140
+     expected: VariableExp    value: 278
 
-     expected: Literal    value: 141
+     expected: CallExp    value: 280
 
-     expected: CallExp    value: 143
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：237
+     expected: IDExp    value: 336
+
+------------------------------------------------
+------------------------------------------------
+状态：238
+     expected: IDExp    value: 337
+
+------------------------------------------------
+------------------------------------------------
+状态：240
+     expected: Exp    value: 338
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：245
+     expected: LogicOperator    value: 341
+
+------------------------------------------------
+------------------------------------------------
+状态：246
+     expected: ArrayItems    value: 342
+
+     expected: Exp    value: 77
+
+     expected: ArrayExp    value: 78
+
+     expected: CalExp    value: 79
+
+     expected: LogicExp    value: 81
+
+     expected: BitExp    value: 82
+
+     expected: RelationExp    value: 83
+
+     expected: AdditiveExp    value: 84
+
+     expected: FactorExp    value: 85
+
+     expected: UnaryBeforeOperator    value: 86
+
+     expected: UnaryExp    value: 87
+
+     expected: Literal    value: 88
+
+     expected: VariableExp    value: 89
+
+     expected: CallExp    value: 91
+
+     expected: IDExp    value: 97
+
+------------------------------------------------
+------------------------------------------------
+状态：247
+     expected: BitOperator    value: 344
+
+------------------------------------------------
+------------------------------------------------
+状态：248
+     expected: RelationalOperator    value: 345
+
+------------------------------------------------
+------------------------------------------------
+状态：249
+     expected: AdditiveOperator    value: 346
+
+------------------------------------------------
+------------------------------------------------
+状态：250
+     expected: FactorOperator    value: 347
+
+------------------------------------------------
+------------------------------------------------
+状态：252
+     expected: UnaryExp    value: 348
+
+     expected: Literal    value: 349
+
+     expected: VariableExp    value: 350
+
+     expected: CallExp    value: 352
+
+     expected: IDExp    value: 358
 
 ------------------------------------------------
 ------------------------------------------------
 状态：253
-     expected: ArgumentList    value: 348
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: UnaryAfterOperator    value: 361
 
 ------------------------------------------------
 ------------------------------------------------
-状态：254
-     expected: Stmt    value: 350
+状态：256
+     expected: Exp    value: 364
 
-     expected: IfStmt    value: 351
+     expected: ArrayExp    value: 134
 
-     expected: BlockStmt    value: 352
+     expected: CalExp    value: 135
 
-     expected: VariableDef    value: 353
+     expected: LogicExp    value: 137
 
-     expected: WhileStmt    value: 354
+     expected: BitExp    value: 138
 
-     expected: ReturnStmt    value: 355
+     expected: RelationExp    value: 139
 
-     expected: AssignStmt    value: 356
+     expected: AdditiveExp    value: 140
 
-     expected: Exp    value: 357
+     expected: FactorExp    value: 141
 
-     expected: VarDefStmt    value: 360
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: VariableExp    value: 363
+     expected: UnaryExp    value: 143
 
-     expected: ArrayExp    value: 40
+     expected: Literal    value: 144
 
-     expected: ArrayMemberExp    value: 41
+     expected: VariableExp    value: 145
 
-     expected: CalExp    value: 42
+     expected: CallExp    value: 147
 
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
-
-------------------------------------------------
-------------------------------------------------
-状态：262
-     expected: ArgumentList    value: 367
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：263
-     expected: ArraySub    value: 368
+     expected: ArraySub    value: 365
 
 ------------------------------------------------
 ------------------------------------------------
-状态：264
-     expected: LogicExp    value: 369
-
-     expected: BitExp    value: 172
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: VariableExp    value: 370
-
-     expected: CallExp    value: 180
-
-------------------------------------------------
-------------------------------------------------
-状态：267
-     expected: Exp    value: 373
-
-     expected: ArrayExp    value: 165
-
-     expected: ArrayMemberExp    value: 166
-
-     expected: CalExp    value: 167
-
-     expected: VariableExp    value: 169
-
-     expected: LogicExp    value: 170
-
-     expected: BitExp    value: 172
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: CallExp    value: 180
+状态：265
+     expected: IDExp    value: 370
 
 ------------------------------------------------
 ------------------------------------------------
 状态：268
-     expected: BitExp    value: 374
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: VariableExp    value: 370
-
-     expected: CallExp    value: 180
+     expected: LogicOperator    value: 372
 
 ------------------------------------------------
 ------------------------------------------------
 状态：269
-     expected: ArgumentList    value: 375
+     expected: ArrayItems    value: 373
 
-     expected: Exp    value: 189
+     expected: Exp    value: 77
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 78
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 79
 
-     expected: CalExp    value: 193
+     expected: LogicExp    value: 81
 
-     expected: VariableExp    value: 195
+     expected: BitExp    value: 82
 
-     expected: LogicExp    value: 196
+     expected: RelationExp    value: 83
 
-     expected: BitExp    value: 198
+     expected: AdditiveExp    value: 84
 
-     expected: RelationExp    value: 199
+     expected: FactorExp    value: 85
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryBeforeOperator    value: 86
 
-     expected: FactorExp    value: 201
+     expected: UnaryExp    value: 87
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: Literal    value: 88
 
-     expected: UnaryExp    value: 203
+     expected: VariableExp    value: 89
 
-     expected: Literal    value: 204
+     expected: CallExp    value: 91
 
-     expected: CallExp    value: 206
+     expected: IDExp    value: 97
 
 ------------------------------------------------
 ------------------------------------------------
 状态：270
-     expected: CallExp    value: 376
+     expected: BitOperator    value: 375
 
 ------------------------------------------------
 ------------------------------------------------
 状态：271
-     expected: CallExp    value: 378
+     expected: RelationalOperator    value: 376
 
 ------------------------------------------------
 ------------------------------------------------
 状态：272
-     expected: RelationExp    value: 379
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: VariableExp    value: 370
-
-     expected: CallExp    value: 180
+     expected: AdditiveOperator    value: 377
 
 ------------------------------------------------
 ------------------------------------------------
 状态：273
-     expected: AdditiveExp    value: 380
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: VariableExp    value: 370
-
-     expected: CallExp    value: 180
+     expected: FactorOperator    value: 378
 
 ------------------------------------------------
 ------------------------------------------------
-状态：274
-     expected: FactorExp    value: 381
+状态：275
+     expected: UnaryExp    value: 379
 
-     expected: UnaryBeforeOperator    value: 176
+     expected: Literal    value: 380
 
-     expected: UnaryExp    value: 177
+     expected: VariableExp    value: 381
 
-     expected: Literal    value: 178
+     expected: CallExp    value: 383
 
-     expected: VariableExp    value: 370
-
-     expected: CallExp    value: 180
+     expected: IDExp    value: 389
 
 ------------------------------------------------
 ------------------------------------------------
-状态：278
-     expected: Exp    value: 382
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+状态：276
+     expected: UnaryAfterOperator    value: 392
 
 ------------------------------------------------
 ------------------------------------------------
-状态：293
-     expected: Exp    value: 389
+状态：279
+     expected: Exp    value: 395
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 134
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 135
 
-     expected: CalExp    value: 390
+     expected: LogicExp    value: 137
 
-     expected: VariableExp    value: 391
+     expected: BitExp    value: 138
 
-     expected: LogicExp    value: 392
+     expected: RelationExp    value: 139
 
-     expected: BitExp    value: 394
+     expected: AdditiveExp    value: 140
 
-     expected: RelationExp    value: 395
+     expected: FactorExp    value: 141
 
-     expected: AdditiveExp    value: 396
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: FactorExp    value: 397
+     expected: UnaryExp    value: 143
 
-     expected: UnaryBeforeOperator    value: 398
+     expected: Literal    value: 144
 
-     expected: UnaryExp    value: 399
+     expected: VariableExp    value: 145
 
-     expected: Literal    value: 400
+     expected: CallExp    value: 147
 
-     expected: CallExp    value: 402
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：286
+     expected: ArraySub    value: 396
+
+------------------------------------------------
+------------------------------------------------
+状态：288
+     expected: IDExp    value: 401
+
+------------------------------------------------
+------------------------------------------------
+状态：291
+     expected: Stmt    value: 403
+
+     expected: IfStmt    value: 404
+
+     expected: BlockStmt    value: 405
+
+     expected: VariableDef    value: 406
+
+     expected: WhileStmt    value: 407
+
+     expected: ReturnStmt    value: 408
+
+     expected: AssignStmt    value: 409
+
+     expected: Exp    value: 410
+
+     expected: VarDefStmt    value: 413
+
+     expected: VariableExp    value: 416
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
 
 ------------------------------------------------
 ------------------------------------------------
 状态：294
-     expected: LogicExp    value: 409
+     expected: BitOperator    value: 171
 
-     expected: BitExp    value: 410
-
-     expected: RelationExp    value: 411
-
-     expected: AdditiveExp    value: 412
-
-     expected: FactorExp    value: 413
-
-     expected: UnaryBeforeOperator    value: 414
-
-     expected: UnaryExp    value: 415
-
-     expected: Literal    value: 416
-
-     expected: VariableExp    value: 417
-
-     expected: CallExp    value: 419
+------------------------------------------------
+------------------------------------------------
+状态：296
+     expected: RelationalOperator    value: 172
 
 ------------------------------------------------
 ------------------------------------------------
 状态：297
-     expected: Exp    value: 428
-
-     expected: ArrayExp    value: 165
-
-     expected: ArrayMemberExp    value: 166
-
-     expected: CalExp    value: 167
-
-     expected: VariableExp    value: 169
-
-     expected: LogicExp    value: 170
-
-     expected: BitExp    value: 172
-
-     expected: RelationExp    value: 173
-
-     expected: AdditiveExp    value: 174
-
-     expected: FactorExp    value: 175
-
-     expected: UnaryBeforeOperator    value: 176
-
-     expected: UnaryExp    value: 177
-
-     expected: Literal    value: 178
-
-     expected: CallExp    value: 180
+     expected: AdditiveOperator    value: 173
 
 ------------------------------------------------
 ------------------------------------------------
 状态：298
-     expected: BitExp    value: 429
-
-     expected: RelationExp    value: 430
-
-     expected: AdditiveExp    value: 431
-
-     expected: FactorExp    value: 432
-
-     expected: UnaryBeforeOperator    value: 433
-
-     expected: UnaryExp    value: 434
-
-     expected: Literal    value: 435
-
-     expected: VariableExp    value: 436
-
-     expected: CallExp    value: 438
-
-------------------------------------------------
-------------------------------------------------
-状态：299
-     expected: ArgumentList    value: 446
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：300
-     expected: CallExp    value: 447
-
-------------------------------------------------
-------------------------------------------------
-状态：301
-     expected: CallExp    value: 449
+     expected: FactorOperator    value: 174
 
 ------------------------------------------------
 ------------------------------------------------
 状态：302
-     expected: RelationExp    value: 450
+     expected: ArgumentList    value: 423
 
-     expected: AdditiveExp    value: 451
+     expected: Exp    value: 242
 
-     expected: FactorExp    value: 452
+     expected: ArrayExp    value: 244
 
-     expected: UnaryBeforeOperator    value: 453
+     expected: CalExp    value: 245
 
-     expected: UnaryExp    value: 454
+     expected: LogicExp    value: 247
 
-     expected: Literal    value: 455
+     expected: BitExp    value: 248
 
-     expected: VariableExp    value: 456
+     expected: RelationExp    value: 249
 
-     expected: CallExp    value: 458
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：303
-     expected: AdditiveExp    value: 466
+     expected: Exp    value: 424
 
-     expected: FactorExp    value: 467
+     expected: ArrayExp    value: 267
 
-     expected: UnaryBeforeOperator    value: 468
+     expected: CalExp    value: 268
 
-     expected: UnaryExp    value: 469
+     expected: LogicExp    value: 270
 
-     expected: Literal    value: 470
+     expected: BitExp    value: 271
 
-     expected: VariableExp    value: 471
+     expected: RelationExp    value: 272
 
-     expected: CallExp    value: 473
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：304
-     expected: FactorExp    value: 481
+     expected: IDExp    value: 425
 
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: VariableExp    value: 482
-
-     expected: CallExp    value: 206
+------------------------------------------------
+------------------------------------------------
+状态：305
+     expected: IDExp    value: 426
 
 ------------------------------------------------
 ------------------------------------------------
 状态：308
-     expected: Exp    value: 484
+     expected: Exp    value: 427
 
-     expected: ArrayExp    value: 128
+     expected: ArrayExp    value: 267
 
-     expected: ArrayMemberExp    value: 129
+     expected: CalExp    value: 268
 
-     expected: CalExp    value: 130
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 132
+     expected: BitExp    value: 271
 
-     expected: LogicExp    value: 133
+     expected: RelationExp    value: 272
 
-     expected: BitExp    value: 135
+     expected: AdditiveExp    value: 273
 
-     expected: RelationExp    value: 136
+     expected: FactorExp    value: 274
 
-     expected: AdditiveExp    value: 137
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: FactorExp    value: 138
+     expected: UnaryExp    value: 276
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Literal    value: 277
 
-     expected: UnaryExp    value: 140
+     expected: VariableExp    value: 278
 
-     expected: Literal    value: 141
+     expected: CallExp    value: 280
 
-     expected: CallExp    value: 143
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：314
+     expected: Exp    value: 430
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：319
+     expected: BitOperator    value: 213
+
+------------------------------------------------
+------------------------------------------------
+状态：321
+     expected: RelationalOperator    value: 214
+
+------------------------------------------------
+------------------------------------------------
+状态：322
+     expected: AdditiveOperator    value: 215
+
+------------------------------------------------
+------------------------------------------------
+状态：323
+     expected: FactorOperator    value: 216
 
 ------------------------------------------------
 ------------------------------------------------
 状态：327
-     expected: ArgumentList    value: 492
+     expected: ArgumentList    value: 435
 
-     expected: Exp    value: 189
+     expected: Exp    value: 242
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 244
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 245
 
-     expected: CalExp    value: 193
+     expected: LogicExp    value: 247
 
-     expected: VariableExp    value: 195
+     expected: BitExp    value: 248
 
-     expected: LogicExp    value: 196
+     expected: RelationExp    value: 249
 
-     expected: BitExp    value: 198
+     expected: AdditiveExp    value: 250
 
-     expected: RelationExp    value: 199
+     expected: FactorExp    value: 251
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: FactorExp    value: 201
+     expected: UnaryExp    value: 253
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: Literal    value: 254
 
-     expected: UnaryExp    value: 203
+     expected: VariableExp    value: 255
 
-     expected: Literal    value: 204
+     expected: CallExp    value: 257
 
-     expected: CallExp    value: 206
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：328
-     expected: BitOperator    value: 229
+     expected: Exp    value: 436
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：329
+     expected: IDExp    value: 437
+
+------------------------------------------------
+------------------------------------------------
+状态：330
+     expected: IDExp    value: 438
 
 ------------------------------------------------
 ------------------------------------------------
 状态：333
-     expected: RelationalOperator    value: 233
+     expected: Exp    value: 439
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：338
-     expected: AdditiveOperator    value: 234
+状态：340
+     expected: Exp    value: 443
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 444
+
+     expected: LogicExp    value: 445
+
+     expected: BitExp    value: 446
+
+     expected: RelationExp    value: 447
+
+     expected: AdditiveExp    value: 448
+
+     expected: FactorExp    value: 449
+
+     expected: UnaryBeforeOperator    value: 450
+
+     expected: UnaryExp    value: 451
+
+     expected: Literal    value: 452
+
+     expected: VariableExp    value: 453
+
+     expected: CallExp    value: 455
+
+     expected: IDExp    value: 461
 
 ------------------------------------------------
 ------------------------------------------------
-状态：339
-     expected: FactorOperator    value: 235
+状态：341
+     expected: LogicExp    value: 464
 
-------------------------------------------------
-------------------------------------------------
-状态：342
-     expected: ArgumentList    value: 496
+     expected: BitExp    value: 465
 
-     expected: Exp    value: 189
+     expected: RelationExp    value: 466
 
-     expected: ArrayExp    value: 191
+     expected: AdditiveExp    value: 467
 
-     expected: ArrayMemberExp    value: 192
+     expected: FactorExp    value: 468
 
-     expected: CalExp    value: 193
+     expected: UnaryBeforeOperator    value: 469
 
-     expected: VariableExp    value: 195
+     expected: UnaryExp    value: 470
 
-     expected: LogicExp    value: 196
+     expected: Literal    value: 471
 
-     expected: BitExp    value: 198
+     expected: VariableExp    value: 472
 
-     expected: RelationExp    value: 199
+     expected: CallExp    value: 474
 
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：343
-     expected: CallExp    value: 497
+     expected: IDExp    value: 480
 
 ------------------------------------------------
 ------------------------------------------------
 状态：344
-     expected: CallExp    value: 499
+     expected: BitExp    value: 484
+
+     expected: RelationExp    value: 485
+
+     expected: AdditiveExp    value: 486
+
+     expected: FactorExp    value: 487
+
+     expected: UnaryBeforeOperator    value: 488
+
+     expected: UnaryExp    value: 489
+
+     expected: Literal    value: 490
+
+     expected: VariableExp    value: 491
+
+     expected: CallExp    value: 493
+
+     expected: IDExp    value: 499
+
+------------------------------------------------
+------------------------------------------------
+状态：345
+     expected: RelationExp    value: 502
+
+     expected: AdditiveExp    value: 503
+
+     expected: FactorExp    value: 504
+
+     expected: UnaryBeforeOperator    value: 505
+
+     expected: UnaryExp    value: 506
+
+     expected: Literal    value: 507
+
+     expected: VariableExp    value: 508
+
+     expected: CallExp    value: 510
+
+     expected: IDExp    value: 516
+
+------------------------------------------------
+------------------------------------------------
+状态：346
+     expected: AdditiveExp    value: 519
+
+     expected: FactorExp    value: 520
+
+     expected: UnaryBeforeOperator    value: 521
+
+     expected: UnaryExp    value: 522
+
+     expected: Literal    value: 523
+
+     expected: VariableExp    value: 524
+
+     expected: CallExp    value: 526
+
+     expected: IDExp    value: 532
 
 ------------------------------------------------
 ------------------------------------------------
 状态：347
-     expected: ArgumentList    value: 501
+     expected: FactorExp    value: 535
 
-     expected: Exp    value: 189
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: ArrayExp    value: 191
+     expected: UnaryExp    value: 253
 
-     expected: ArrayMemberExp    value: 192
+     expected: Literal    value: 254
 
-     expected: CalExp    value: 193
+     expected: VariableExp    value: 255
 
-     expected: VariableExp    value: 195
+     expected: CallExp    value: 257
 
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
-状态：359
-     expected: Stmts    value: 506
+状态：351
+     expected: Exp    value: 536
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：362
-     expected: Exp    value: 508
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: VariableExp    value: 44
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+状态：358
+     expected: ArraySub    value: 537
 
 ------------------------------------------------
 ------------------------------------------------
-状态：363
-     expected: ArraySub    value: 90
+状态：360
+     expected: IDExp    value: 542
+
+------------------------------------------------
+------------------------------------------------
+状态：366
+     expected: ArgumentList    value: 545
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：367
+     expected: Exp    value: 546
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：368
+     expected: IDExp    value: 547
 
 ------------------------------------------------
 ------------------------------------------------
 状态：369
-     expected: BitOperator    value: 268
+     expected: IDExp    value: 548
 
 ------------------------------------------------
 ------------------------------------------------
-状态：374
-     expected: RelationalOperator    value: 272
+状态：372
+     expected: LogicExp    value: 549
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：379
-     expected: AdditiveOperator    value: 273
+状态：375
+     expected: BitExp    value: 551
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：380
-     expected: FactorOperator    value: 274
+状态：376
+     expected: RelationExp    value: 552
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：383
-     expected: ArgumentList    value: 516
+状态：377
+     expected: AdditiveExp    value: 553
 
-     expected: Exp    value: 189
+     expected: FactorExp    value: 274
 
-     expected: ArrayExp    value: 191
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: ArrayMemberExp    value: 192
+     expected: UnaryExp    value: 276
 
-     expected: CalExp    value: 193
+     expected: Literal    value: 277
 
-     expected: VariableExp    value: 195
+     expected: VariableExp    value: 278
 
-     expected: LogicExp    value: 196
+     expected: CallExp    value: 280
 
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：384
-     expected: CallExp    value: 517
+状态：378
+     expected: FactorExp    value: 554
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：385
-     expected: CallExp    value: 519
+状态：382
+     expected: Exp    value: 555
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：388
-     expected: ArgumentList    value: 521
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：390
-     expected: LogicOperator    value: 522
+状态：389
+     expected: ArraySub    value: 556
 
 ------------------------------------------------
 ------------------------------------------------
 状态：391
-     expected: ArraySub    value: 296
+     expected: IDExp    value: 561
 
 ------------------------------------------------
 ------------------------------------------------
-状态：392
-     expected: BitOperator    value: 523
+状态：397
+     expected: ArgumentList    value: 564
 
-------------------------------------------------
-------------------------------------------------
-状态：394
-     expected: RelationalOperator    value: 527
+     expected: Exp    value: 242
 
-------------------------------------------------
-------------------------------------------------
-状态：395
-     expected: AdditiveOperator    value: 528
+     expected: ArrayExp    value: 244
 
-------------------------------------------------
-------------------------------------------------
-状态：396
-     expected: FactorOperator    value: 529
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：398
-     expected: UnaryExp    value: 530
+     expected: Exp    value: 565
 
-     expected: Literal    value: 531
+     expected: ArrayExp    value: 267
 
-     expected: VariableExp    value: 532
+     expected: CalExp    value: 268
 
-     expected: CallExp    value: 534
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：399
-     expected: UnaryAfterOperator    value: 542
+     expected: IDExp    value: 566
 
 ------------------------------------------------
 ------------------------------------------------
-状态：401
-     expected: Exp    value: 545
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
-
-------------------------------------------------
-------------------------------------------------
-状态：409
-     expected: BitOperator    value: 547
-
-------------------------------------------------
-------------------------------------------------
-状态：410
-     expected: RelationalOperator    value: 548
-
-------------------------------------------------
-------------------------------------------------
-状态：411
-     expected: AdditiveOperator    value: 549
+状态：400
+     expected: IDExp    value: 567
 
 ------------------------------------------------
 ------------------------------------------------
 状态：412
-     expected: FactorOperator    value: 550
-
-------------------------------------------------
-------------------------------------------------
-状态：414
-     expected: UnaryExp    value: 551
-
-     expected: Literal    value: 552
-
-     expected: VariableExp    value: 553
-
-     expected: CallExp    value: 555
+     expected: Stmts    value: 571
 
 ------------------------------------------------
 ------------------------------------------------
 状态：415
-     expected: UnaryAfterOperator    value: 563
+     expected: Exp    value: 573
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: VariableExp    value: 55
+
+     expected: CallExp    value: 57
+
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
 状态：418
-     expected: Exp    value: 566
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: ArraySub    value: 577
 
 ------------------------------------------------
 ------------------------------------------------
-状态：429
-     expected: RelationalOperator    value: 572
+状态：420
+     expected: IDExp    value: 581
 
 ------------------------------------------------
 ------------------------------------------------
-状态：430
-     expected: AdditiveOperator    value: 573
+状态：422
+     expected: Exp    value: 582
 
-------------------------------------------------
-------------------------------------------------
-状态：431
-     expected: FactorOperator    value: 574
+     expected: ArrayExp    value: 267
 
-------------------------------------------------
-------------------------------------------------
-状态：433
-     expected: UnaryExp    value: 575
+     expected: CalExp    value: 268
 
-     expected: Literal    value: 576
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 577
+     expected: BitExp    value: 271
 
-     expected: CallExp    value: 579
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：434
-     expected: UnaryAfterOperator    value: 587
+     expected: Exp    value: 587
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：437
-     expected: Exp    value: 590
+状态：444
+     expected: LogicOperator    value: 591
 
-     expected: ArrayExp    value: 128
+------------------------------------------------
+------------------------------------------------
+状态：445
+     expected: BitOperator    value: 592
 
-     expected: ArrayMemberExp    value: 129
+------------------------------------------------
+------------------------------------------------
+状态：446
+     expected: RelationalOperator    value: 593
 
-     expected: CalExp    value: 130
+------------------------------------------------
+------------------------------------------------
+状态：447
+     expected: AdditiveOperator    value: 594
 
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+------------------------------------------------
+------------------------------------------------
+状态：448
+     expected: FactorOperator    value: 595
 
 ------------------------------------------------
 ------------------------------------------------
 状态：450
-     expected: AdditiveOperator    value: 596
+     expected: UnaryExp    value: 596
+
+     expected: Literal    value: 597
+
+     expected: VariableExp    value: 598
+
+     expected: CallExp    value: 600
+
+     expected: IDExp    value: 606
 
 ------------------------------------------------
 ------------------------------------------------
 状态：451
-     expected: FactorOperator    value: 597
-
-------------------------------------------------
-------------------------------------------------
-状态：453
-     expected: UnaryExp    value: 598
-
-     expected: Literal    value: 599
-
-     expected: VariableExp    value: 600
-
-     expected: CallExp    value: 602
+     expected: UnaryAfterOperator    value: 609
 
 ------------------------------------------------
 ------------------------------------------------
 状态：454
-     expected: UnaryAfterOperator    value: 610
+     expected: Exp    value: 612
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：457
-     expected: Exp    value: 613
+状态：461
+     expected: ArraySub    value: 613
 
-     expected: ArrayExp    value: 128
+------------------------------------------------
+------------------------------------------------
+状态：463
+     expected: IDExp    value: 618
 
-     expected: ArrayMemberExp    value: 129
+------------------------------------------------
+------------------------------------------------
+状态：464
+     expected: BitOperator    value: 619
 
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+------------------------------------------------
+------------------------------------------------
+状态：465
+     expected: RelationalOperator    value: 620
 
 ------------------------------------------------
 ------------------------------------------------
 状态：466
-     expected: FactorOperator    value: 618
+     expected: AdditiveOperator    value: 621
 
 ------------------------------------------------
 ------------------------------------------------
-状态：468
-     expected: UnaryExp    value: 619
-
-     expected: Literal    value: 620
-
-     expected: VariableExp    value: 621
-
-     expected: CallExp    value: 623
+状态：467
+     expected: FactorOperator    value: 622
 
 ------------------------------------------------
 ------------------------------------------------
 状态：469
-     expected: UnaryAfterOperator    value: 631
+     expected: UnaryExp    value: 623
+
+     expected: Literal    value: 624
+
+     expected: VariableExp    value: 625
+
+     expected: CallExp    value: 627
+
+     expected: IDExp    value: 633
 
 ------------------------------------------------
 ------------------------------------------------
-状态：472
-     expected: Exp    value: 634
+状态：470
+     expected: UnaryAfterOperator    value: 636
 
-     expected: ArrayExp    value: 128
+------------------------------------------------
+------------------------------------------------
+状态：473
+     expected: Exp    value: 639
 
-     expected: ArrayMemberExp    value: 129
+     expected: ArrayExp    value: 134
 
-     expected: CalExp    value: 130
+     expected: CalExp    value: 135
 
-     expected: VariableExp    value: 132
+     expected: LogicExp    value: 137
 
-     expected: LogicExp    value: 133
+     expected: BitExp    value: 138
 
-     expected: BitExp    value: 135
+     expected: RelationExp    value: 139
 
-     expected: RelationExp    value: 136
+     expected: AdditiveExp    value: 140
 
-     expected: AdditiveExp    value: 137
+     expected: FactorExp    value: 141
 
-     expected: FactorExp    value: 138
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: UnaryExp    value: 143
 
-     expected: UnaryExp    value: 140
+     expected: Literal    value: 144
 
-     expected: Literal    value: 141
+     expected: VariableExp    value: 145
 
-     expected: CallExp    value: 143
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：480
+     expected: ArraySub    value: 640
+
+------------------------------------------------
+------------------------------------------------
+状态：482
+     expected: IDExp    value: 645
+
+------------------------------------------------
+------------------------------------------------
+状态：484
+     expected: RelationalOperator    value: 646
 
 ------------------------------------------------
 ------------------------------------------------
 状态：485
-     expected: ArgumentList    value: 640
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: AdditiveOperator    value: 647
 
 ------------------------------------------------
 ------------------------------------------------
 状态：486
-     expected: CallExp    value: 641
+     expected: FactorOperator    value: 648
 
 ------------------------------------------------
 ------------------------------------------------
-状态：487
-     expected: CallExp    value: 643
+状态：488
+     expected: UnaryExp    value: 649
+
+     expected: Literal    value: 650
+
+     expected: VariableExp    value: 651
+
+     expected: CallExp    value: 653
+
+     expected: IDExp    value: 659
 
 ------------------------------------------------
 ------------------------------------------------
-状态：490
-     expected: ArgumentList    value: 645
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+状态：489
+     expected: UnaryAfterOperator    value: 662
 
 ------------------------------------------------
 ------------------------------------------------
-状态：493
-     expected: ArraySub    value: 647
+状态：492
+     expected: Exp    value: 665
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：500
-     expected: ArgumentList    value: 649
+状态：499
+     expected: ArraySub    value: 666
 
-     expected: Exp    value: 189
+------------------------------------------------
+------------------------------------------------
+状态：501
+     expected: IDExp    value: 671
 
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+------------------------------------------------
+------------------------------------------------
+状态：502
+     expected: AdditiveOperator    value: 672
 
 ------------------------------------------------
 ------------------------------------------------
 状态：503
-     expected: Stmt    value: 651
-
-     expected: IfStmt    value: 652
-
-     expected: BlockStmt    value: 653
-
-     expected: VariableDef    value: 654
-
-     expected: WhileStmt    value: 655
-
-     expected: ReturnStmt    value: 656
-
-     expected: AssignStmt    value: 657
-
-     expected: Exp    value: 658
-
-     expected: VarDefStmt    value: 660
-
-     expected: VariableExp    value: 663
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: FactorOperator    value: 673
 
 ------------------------------------------------
 ------------------------------------------------
 状态：505
-     expected: Exp    value: 665
+     expected: UnaryExp    value: 674
 
-     expected: ArrayExp    value: 128
+     expected: Literal    value: 675
 
-     expected: ArrayMemberExp    value: 129
+     expected: VariableExp    value: 676
 
-     expected: CalExp    value: 130
+     expected: CallExp    value: 678
 
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 684
 
 ------------------------------------------------
 ------------------------------------------------
 状态：506
-     expected: Stmt    value: 350
-
-     expected: IfStmt    value: 351
-
-     expected: BlockStmt    value: 352
-
-     expected: VariableDef    value: 353
-
-     expected: WhileStmt    value: 354
-
-     expected: ReturnStmt    value: 355
-
-     expected: AssignStmt    value: 356
-
-     expected: Exp    value: 357
-
-     expected: VarDefStmt    value: 360
-
-     expected: VariableExp    value: 363
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: UnaryAfterOperator    value: 687
 
 ------------------------------------------------
 ------------------------------------------------
-状态：507
-     expected: Exp    value: 667
+状态：509
+     expected: Exp    value: 690
 
-     expected: ArrayExp    value: 128
+     expected: ArrayExp    value: 134
 
-     expected: ArrayMemberExp    value: 129
+     expected: CalExp    value: 135
 
-     expected: CalExp    value: 130
+     expected: LogicExp    value: 137
 
-     expected: VariableExp    value: 132
+     expected: BitExp    value: 138
 
-     expected: LogicExp    value: 133
+     expected: RelationExp    value: 139
 
-     expected: BitExp    value: 135
+     expected: AdditiveExp    value: 140
 
-     expected: RelationExp    value: 136
+     expected: FactorExp    value: 141
 
-     expected: AdditiveExp    value: 137
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: FactorExp    value: 138
+     expected: UnaryExp    value: 143
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Literal    value: 144
 
-     expected: UnaryExp    value: 140
+     expected: VariableExp    value: 145
 
-     expected: Literal    value: 141
+     expected: CallExp    value: 147
 
-     expected: CallExp    value: 143
-
-------------------------------------------------
-------------------------------------------------
-状态：510
-     expected: Exp    value: 669
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: VariableExp    value: 44
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：513
-     expected: ArraySub    value: 672
+状态：516
+     expected: ArraySub    value: 691
 
 ------------------------------------------------
 ------------------------------------------------
-状态：520
-     expected: ArgumentList    value: 674
+状态：518
+     expected: IDExp    value: 696
 
-     expected: Exp    value: 189
+------------------------------------------------
+------------------------------------------------
+状态：519
+     expected: FactorOperator    value: 697
 
-     expected: ArrayExp    value: 191
+------------------------------------------------
+------------------------------------------------
+状态：521
+     expected: UnaryExp    value: 698
 
-     expected: ArrayMemberExp    value: 192
+     expected: Literal    value: 699
 
-     expected: CalExp    value: 193
+     expected: VariableExp    value: 700
 
-     expected: VariableExp    value: 195
+     expected: CallExp    value: 702
 
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 708
 
 ------------------------------------------------
 ------------------------------------------------
 状态：522
-     expected: LogicExp    value: 676
-
-     expected: BitExp    value: 394
-
-     expected: RelationExp    value: 395
-
-     expected: AdditiveExp    value: 396
-
-     expected: FactorExp    value: 397
-
-     expected: UnaryBeforeOperator    value: 398
-
-     expected: UnaryExp    value: 399
-
-     expected: Literal    value: 400
-
-     expected: VariableExp    value: 677
-
-     expected: CallExp    value: 402
-
-------------------------------------------------
-------------------------------------------------
-状态：523
-     expected: BitExp    value: 679
-
-     expected: RelationExp    value: 395
-
-     expected: AdditiveExp    value: 396
-
-     expected: FactorExp    value: 397
-
-     expected: UnaryBeforeOperator    value: 398
-
-     expected: UnaryExp    value: 399
-
-     expected: Literal    value: 400
-
-     expected: VariableExp    value: 677
-
-     expected: CallExp    value: 402
-
-------------------------------------------------
-------------------------------------------------
-状态：524
-     expected: ArgumentList    value: 680
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: UnaryAfterOperator    value: 711
 
 ------------------------------------------------
 ------------------------------------------------
 状态：525
-     expected: CallExp    value: 681
+     expected: Exp    value: 714
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：526
-     expected: CallExp    value: 683
+状态：532
+     expected: ArraySub    value: 715
 
 ------------------------------------------------
 ------------------------------------------------
-状态：527
-     expected: RelationExp    value: 684
-
-     expected: AdditiveExp    value: 396
-
-     expected: FactorExp    value: 397
-
-     expected: UnaryBeforeOperator    value: 398
-
-     expected: UnaryExp    value: 399
-
-     expected: Literal    value: 400
-
-     expected: VariableExp    value: 677
-
-     expected: CallExp    value: 402
+状态：534
+     expected: IDExp    value: 720
 
 ------------------------------------------------
 ------------------------------------------------
-状态：528
-     expected: AdditiveExp    value: 685
+状态：538
+     expected: ArgumentList    value: 723
 
-     expected: FactorExp    value: 397
+     expected: Exp    value: 242
 
-     expected: UnaryBeforeOperator    value: 398
+     expected: ArrayExp    value: 244
 
-     expected: UnaryExp    value: 399
+     expected: CalExp    value: 245
 
-     expected: Literal    value: 400
+     expected: LogicExp    value: 247
 
-     expected: VariableExp    value: 677
+     expected: BitExp    value: 248
 
-     expected: CallExp    value: 402
+     expected: RelationExp    value: 249
 
-------------------------------------------------
-------------------------------------------------
-状态：529
-     expected: FactorExp    value: 686
+     expected: AdditiveExp    value: 250
 
-     expected: UnaryBeforeOperator    value: 398
+     expected: FactorExp    value: 251
 
-     expected: UnaryExp    value: 399
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: Literal    value: 400
+     expected: UnaryExp    value: 253
 
-     expected: VariableExp    value: 677
+     expected: Literal    value: 254
 
-     expected: CallExp    value: 402
+     expected: VariableExp    value: 255
 
-------------------------------------------------
-------------------------------------------------
-状态：533
-     expected: Exp    value: 687
+     expected: CallExp    value: 257
 
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
-状态：547
-     expected: BitExp    value: 694
+状态：539
+     expected: Exp    value: 724
 
-     expected: RelationExp    value: 411
+     expected: ArrayExp    value: 267
 
-     expected: AdditiveExp    value: 412
+     expected: CalExp    value: 268
 
-     expected: FactorExp    value: 413
+     expected: LogicExp    value: 270
 
-     expected: UnaryBeforeOperator    value: 414
+     expected: BitExp    value: 271
 
-     expected: UnaryExp    value: 415
+     expected: RelationExp    value: 272
 
-     expected: Literal    value: 416
+     expected: AdditiveExp    value: 273
 
-     expected: VariableExp    value: 417
+     expected: FactorExp    value: 274
 
-     expected: CallExp    value: 419
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：548
-     expected: RelationExp    value: 695
+状态：540
+     expected: IDExp    value: 725
 
-     expected: AdditiveExp    value: 412
+------------------------------------------------
+------------------------------------------------
+状态：541
+     expected: IDExp    value: 726
 
-     expected: FactorExp    value: 413
+------------------------------------------------
+------------------------------------------------
+状态：544
+     expected: Exp    value: 727
 
-     expected: UnaryBeforeOperator    value: 414
+     expected: ArrayExp    value: 267
 
-     expected: UnaryExp    value: 415
+     expected: CalExp    value: 268
 
-     expected: Literal    value: 416
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 417
+     expected: BitExp    value: 271
 
-     expected: CallExp    value: 419
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：549
-     expected: AdditiveExp    value: 696
-
-     expected: FactorExp    value: 413
-
-     expected: UnaryBeforeOperator    value: 414
-
-     expected: UnaryExp    value: 415
-
-     expected: Literal    value: 416
-
-     expected: VariableExp    value: 417
-
-     expected: CallExp    value: 419
+     expected: BitOperator    value: 375
 
 ------------------------------------------------
 ------------------------------------------------
-状态：550
-     expected: FactorExp    value: 697
-
-     expected: UnaryBeforeOperator    value: 414
-
-     expected: UnaryExp    value: 415
-
-     expected: Literal    value: 416
-
-     expected: VariableExp    value: 417
-
-     expected: CallExp    value: 419
+状态：551
+     expected: RelationalOperator    value: 376
 
 ------------------------------------------------
 ------------------------------------------------
-状态：554
-     expected: Exp    value: 698
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+状态：552
+     expected: AdditiveOperator    value: 377
 
 ------------------------------------------------
 ------------------------------------------------
-状态：567
-     expected: ArgumentList    value: 704
+状态：553
+     expected: FactorOperator    value: 378
 
-     expected: Exp    value: 189
+------------------------------------------------
+------------------------------------------------
+状态：557
+     expected: ArgumentList    value: 732
 
-     expected: ArrayExp    value: 191
+     expected: Exp    value: 242
 
-     expected: ArrayMemberExp    value: 192
+     expected: ArrayExp    value: 244
 
-     expected: CalExp    value: 193
+     expected: CalExp    value: 245
 
-     expected: VariableExp    value: 195
+     expected: LogicExp    value: 247
 
-     expected: LogicExp    value: 196
+     expected: BitExp    value: 248
 
-     expected: BitExp    value: 198
+     expected: RelationExp    value: 249
 
-     expected: RelationExp    value: 199
+     expected: AdditiveExp    value: 250
 
-     expected: AdditiveExp    value: 200
+     expected: FactorExp    value: 251
 
-     expected: FactorExp    value: 201
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: UnaryExp    value: 253
 
-     expected: UnaryExp    value: 203
+     expected: Literal    value: 254
 
-     expected: Literal    value: 204
+     expected: VariableExp    value: 255
 
-     expected: CallExp    value: 206
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：558
+     expected: Exp    value: 733
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：559
+     expected: IDExp    value: 734
+
+------------------------------------------------
+------------------------------------------------
+状态：560
+     expected: IDExp    value: 735
+
+------------------------------------------------
+------------------------------------------------
+状态：563
+     expected: Exp    value: 736
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：568
-     expected: CallExp    value: 705
+     expected: Stmt    value: 739
+
+     expected: IfStmt    value: 740
+
+     expected: BlockStmt    value: 741
+
+     expected: VariableDef    value: 742
+
+     expected: WhileStmt    value: 743
+
+     expected: ReturnStmt    value: 744
+
+     expected: AssignStmt    value: 745
+
+     expected: Exp    value: 746
+
+     expected: VarDefStmt    value: 748
+
+     expected: VariableExp    value: 751
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
 
 ------------------------------------------------
 ------------------------------------------------
-状态：569
-     expected: CallExp    value: 707
+状态：570
+     expected: Exp    value: 753
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：571
-     expected: ArraySub    value: 709
+     expected: Stmt    value: 403
+
+     expected: IfStmt    value: 404
+
+     expected: BlockStmt    value: 405
+
+     expected: VariableDef    value: 406
+
+     expected: WhileStmt    value: 407
+
+     expected: ReturnStmt    value: 408
+
+     expected: AssignStmt    value: 409
+
+     expected: Exp    value: 410
+
+     expected: VarDefStmt    value: 413
+
+     expected: VariableExp    value: 416
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
 
 ------------------------------------------------
 ------------------------------------------------
 状态：572
-     expected: RelationExp    value: 710
+     expected: Exp    value: 755
 
-     expected: AdditiveExp    value: 431
+     expected: ArrayExp    value: 134
 
-     expected: FactorExp    value: 432
+     expected: CalExp    value: 135
 
-     expected: UnaryBeforeOperator    value: 433
+     expected: LogicExp    value: 137
 
-     expected: UnaryExp    value: 434
+     expected: BitExp    value: 138
 
-     expected: Literal    value: 435
+     expected: RelationExp    value: 139
 
-     expected: VariableExp    value: 436
+     expected: AdditiveExp    value: 140
 
-     expected: CallExp    value: 438
+     expected: FactorExp    value: 141
 
-------------------------------------------------
-------------------------------------------------
-状态：573
-     expected: AdditiveExp    value: 711
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: FactorExp    value: 432
+     expected: UnaryExp    value: 143
 
-     expected: UnaryBeforeOperator    value: 433
+     expected: Literal    value: 144
 
-     expected: UnaryExp    value: 434
+     expected: VariableExp    value: 145
 
-     expected: Literal    value: 435
+     expected: CallExp    value: 147
 
-     expected: VariableExp    value: 436
-
-     expected: CallExp    value: 438
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
-状态：574
-     expected: FactorExp    value: 712
+状态：575
+     expected: Exp    value: 757
 
-     expected: UnaryBeforeOperator    value: 433
+     expected: ArrayExp    value: 40
 
-     expected: UnaryExp    value: 434
+     expected: CalExp    value: 41
 
-     expected: Literal    value: 435
+     expected: LogicExp    value: 43
 
-     expected: VariableExp    value: 436
+     expected: BitExp    value: 44
 
-     expected: CallExp    value: 438
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: VariableExp    value: 55
+
+     expected: CallExp    value: 57
+
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
 状态：578
-     expected: Exp    value: 713
+     expected: Exp    value: 761
 
-     expected: ArrayExp    value: 128
+     expected: ArrayExp    value: 267
 
-     expected: ArrayMemberExp    value: 129
+     expected: CalExp    value: 268
 
-     expected: CalExp    value: 130
+     expected: LogicExp    value: 270
 
-     expected: VariableExp    value: 132
+     expected: BitExp    value: 271
 
-     expected: LogicExp    value: 133
+     expected: RelationExp    value: 272
 
-     expected: BitExp    value: 135
+     expected: AdditiveExp    value: 273
 
-     expected: RelationExp    value: 136
+     expected: FactorExp    value: 274
 
-     expected: AdditiveExp    value: 137
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: FactorExp    value: 138
+     expected: UnaryExp    value: 276
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: Literal    value: 277
 
-     expected: UnaryExp    value: 140
+     expected: VariableExp    value: 278
 
-     expected: Literal    value: 141
+     expected: CallExp    value: 280
 
-     expected: CallExp    value: 143
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：579
+     expected: IDExp    value: 762
+
+------------------------------------------------
+------------------------------------------------
+状态：580
+     expected: IDExp    value: 763
 
 ------------------------------------------------
 ------------------------------------------------
 状态：591
-     expected: ArgumentList    value: 719
+     expected: LogicExp    value: 766
 
-     expected: Exp    value: 189
+     expected: BitExp    value: 446
 
-     expected: ArrayExp    value: 191
+     expected: RelationExp    value: 447
 
-     expected: ArrayMemberExp    value: 192
+     expected: AdditiveExp    value: 448
 
-     expected: CalExp    value: 193
+     expected: FactorExp    value: 449
 
-     expected: VariableExp    value: 195
+     expected: UnaryBeforeOperator    value: 450
 
-     expected: LogicExp    value: 196
+     expected: UnaryExp    value: 451
 
-     expected: BitExp    value: 198
+     expected: Literal    value: 452
 
-     expected: RelationExp    value: 199
+     expected: VariableExp    value: 453
 
-     expected: AdditiveExp    value: 200
+     expected: CallExp    value: 455
 
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 461
 
 ------------------------------------------------
 ------------------------------------------------
 状态：592
-     expected: CallExp    value: 720
+     expected: BitExp    value: 767
+
+     expected: RelationExp    value: 447
+
+     expected: AdditiveExp    value: 448
+
+     expected: FactorExp    value: 449
+
+     expected: UnaryBeforeOperator    value: 450
+
+     expected: UnaryExp    value: 451
+
+     expected: Literal    value: 452
+
+     expected: VariableExp    value: 453
+
+     expected: CallExp    value: 455
+
+     expected: IDExp    value: 461
 
 ------------------------------------------------
 ------------------------------------------------
 状态：593
-     expected: CallExp    value: 722
+     expected: RelationExp    value: 768
+
+     expected: AdditiveExp    value: 448
+
+     expected: FactorExp    value: 449
+
+     expected: UnaryBeforeOperator    value: 450
+
+     expected: UnaryExp    value: 451
+
+     expected: Literal    value: 452
+
+     expected: VariableExp    value: 453
+
+     expected: CallExp    value: 455
+
+     expected: IDExp    value: 461
 
 ------------------------------------------------
 ------------------------------------------------
-状态：596
-     expected: AdditiveExp    value: 724
+状态：594
+     expected: AdditiveExp    value: 769
 
-     expected: FactorExp    value: 452
+     expected: FactorExp    value: 449
 
-     expected: UnaryBeforeOperator    value: 453
+     expected: UnaryBeforeOperator    value: 450
 
-     expected: UnaryExp    value: 454
+     expected: UnaryExp    value: 451
 
-     expected: Literal    value: 455
+     expected: Literal    value: 452
 
-     expected: VariableExp    value: 456
+     expected: VariableExp    value: 453
 
-     expected: CallExp    value: 458
+     expected: CallExp    value: 455
 
-------------------------------------------------
-------------------------------------------------
-状态：597
-     expected: FactorExp    value: 725
-
-     expected: UnaryBeforeOperator    value: 453
-
-     expected: UnaryExp    value: 454
-
-     expected: Literal    value: 455
-
-     expected: VariableExp    value: 456
-
-     expected: CallExp    value: 458
+     expected: IDExp    value: 461
 
 ------------------------------------------------
 ------------------------------------------------
-状态：601
-     expected: Exp    value: 726
+状态：595
+     expected: FactorExp    value: 770
 
-     expected: ArrayExp    value: 128
+     expected: UnaryBeforeOperator    value: 450
 
-     expected: ArrayMemberExp    value: 129
+     expected: UnaryExp    value: 451
 
-     expected: CalExp    value: 130
+     expected: Literal    value: 452
 
-     expected: VariableExp    value: 132
+     expected: VariableExp    value: 453
 
-     expected: LogicExp    value: 133
+     expected: CallExp    value: 455
 
-     expected: BitExp    value: 135
+     expected: IDExp    value: 461
 
-     expected: RelationExp    value: 136
+------------------------------------------------
+------------------------------------------------
+状态：599
+     expected: Exp    value: 771
 
-     expected: AdditiveExp    value: 137
+     expected: ArrayExp    value: 134
 
-     expected: FactorExp    value: 138
+     expected: CalExp    value: 135
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: LogicExp    value: 137
 
-     expected: UnaryExp    value: 140
+     expected: BitExp    value: 138
 
-     expected: Literal    value: 141
+     expected: RelationExp    value: 139
 
-     expected: CallExp    value: 143
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：606
+     expected: ArraySub    value: 772
+
+------------------------------------------------
+------------------------------------------------
+状态：608
+     expected: IDExp    value: 777
 
 ------------------------------------------------
 ------------------------------------------------
 状态：614
-     expected: ArgumentList    value: 732
+     expected: ArgumentList    value: 780
 
-     expected: Exp    value: 189
+     expected: Exp    value: 242
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 244
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 245
 
-     expected: CalExp    value: 193
+     expected: LogicExp    value: 247
 
-     expected: VariableExp    value: 195
+     expected: BitExp    value: 248
 
-     expected: LogicExp    value: 196
+     expected: RelationExp    value: 249
 
-     expected: BitExp    value: 198
+     expected: AdditiveExp    value: 250
 
-     expected: RelationExp    value: 199
+     expected: FactorExp    value: 251
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: FactorExp    value: 201
+     expected: UnaryExp    value: 253
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: Literal    value: 254
 
-     expected: UnaryExp    value: 203
+     expected: VariableExp    value: 255
 
-     expected: Literal    value: 204
+     expected: CallExp    value: 257
 
-     expected: CallExp    value: 206
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：615
-     expected: CallExp    value: 733
+     expected: Exp    value: 781
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：616
-     expected: CallExp    value: 735
+     expected: IDExp    value: 782
 
 ------------------------------------------------
 ------------------------------------------------
-状态：618
-     expected: FactorExp    value: 737
+状态：617
+     expected: IDExp    value: 783
 
-     expected: UnaryBeforeOperator    value: 468
+------------------------------------------------
+------------------------------------------------
+状态：619
+     expected: BitExp    value: 784
 
-     expected: UnaryExp    value: 469
+     expected: RelationExp    value: 466
 
-     expected: Literal    value: 470
+     expected: AdditiveExp    value: 467
 
-     expected: VariableExp    value: 471
+     expected: FactorExp    value: 468
 
-     expected: CallExp    value: 473
+     expected: UnaryBeforeOperator    value: 469
+
+     expected: UnaryExp    value: 470
+
+     expected: Literal    value: 471
+
+     expected: VariableExp    value: 472
+
+     expected: CallExp    value: 474
+
+     expected: IDExp    value: 480
+
+------------------------------------------------
+------------------------------------------------
+状态：620
+     expected: RelationExp    value: 785
+
+     expected: AdditiveExp    value: 467
+
+     expected: FactorExp    value: 468
+
+     expected: UnaryBeforeOperator    value: 469
+
+     expected: UnaryExp    value: 470
+
+     expected: Literal    value: 471
+
+     expected: VariableExp    value: 472
+
+     expected: CallExp    value: 474
+
+     expected: IDExp    value: 480
+
+------------------------------------------------
+------------------------------------------------
+状态：621
+     expected: AdditiveExp    value: 786
+
+     expected: FactorExp    value: 468
+
+     expected: UnaryBeforeOperator    value: 469
+
+     expected: UnaryExp    value: 470
+
+     expected: Literal    value: 471
+
+     expected: VariableExp    value: 472
+
+     expected: CallExp    value: 474
+
+     expected: IDExp    value: 480
 
 ------------------------------------------------
 ------------------------------------------------
 状态：622
-     expected: Exp    value: 738
+     expected: FactorExp    value: 787
 
-     expected: ArrayExp    value: 128
+     expected: UnaryBeforeOperator    value: 469
 
-     expected: ArrayMemberExp    value: 129
+     expected: UnaryExp    value: 470
 
-     expected: CalExp    value: 130
+     expected: Literal    value: 471
 
-     expected: VariableExp    value: 132
+     expected: VariableExp    value: 472
 
-     expected: LogicExp    value: 133
+     expected: CallExp    value: 474
 
-     expected: BitExp    value: 135
+     expected: IDExp    value: 480
 
-     expected: RelationExp    value: 136
+------------------------------------------------
+------------------------------------------------
+状态：626
+     expected: Exp    value: 788
 
-     expected: AdditiveExp    value: 137
+     expected: ArrayExp    value: 134
 
-     expected: FactorExp    value: 138
+     expected: CalExp    value: 135
 
-     expected: UnaryBeforeOperator    value: 139
+     expected: LogicExp    value: 137
 
-     expected: UnaryExp    value: 140
+     expected: BitExp    value: 138
 
-     expected: Literal    value: 141
+     expected: RelationExp    value: 139
 
-     expected: CallExp    value: 143
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：633
+     expected: ArraySub    value: 789
 
 ------------------------------------------------
 ------------------------------------------------
 状态：635
-     expected: ArgumentList    value: 744
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 794
 
 ------------------------------------------------
 ------------------------------------------------
-状态：636
-     expected: CallExp    value: 745
+状态：641
+     expected: ArgumentList    value: 797
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
-状态：637
-     expected: CallExp    value: 747
+状态：642
+     expected: Exp    value: 798
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：643
+     expected: IDExp    value: 799
 
 ------------------------------------------------
 ------------------------------------------------
 状态：644
-     expected: ArgumentList    value: 750
+     expected: IDExp    value: 800
 
-     expected: Exp    value: 189
+------------------------------------------------
+------------------------------------------------
+状态：646
+     expected: RelationExp    value: 801
 
-     expected: ArrayExp    value: 191
+     expected: AdditiveExp    value: 486
 
-     expected: ArrayMemberExp    value: 192
+     expected: FactorExp    value: 487
 
-     expected: CalExp    value: 193
+     expected: UnaryBeforeOperator    value: 488
 
-     expected: VariableExp    value: 195
+     expected: UnaryExp    value: 489
 
-     expected: LogicExp    value: 196
+     expected: Literal    value: 490
 
-     expected: BitExp    value: 198
+     expected: VariableExp    value: 491
 
-     expected: RelationExp    value: 199
+     expected: CallExp    value: 493
 
-     expected: AdditiveExp    value: 200
+     expected: IDExp    value: 499
 
-     expected: FactorExp    value: 201
+------------------------------------------------
+------------------------------------------------
+状态：647
+     expected: AdditiveExp    value: 802
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: FactorExp    value: 487
 
-     expected: UnaryExp    value: 203
+     expected: UnaryBeforeOperator    value: 488
 
-     expected: Literal    value: 204
+     expected: UnaryExp    value: 489
 
-     expected: CallExp    value: 206
+     expected: Literal    value: 490
+
+     expected: VariableExp    value: 491
+
+     expected: CallExp    value: 493
+
+     expected: IDExp    value: 499
+
+------------------------------------------------
+------------------------------------------------
+状态：648
+     expected: FactorExp    value: 803
+
+     expected: UnaryBeforeOperator    value: 488
+
+     expected: UnaryExp    value: 489
+
+     expected: Literal    value: 490
+
+     expected: VariableExp    value: 491
+
+     expected: CallExp    value: 493
+
+     expected: IDExp    value: 499
+
+------------------------------------------------
+------------------------------------------------
+状态：652
+     expected: Exp    value: 804
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：659
-     expected: Stmts    value: 754
+     expected: ArraySub    value: 805
 
 ------------------------------------------------
 ------------------------------------------------
-状态：662
-     expected: Exp    value: 756
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: VariableExp    value: 44
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+状态：661
+     expected: IDExp    value: 810
 
 ------------------------------------------------
 ------------------------------------------------
-状态：663
-     expected: ArraySub    value: 90
+状态：667
+     expected: ArgumentList    value: 813
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：668
+     expected: Exp    value: 814
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：669
+     expected: IDExp    value: 815
 
 ------------------------------------------------
 ------------------------------------------------
 状态：670
-     expected: Exp    value: 763
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: VariableExp    value: 44
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: IDExp    value: 816
 
 ------------------------------------------------
 ------------------------------------------------
-状态：676
-     expected: BitOperator    value: 523
+状态：672
+     expected: AdditiveExp    value: 817
+
+     expected: FactorExp    value: 504
+
+     expected: UnaryBeforeOperator    value: 505
+
+     expected: UnaryExp    value: 506
+
+     expected: Literal    value: 507
+
+     expected: VariableExp    value: 508
+
+     expected: CallExp    value: 510
+
+     expected: IDExp    value: 516
 
 ------------------------------------------------
 ------------------------------------------------
-状态：679
-     expected: RelationalOperator    value: 527
+状态：673
+     expected: FactorExp    value: 818
+
+     expected: UnaryBeforeOperator    value: 505
+
+     expected: UnaryExp    value: 506
+
+     expected: Literal    value: 507
+
+     expected: VariableExp    value: 508
+
+     expected: CallExp    value: 510
+
+     expected: IDExp    value: 516
+
+------------------------------------------------
+------------------------------------------------
+状态：677
+     expected: Exp    value: 819
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：684
-     expected: AdditiveOperator    value: 528
+     expected: ArraySub    value: 820
 
 ------------------------------------------------
 ------------------------------------------------
-状态：685
-     expected: FactorOperator    value: 529
+状态：686
+     expected: IDExp    value: 825
 
 ------------------------------------------------
 ------------------------------------------------
-状态：688
-     expected: ArgumentList    value: 767
+状态：692
+     expected: ArgumentList    value: 828
 
-     expected: Exp    value: 189
+     expected: Exp    value: 242
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 244
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 245
 
-     expected: CalExp    value: 193
+     expected: LogicExp    value: 247
 
-     expected: VariableExp    value: 195
+     expected: BitExp    value: 248
 
-     expected: LogicExp    value: 196
+     expected: RelationExp    value: 249
 
-     expected: BitExp    value: 198
+     expected: AdditiveExp    value: 250
 
-     expected: RelationExp    value: 199
+     expected: FactorExp    value: 251
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: FactorExp    value: 201
+     expected: UnaryExp    value: 253
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: Literal    value: 254
 
-     expected: UnaryExp    value: 203
+     expected: VariableExp    value: 255
 
-     expected: Literal    value: 204
+     expected: CallExp    value: 257
 
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：689
-     expected: CallExp    value: 768
-
-------------------------------------------------
-------------------------------------------------
-状态：690
-     expected: CallExp    value: 770
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
 状态：693
-     expected: ArgumentList    value: 772
+     expected: Exp    value: 829
 
-     expected: Exp    value: 189
+     expected: ArrayExp    value: 267
 
-     expected: ArrayExp    value: 191
+     expected: CalExp    value: 268
 
-     expected: ArrayMemberExp    value: 192
+     expected: LogicExp    value: 270
 
-     expected: CalExp    value: 193
+     expected: BitExp    value: 271
 
-     expected: VariableExp    value: 195
+     expected: RelationExp    value: 272
 
-     expected: LogicExp    value: 196
+     expected: AdditiveExp    value: 273
 
-     expected: BitExp    value: 198
+     expected: FactorExp    value: 274
 
-     expected: RelationExp    value: 199
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryExp    value: 276
 
-     expected: FactorExp    value: 201
+     expected: Literal    value: 277
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: VariableExp    value: 278
 
-     expected: UnaryExp    value: 203
+     expected: CallExp    value: 280
 
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
 状态：694
-     expected: RelationalOperator    value: 548
+     expected: IDExp    value: 830
 
 ------------------------------------------------
 ------------------------------------------------
 状态：695
-     expected: AdditiveOperator    value: 549
+     expected: IDExp    value: 831
 
 ------------------------------------------------
 ------------------------------------------------
-状态：696
-     expected: FactorOperator    value: 550
+状态：697
+     expected: FactorExp    value: 832
 
-------------------------------------------------
-------------------------------------------------
-状态：699
-     expected: ArgumentList    value: 774
+     expected: UnaryBeforeOperator    value: 521
 
-     expected: Exp    value: 189
+     expected: UnaryExp    value: 522
 
-     expected: ArrayExp    value: 191
+     expected: Literal    value: 523
 
-     expected: ArrayMemberExp    value: 192
+     expected: VariableExp    value: 524
 
-     expected: CalExp    value: 193
+     expected: CallExp    value: 526
 
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：700
-     expected: CallExp    value: 775
+     expected: IDExp    value: 532
 
 ------------------------------------------------
 ------------------------------------------------
 状态：701
-     expected: CallExp    value: 777
+     expected: Exp    value: 833
+
+     expected: ArrayExp    value: 134
+
+     expected: CalExp    value: 135
+
+     expected: LogicExp    value: 137
+
+     expected: BitExp    value: 138
+
+     expected: RelationExp    value: 139
+
+     expected: AdditiveExp    value: 140
+
+     expected: FactorExp    value: 141
+
+     expected: UnaryBeforeOperator    value: 142
+
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
 
 ------------------------------------------------
 ------------------------------------------------
 状态：708
-     expected: ArgumentList    value: 780
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: ArraySub    value: 834
 
 ------------------------------------------------
 ------------------------------------------------
 状态：710
-     expected: AdditiveOperator    value: 573
-
-------------------------------------------------
-------------------------------------------------
-状态：711
-     expected: FactorOperator    value: 574
-
-------------------------------------------------
-------------------------------------------------
-状态：714
-     expected: ArgumentList    value: 782
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：715
-     expected: CallExp    value: 783
+     expected: IDExp    value: 839
 
 ------------------------------------------------
 ------------------------------------------------
 状态：716
-     expected: CallExp    value: 785
+     expected: ArgumentList    value: 842
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
 
 ------------------------------------------------
 ------------------------------------------------
-状态：723
-     expected: ArgumentList    value: 788
+状态：717
+     expected: Exp    value: 843
 
-     expected: Exp    value: 189
+     expected: ArrayExp    value: 267
 
-     expected: ArrayExp    value: 191
+     expected: CalExp    value: 268
 
-     expected: ArrayMemberExp    value: 192
+     expected: LogicExp    value: 270
 
-     expected: CalExp    value: 193
+     expected: BitExp    value: 271
 
-     expected: VariableExp    value: 195
+     expected: RelationExp    value: 272
 
-     expected: LogicExp    value: 196
+     expected: AdditiveExp    value: 273
 
-     expected: BitExp    value: 198
+     expected: FactorExp    value: 274
 
-     expected: RelationExp    value: 199
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryExp    value: 276
 
-     expected: FactorExp    value: 201
+     expected: Literal    value: 277
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: VariableExp    value: 278
 
-     expected: UnaryExp    value: 203
+     expected: CallExp    value: 280
 
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：724
-     expected: FactorOperator    value: 597
+状态：718
+     expected: IDExp    value: 844
 
 ------------------------------------------------
 ------------------------------------------------
-状态：727
-     expected: ArgumentList    value: 790
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+状态：719
+     expected: IDExp    value: 845
 
 ------------------------------------------------
 ------------------------------------------------
-状态：728
-     expected: CallExp    value: 791
+状态：722
+     expected: Exp    value: 846
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：729
-     expected: CallExp    value: 793
+状态：731
+     expected: Exp    value: 850
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：736
-     expected: ArgumentList    value: 796
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+状态：747
+     expected: Stmts    value: 855
 
 ------------------------------------------------
 ------------------------------------------------
-状态：739
-     expected: ArgumentList    value: 798
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：740
-     expected: CallExp    value: 799
-
-------------------------------------------------
-------------------------------------------------
-状态：741
-     expected: CallExp    value: 801
-
-------------------------------------------------
-------------------------------------------------
-状态：748
-     expected: ArgumentList    value: 804
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
-
-------------------------------------------------
-------------------------------------------------
-状态：754
-     expected: Stmt    value: 350
-
-     expected: IfStmt    value: 351
-
-     expected: BlockStmt    value: 352
-
-     expected: VariableDef    value: 353
-
-     expected: WhileStmt    value: 354
-
-     expected: ReturnStmt    value: 355
-
-     expected: AssignStmt    value: 356
-
-     expected: Exp    value: 357
-
-     expected: VarDefStmt    value: 360
-
-     expected: VariableExp    value: 363
+状态：750
+     expected: Exp    value: 857
 
      expected: ArrayExp    value: 40
 
-     expected: ArrayMemberExp    value: 41
+     expected: CalExp    value: 41
 
-     expected: CalExp    value: 42
+     expected: LogicExp    value: 43
 
-     expected: LogicExp    value: 45
+     expected: BitExp    value: 44
 
-     expected: BitExp    value: 47
+     expected: RelationExp    value: 45
 
-     expected: RelationExp    value: 48
+     expected: AdditiveExp    value: 46
 
-     expected: AdditiveExp    value: 49
+     expected: FactorExp    value: 47
 
-     expected: FactorExp    value: 50
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: UnaryExp    value: 49
 
-     expected: UnaryExp    value: 52
+     expected: Literal    value: 54
 
-     expected: Literal    value: 57
+     expected: VariableExp    value: 55
 
-     expected: CallExp    value: 59
+     expected: CallExp    value: 57
 
-------------------------------------------------
-------------------------------------------------
-状态：755
-     expected: Exp    value: 807
-
-     expected: ArrayExp    value: 128
-
-     expected: ArrayMemberExp    value: 129
-
-     expected: CalExp    value: 130
-
-     expected: VariableExp    value: 132
-
-     expected: LogicExp    value: 133
-
-     expected: BitExp    value: 135
-
-     expected: RelationExp    value: 136
-
-     expected: AdditiveExp    value: 137
-
-     expected: FactorExp    value: 138
-
-     expected: UnaryBeforeOperator    value: 139
-
-     expected: UnaryExp    value: 140
-
-     expected: Literal    value: 141
-
-     expected: CallExp    value: 143
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
 状态：758
-     expected: Exp    value: 809
+     expected: Exp    value: 864
 
      expected: ArrayExp    value: 40
 
-     expected: ArrayMemberExp    value: 41
+     expected: CalExp    value: 41
 
-     expected: CalExp    value: 42
+     expected: LogicExp    value: 43
 
-     expected: VariableExp    value: 44
+     expected: BitExp    value: 44
 
-     expected: LogicExp    value: 45
+     expected: RelationExp    value: 45
 
-     expected: BitExp    value: 47
+     expected: AdditiveExp    value: 46
 
-     expected: RelationExp    value: 48
+     expected: FactorExp    value: 47
 
-     expected: AdditiveExp    value: 49
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: FactorExp    value: 50
+     expected: UnaryExp    value: 49
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: Literal    value: 54
 
-     expected: UnaryExp    value: 52
+     expected: VariableExp    value: 55
 
-     expected: Literal    value: 57
+     expected: CallExp    value: 57
 
-     expected: CallExp    value: 59
+     expected: IDExp    value: 63
 
 ------------------------------------------------
 ------------------------------------------------
 状态：760
-     expected: Stmt    value: 812
+     expected: Exp    value: 865
 
-     expected: IfStmt    value: 652
+     expected: ArrayExp    value: 267
 
-     expected: BlockStmt    value: 653
+     expected: CalExp    value: 268
 
-     expected: VariableDef    value: 654
+     expected: LogicExp    value: 270
 
-     expected: WhileStmt    value: 655
+     expected: BitExp    value: 271
 
-     expected: ReturnStmt    value: 656
+     expected: RelationExp    value: 272
 
-     expected: AssignStmt    value: 657
+     expected: AdditiveExp    value: 273
 
-     expected: Exp    value: 658
+     expected: FactorExp    value: 274
 
-     expected: VarDefStmt    value: 660
+     expected: UnaryBeforeOperator    value: 275
 
-     expected: VariableExp    value: 663
+     expected: UnaryExp    value: 276
 
-     expected: ArrayExp    value: 40
+     expected: Literal    value: 277
 
-     expected: ArrayMemberExp    value: 41
+     expected: VariableExp    value: 278
 
-     expected: CalExp    value: 42
+     expected: CallExp    value: 280
 
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: IDExp    value: 286
 
 ------------------------------------------------
 ------------------------------------------------
-状态：761
-     expected: Stmt    value: 813
-
-     expected: IfStmt    value: 351
-
-     expected: BlockStmt    value: 352
-
-     expected: VariableDef    value: 353
-
-     expected: WhileStmt    value: 354
-
-     expected: ReturnStmt    value: 355
-
-     expected: AssignStmt    value: 356
-
-     expected: Exp    value: 357
-
-     expected: VarDefStmt    value: 360
-
-     expected: VariableExp    value: 363
-
-     expected: ArrayExp    value: 40
-
-     expected: ArrayMemberExp    value: 41
-
-     expected: CalExp    value: 42
-
-     expected: LogicExp    value: 45
-
-     expected: BitExp    value: 47
-
-     expected: RelationExp    value: 48
-
-     expected: AdditiveExp    value: 49
-
-     expected: FactorExp    value: 50
-
-     expected: UnaryBeforeOperator    value: 51
-
-     expected: UnaryExp    value: 52
-
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+状态：766
+     expected: BitOperator    value: 592
 
 ------------------------------------------------
 ------------------------------------------------
-状态：771
-     expected: ArgumentList    value: 816
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+状态：767
+     expected: RelationalOperator    value: 593
 
 ------------------------------------------------
 ------------------------------------------------
-状态：778
-     expected: ArgumentList    value: 819
+状态：768
+     expected: AdditiveOperator    value: 594
 
-     expected: Exp    value: 189
+------------------------------------------------
+------------------------------------------------
+状态：769
+     expected: FactorOperator    value: 595
 
-     expected: ArrayExp    value: 191
+------------------------------------------------
+------------------------------------------------
+状态：773
+     expected: ArgumentList    value: 869
 
-     expected: ArrayMemberExp    value: 192
+     expected: Exp    value: 242
 
-     expected: CalExp    value: 193
+     expected: ArrayExp    value: 244
 
-     expected: VariableExp    value: 195
+     expected: CalExp    value: 245
 
-     expected: LogicExp    value: 196
+     expected: LogicExp    value: 247
 
-     expected: BitExp    value: 198
+     expected: BitExp    value: 248
 
-     expected: RelationExp    value: 199
+     expected: RelationExp    value: 249
 
-     expected: AdditiveExp    value: 200
+     expected: AdditiveExp    value: 250
 
-     expected: FactorExp    value: 201
+     expected: FactorExp    value: 251
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: UnaryExp    value: 203
+     expected: UnaryExp    value: 253
 
-     expected: Literal    value: 204
+     expected: Literal    value: 254
 
-     expected: CallExp    value: 206
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：774
+     expected: Exp    value: 870
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：775
+     expected: IDExp    value: 871
+
+------------------------------------------------
+------------------------------------------------
+状态：776
+     expected: IDExp    value: 872
+
+------------------------------------------------
+------------------------------------------------
+状态：779
+     expected: Exp    value: 873
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：784
+     expected: RelationalOperator    value: 620
+
+------------------------------------------------
+------------------------------------------------
+状态：785
+     expected: AdditiveOperator    value: 621
 
 ------------------------------------------------
 ------------------------------------------------
 状态：786
-     expected: ArgumentList    value: 822
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: FactorOperator    value: 622
 
 ------------------------------------------------
 ------------------------------------------------
-状态：794
-     expected: ArgumentList    value: 825
+状态：790
+     expected: ArgumentList    value: 878
 
-     expected: Exp    value: 189
+     expected: Exp    value: 242
 
-     expected: ArrayExp    value: 191
+     expected: ArrayExp    value: 244
 
-     expected: ArrayMemberExp    value: 192
+     expected: CalExp    value: 245
 
-     expected: CalExp    value: 193
+     expected: LogicExp    value: 247
 
-     expected: VariableExp    value: 195
+     expected: BitExp    value: 248
 
-     expected: LogicExp    value: 196
+     expected: RelationExp    value: 249
 
-     expected: BitExp    value: 198
+     expected: AdditiveExp    value: 250
 
-     expected: RelationExp    value: 199
+     expected: FactorExp    value: 251
 
-     expected: AdditiveExp    value: 200
+     expected: UnaryBeforeOperator    value: 252
 
-     expected: FactorExp    value: 201
+     expected: UnaryExp    value: 253
 
-     expected: UnaryBeforeOperator    value: 202
+     expected: Literal    value: 254
 
-     expected: UnaryExp    value: 203
+     expected: VariableExp    value: 255
 
-     expected: Literal    value: 204
+     expected: CallExp    value: 257
 
-     expected: CallExp    value: 206
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：791
+     expected: Exp    value: 879
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：792
+     expected: IDExp    value: 880
+
+------------------------------------------------
+------------------------------------------------
+状态：793
+     expected: IDExp    value: 881
+
+------------------------------------------------
+------------------------------------------------
+状态：796
+     expected: Exp    value: 882
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：801
+     expected: AdditiveOperator    value: 647
 
 ------------------------------------------------
 ------------------------------------------------
 状态：802
-     expected: ArgumentList    value: 828
-
-     expected: Exp    value: 189
-
-     expected: ArrayExp    value: 191
-
-     expected: ArrayMemberExp    value: 192
-
-     expected: CalExp    value: 193
-
-     expected: VariableExp    value: 195
-
-     expected: LogicExp    value: 196
-
-     expected: BitExp    value: 198
-
-     expected: RelationExp    value: 199
-
-     expected: AdditiveExp    value: 200
-
-     expected: FactorExp    value: 201
-
-     expected: UnaryBeforeOperator    value: 202
-
-     expected: UnaryExp    value: 203
-
-     expected: Literal    value: 204
-
-     expected: CallExp    value: 206
+     expected: FactorOperator    value: 648
 
 ------------------------------------------------
 ------------------------------------------------
-状态：810
-     expected: Exp    value: 832
+状态：806
+     expected: ArgumentList    value: 887
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：807
+     expected: Exp    value: 888
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：808
+     expected: IDExp    value: 889
+
+------------------------------------------------
+------------------------------------------------
+状态：809
+     expected: IDExp    value: 890
+
+------------------------------------------------
+------------------------------------------------
+状态：812
+     expected: Exp    value: 891
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：817
+     expected: FactorOperator    value: 673
+
+------------------------------------------------
+------------------------------------------------
+状态：821
+     expected: ArgumentList    value: 896
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：822
+     expected: Exp    value: 897
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：823
+     expected: IDExp    value: 898
+
+------------------------------------------------
+------------------------------------------------
+状态：824
+     expected: IDExp    value: 899
+
+------------------------------------------------
+------------------------------------------------
+状态：827
+     expected: Exp    value: 900
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：835
+     expected: ArgumentList    value: 905
+
+     expected: Exp    value: 242
+
+     expected: ArrayExp    value: 244
+
+     expected: CalExp    value: 245
+
+     expected: LogicExp    value: 247
+
+     expected: BitExp    value: 248
+
+     expected: RelationExp    value: 249
+
+     expected: AdditiveExp    value: 250
+
+     expected: FactorExp    value: 251
+
+     expected: UnaryBeforeOperator    value: 252
+
+     expected: UnaryExp    value: 253
+
+     expected: Literal    value: 254
+
+     expected: VariableExp    value: 255
+
+     expected: CallExp    value: 257
+
+     expected: IDExp    value: 263
+
+------------------------------------------------
+------------------------------------------------
+状态：836
+     expected: Exp    value: 906
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：837
+     expected: IDExp    value: 907
+
+------------------------------------------------
+------------------------------------------------
+状态：838
+     expected: IDExp    value: 908
+
+------------------------------------------------
+------------------------------------------------
+状态：841
+     expected: Exp    value: 909
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：855
+     expected: Stmt    value: 403
+
+     expected: IfStmt    value: 404
+
+     expected: BlockStmt    value: 405
+
+     expected: VariableDef    value: 406
+
+     expected: WhileStmt    value: 407
+
+     expected: ReturnStmt    value: 408
+
+     expected: AssignStmt    value: 409
+
+     expected: Exp    value: 410
+
+     expected: VarDefStmt    value: 413
+
+     expected: VariableExp    value: 416
 
      expected: ArrayExp    value: 40
 
-     expected: ArrayMemberExp    value: 41
+     expected: CalExp    value: 41
 
-     expected: CalExp    value: 42
+     expected: IDExp    value: 418
 
-     expected: VariableExp    value: 44
+     expected: LogicExp    value: 43
 
-     expected: LogicExp    value: 45
+     expected: BitExp    value: 44
 
-     expected: BitExp    value: 47
+     expected: RelationExp    value: 45
 
-     expected: RelationExp    value: 48
+     expected: AdditiveExp    value: 46
 
-     expected: AdditiveExp    value: 49
+     expected: FactorExp    value: 47
 
-     expected: FactorExp    value: 50
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: UnaryExp    value: 49
 
-     expected: UnaryExp    value: 52
+     expected: Literal    value: 54
 
-     expected: Literal    value: 57
-
-     expected: CallExp    value: 59
+     expected: CallExp    value: 57
 
 ------------------------------------------------
 ------------------------------------------------
-状态：830
-     expected: Stmt    value: 838
+状态：856
+     expected: Exp    value: 915
 
-     expected: IfStmt    value: 652
+     expected: ArrayExp    value: 134
 
-     expected: BlockStmt    value: 653
+     expected: CalExp    value: 135
 
-     expected: VariableDef    value: 654
+     expected: LogicExp    value: 137
 
-     expected: WhileStmt    value: 655
+     expected: BitExp    value: 138
 
-     expected: ReturnStmt    value: 656
+     expected: RelationExp    value: 139
 
-     expected: AssignStmt    value: 657
+     expected: AdditiveExp    value: 140
 
-     expected: Exp    value: 658
+     expected: FactorExp    value: 141
 
-     expected: VarDefStmt    value: 660
+     expected: UnaryBeforeOperator    value: 142
 
-     expected: VariableExp    value: 663
+     expected: UnaryExp    value: 143
+
+     expected: Literal    value: 144
+
+     expected: VariableExp    value: 145
+
+     expected: CallExp    value: 147
+
+     expected: IDExp    value: 153
+
+------------------------------------------------
+------------------------------------------------
+状态：859
+     expected: Exp    value: 917
 
      expected: ArrayExp    value: 40
 
-     expected: ArrayMemberExp    value: 41
+     expected: CalExp    value: 41
 
-     expected: CalExp    value: 42
+     expected: LogicExp    value: 43
 
-     expected: LogicExp    value: 45
+     expected: BitExp    value: 44
 
-     expected: BitExp    value: 47
+     expected: RelationExp    value: 45
 
-     expected: RelationExp    value: 48
+     expected: AdditiveExp    value: 46
 
-     expected: AdditiveExp    value: 49
+     expected: FactorExp    value: 47
 
-     expected: FactorExp    value: 50
+     expected: UnaryBeforeOperator    value: 48
 
-     expected: UnaryBeforeOperator    value: 51
+     expected: UnaryExp    value: 49
 
-     expected: UnaryExp    value: 52
+     expected: Literal    value: 54
 
-     expected: Literal    value: 57
+     expected: VariableExp    value: 55
 
-     expected: CallExp    value: 59
+     expected: CallExp    value: 57
+
+     expected: IDExp    value: 63
+
+------------------------------------------------
+------------------------------------------------
+状态：861
+     expected: Stmt    value: 920
+
+     expected: IfStmt    value: 740
+
+     expected: BlockStmt    value: 741
+
+     expected: VariableDef    value: 742
+
+     expected: WhileStmt    value: 743
+
+     expected: ReturnStmt    value: 744
+
+     expected: AssignStmt    value: 745
+
+     expected: Exp    value: 746
+
+     expected: VarDefStmt    value: 748
+
+     expected: VariableExp    value: 751
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
+
+------------------------------------------------
+------------------------------------------------
+状态：862
+     expected: Stmt    value: 921
+
+     expected: IfStmt    value: 404
+
+     expected: BlockStmt    value: 405
+
+     expected: VariableDef    value: 406
+
+     expected: WhileStmt    value: 407
+
+     expected: ReturnStmt    value: 408
+
+     expected: AssignStmt    value: 409
+
+     expected: Exp    value: 410
+
+     expected: VarDefStmt    value: 413
+
+     expected: VariableExp    value: 416
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
+
+------------------------------------------------
+------------------------------------------------
+状态：868
+     expected: Exp    value: 924
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：877
+     expected: Exp    value: 928
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：886
+     expected: Exp    value: 932
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：895
+     expected: Exp    value: 936
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：904
+     expected: Exp    value: 940
+
+     expected: ArrayExp    value: 267
+
+     expected: CalExp    value: 268
+
+     expected: LogicExp    value: 270
+
+     expected: BitExp    value: 271
+
+     expected: RelationExp    value: 272
+
+     expected: AdditiveExp    value: 273
+
+     expected: FactorExp    value: 274
+
+     expected: UnaryBeforeOperator    value: 275
+
+     expected: UnaryExp    value: 276
+
+     expected: Literal    value: 277
+
+     expected: VariableExp    value: 278
+
+     expected: CallExp    value: 280
+
+     expected: IDExp    value: 286
+
+------------------------------------------------
+------------------------------------------------
+状态：918
+     expected: Exp    value: 946
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: VariableExp    value: 55
+
+     expected: CallExp    value: 57
+
+     expected: IDExp    value: 63
+
+------------------------------------------------
+------------------------------------------------
+状态：944
+     expected: Stmt    value: 952
+
+     expected: IfStmt    value: 740
+
+     expected: BlockStmt    value: 741
+
+     expected: VariableDef    value: 742
+
+     expected: WhileStmt    value: 743
+
+     expected: ReturnStmt    value: 744
+
+     expected: AssignStmt    value: 745
+
+     expected: Exp    value: 746
+
+     expected: VarDefStmt    value: 748
+
+     expected: VariableExp    value: 751
+
+     expected: ArrayExp    value: 40
+
+     expected: CalExp    value: 41
+
+     expected: IDExp    value: 418
+
+     expected: LogicExp    value: 43
+
+     expected: BitExp    value: 44
+
+     expected: RelationExp    value: 45
+
+     expected: AdditiveExp    value: 46
+
+     expected: FactorExp    value: 47
+
+     expected: UnaryBeforeOperator    value: 48
+
+     expected: UnaryExp    value: 49
+
+     expected: Literal    value: 54
+
+     expected: CallExp    value: 57
 
 ------------------------------------------------

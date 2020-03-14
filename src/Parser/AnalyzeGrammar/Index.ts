@@ -80,7 +80,7 @@ async function hasCache(nowHashValue: number): Promise<boolean> {
                 //如果缓存文件存在
                 let state = await fs.statSync(CACHE_FILE);//读取文件状态信息
                 let hashDate = hashCode(state.mtime.toLocaleString());
-                return hashDate === hashFile.hashDate;
+                return hashDate === hashFile.hashDate;//最后查看是否更改了，因为光hash正确也可能是因为产生了碰撞
             }
         }
     }

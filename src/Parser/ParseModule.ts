@@ -54,7 +54,7 @@ export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
         //根据栈顶状态，以及预读取的token，来获取下一个转移的状态
         let actionItem: ActionFormItem = actionForm.getActionItem(statusStack.peek(), nextToken.getTokenTypeValue());
         if (actionItem.hasConflict) {
-            printWarn("发生冲突！"+actionItem);
+            printWarn("发生冲突！" + actionItem);
         }
         switch (actionItem.action) {
             case ActionStatus.ACC:
@@ -101,17 +101,11 @@ export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
                     //则表示需要一个block
                     pushBlock();
                 } else {
-                    let tempNextToken = lookAheadToken();
-                    if (tempNextToken.tokenType === T.FUN || nextToken.tokenType === T.FUN) {
-                        if (nextToken.tokenType === T.STATIC && tempNextToken.tokenType === T.FUN) {
-                            let funName = lookAheadXToken(2);
-                            pushFun(funName.value, FUN_TYPE.STATIC);
-                        } else if (nextToken.tokenType === T.AT && tempNextToken.tokenType === T.FUN) {
-                            let funName = lookAheadXToken(2);
-                            pushFun(funName.value, FUN_TYPE.INNER);
-                        } else if (nextToken.tokenType === T.FUN && tempNextToken.tokenType === T.ID) {
-                            pushFun(tempNextToken.value, FUN_TYPE.GENERAL);
-                        }
+                    let tempNextToken = lookAheadToken();//向后读取一个token
+                    if (tempNextToken.tokenType === T.FUN&&(nextToken.tokenType===T.STATIC||nextToken.tokenType===T.AT)) {//如果读取的Token是fun，那么表示再往后一个就是函数名
+                        pushFun(lookAheadXToken(2).value)
+                    } else if (nextToken.tokenType === T.FUN) {//如果当前就是fun，那么下一个就是函数名
+                        pushFun(tempNextToken.value)
                     }
                 }
                 break;

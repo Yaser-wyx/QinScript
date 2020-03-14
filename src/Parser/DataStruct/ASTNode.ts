@@ -1,5 +1,6 @@
 //AST节点定义
 import exp = require("constants");
+import {Stack} from "./Stack";
 
 export enum NODE_TYPE {
     VARIABLE_EXP,
@@ -8,8 +9,9 @@ export enum NODE_TYPE {
     VAR_DEF_STMT,//基础变量声明语句
     RETURN_STMT,//返回语句
     MODULE_FUN_DECLARATION,//模块函数定义
+    INNER_FUN_STMT,//内部函数定义
     FUN_DECLARATION,//基础函数定义
-
+    ID_EXP,//ID表达式
     EXPRESSION_STMT,//表达式语句
     IF_STMT,//if语句
     WHILE_STMT,//while语句
@@ -67,6 +69,11 @@ interface ASTNode {
     readonly nodeType: NODE_TYPE;//节点类型
 }
 
+export class InnerFunDefStmt implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.INNER_FUN_STMT;
+
+}
+
 //模块函数的定义节点，区分是静态函数，还是普通函数
 export class ModuleFunDefStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.MODULE_FUN_DECLARATION;
@@ -102,17 +109,31 @@ export class FunDeclaration implements ASTNode {
 
     readonly nodeType: NODE_TYPE = NODE_TYPE.FUN_DECLARATION;
     readonly id: string;
-    private readonly _params: ParamList;//形参列表
-    readonly body: BlockStmt;
+    private _params: Array<string> | null = null;//形参列表
+    private _body: BlockStmt | null = null;
 
-    constructor(id: string, params: ParamList, body: BlockStmt) {
+    constructor(id: string) {
         this.id = id;
-        this.body = body;
-        this._params = params;
     }
 
-    get params(): Array<string> {
-        return this._params.params;
+    get params(): Array<string> | null {
+        if (this._params) {
+            return this._params;
+        } else {
+            return null
+        }
+    }
+
+    set params(value: Array<string> | null) {
+        this._params = value;
+    }
+
+    get body(): BlockStmt | null {
+        return this._body;
+    }
+
+    set body(value: BlockStmt | null) {
+        this._body = value;
     }
 }
 
@@ -159,6 +180,7 @@ export type Statement =
     AssignStmt
     | Expression
     | BlockStmt
+    | InnerFunDefStmt
     | VarDefStmt
     | VariableDef
     | ReturnStmt
@@ -191,11 +213,11 @@ export class IfStmt implements ASTNode {
     }
 
 
-    get test(): CallExp | ArrayExp | BinaryExp | UnaryExp | Literal | VariableExp | Exp {
+    get test(): Expression {
         return this._test;
     }
 
-    get consequent(): AssignStmt | CallExp | ArrayExp | BinaryExp | UnaryExp | Literal | VariableExp | Exp | BlockStmt | VarDefStmt | VariableDef | ReturnStmt | IfStmt | WhileStmt {
+    get consequent(): Statement {
         return this._consequent;
     }
 
@@ -257,6 +279,7 @@ export class BlockStmt implements ASTNode {
 export type Expression =
     CallExp
     | ArrayExp
+    | IDExp
     | BinaryExp
     | UnaryExp
     | Literal
@@ -288,10 +311,10 @@ export class ArgumentList implements ASTNode {
 
 export class CallExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
-    readonly callee: string;//有两种调用，一种是ID()，另一种是@ID()
+    readonly callee: IDExp;//使用IDExp来代表ID链
     private _args: ArgumentList;//实参列表节点
 
-    constructor(callee: string, argumentList: ArgumentList) {
+    constructor(callee: IDExp, argumentList: ArgumentList) {
         this.callee = callee;
         this._args = argumentList;
     }
@@ -301,15 +324,28 @@ export class CallExp implements ASTNode {
     }
 }
 
+/*export class ArrayMemberExp implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_MEMBER;
+    private readonly _variableExp: VariableExp;
+    private readonly _arraySub: ArraySub;
+
+    constructor(variableExp: VariableExp, arraySub: ArraySub) {
+        this._variableExp = variableExp;
+        this._arraySub = arraySub;
+    }
+
+    get variableExp(): VariableExp {
+        return this._variableExp;
+    }
+
+    get arraySub(): ArraySub {
+        return this._arraySub;
+    }
+}*/
 
 export class ArraySub implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_SUB;
-    readonly exp: Exp;
     private _arraySub: Array<Exp> = [];
-
-    constructor(exp: Exp) {
-        this.exp = exp;
-    }
 
     pushSub(exp: Exp) {
         this._arraySub.push(exp)
@@ -334,22 +370,60 @@ export class ArrayExp implements ASTNode {
     }
 }
 
+export enum ID_TYPE {
+    GENERAL_ID,//普通的id，单个的
+    GENERAL_ID_LIST,//普通ID链表
+    STATIC_ID,//如果有前缀AT，就代表是静态的ID，根据后缀，可能是静态变量也可能是静态函数
+    MODULE_ID//如果有中缀::，就代表是外部模块的变量或函数，那么ID链表中的第一个ID就是模块名，后面的就是相关的ID引用
+}
+
+export class IDExp implements ASTNode {
+    readonly nodeType: NODE_TYPE = NODE_TYPE.ID_EXP;
+    private _idArray: Array<string> = new Array<string>();//ID链
+    private _idType: ID_TYPE;
+
+    constructor(idName: string) {
+        this._idArray.push(idName);
+        this._idType = ID_TYPE.GENERAL_ID
+    }
+
+    pushID(idName: string) {
+        this._idArray.unshift(idName);
+    }
+
+
+    get idArray(): Array<string> {
+        return this._idArray;
+    }
+
+    set idType(value: ID_TYPE) {
+        //只可以对当前idType为general时才可以设置
+        this._idType = value;
+    }
+
+    get idType(): ID_TYPE {
+        return this._idType;
+    }
+}
+
 export class VariableExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_EXP;
-    private readonly _isStatic: boolean;
-    private readonly _varName: string;
+    private readonly _idExp: IDExp;
+    private readonly _arraySub?: Array<Exp>;
 
-    constructor(_varName: string, isStatic: boolean = false) {
-        this._isStatic = isStatic;
-        this._varName = _varName;
+    constructor(_varName: IDExp, arraySub?: ArraySub) {
+        this._idExp = _varName;
+        if (arraySub) {
+            this._arraySub = arraySub.arraySub;
+        }
     }
 
-    get isStatic(): boolean {
-        return this._isStatic;
+    get arraySub(): any {
+        return this._arraySub;
     }
 
-    get varName(): string {
-        return this._varName;
+    get idExp(): IDExp {
+        return this._idExp;
     }
 }
 
