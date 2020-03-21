@@ -28,7 +28,7 @@ export async function main() {
     printInfo("运行结束！")
 }
 
-let version = "QinScript Version 0.1";
+let version = "QinScript Version 0.11";
 printInfo(version, false);
 printInfo("该项目仅供学习使用，请勿用于任何实际项目中，否则后果自负！", false);
 printInfo("-------------------------------------------------", false);

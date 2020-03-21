@@ -1,6 +1,7 @@
 import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
 import {Variable, VarTypePair} from "./Variable";
 import {FunSymbolTable} from "./SymbolTable";
+import {printInterpreterError} from "../error/error";
 
 export enum FUN_TYPE {//函数类型
     GENERAL,//普通函数
@@ -37,11 +38,13 @@ export class Fun {//普通函数
         this._moduleName = moduleName;
         this._funType = funType;
         this._funSymbolTable = new FunSymbolTable();
-        if (funDefNode) {
+        if (funDefNode && funDefNode.body && funDefNode.params) {
             this._funBlock = funDefNode.body;
             funDefNode.params.forEach((name: string) => {
                 this._paramList.push(name);
             })
+        } else {
+            printInterpreterError("函数节点缺失，函数构建失败！");
         }
     }
 
@@ -52,7 +55,7 @@ export class Fun {//普通函数
     pushVariable(blockStatement: BlockStmt, varTypePair: VarTypePair) {
         //添加变量到函数符号表中
         let variable: Variable = new Variable(this._moduleName);
-        variable.initLocalVar(varTypePair, blockStatement);
+        variable.initLocalVar(varTypePair, blockStatement);//使用varTypePair来对当前变量进行赋值，varTypePair可能是对变量的一个引用
         this._funSymbolTable.pushVariable(variable);
     }
 

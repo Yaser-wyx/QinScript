@@ -1,5 +1,6 @@
 //变量包装类
-import {BlockStmt, Exp, VarDefStmt, VariableDef, VariableExp} from "../Parser/DataStruct/ASTNode";
+import {BlockStmt, Exp, VariableDef} from "../Parser/DataStruct/ASTNode";
+import {printInterpreterError} from "../error/error";
 
 export enum VARIABLE_TYPE {
     STRING,
@@ -7,23 +8,173 @@ export enum VARIABLE_TYPE {
     ARRAY,
     NULL,
     BOOLEAN,
-    COMPLEXUS
+    COMPLEXUS,//复合体变量，因为QS是面向过程的语言，不能有对象，所以此处的复合体类似于结构体，具体实现的话还是用js中的对象来实现
+    REFERENCE//引用变量
+}
+
+export class IDWrap {
+    private _idName: string;
+    private _moduleName?: string;
+    private _isStatic: boolean;
+    private _isModule: boolean;
+    private _referenceIndex: Array<string> = [];
+
+    constructor(idName: string, isStatic: boolean, isModule: boolean, moduleName?: string) {
+        this._idName = idName;
+        this._moduleName = moduleName;
+        this._isStatic = isStatic;
+        this._isModule = isModule;
+    }
+
+    get idName(): string {
+        return this._idName;
+    }
+
+    getModuleName(): string | null {
+        if (this._moduleName) {
+            return this._moduleName;
+        }
+        return null;
+    }
+
+    get isStatic(): boolean {
+        return this._isStatic;
+    }
+
+    get isModule(): boolean {
+        return this._isModule;
+    }
+
+    get referenceIndex(): Array<string> {
+        return this._referenceIndex;
+    }
+
+    set referenceIndex(value: Array<string>) {
+        this._referenceIndex = value;
+    }
+}
+
+/*type referenceType =
+    VARIABLE_TYPE.STRING
+    | VARIABLE_TYPE.NUMBER
+    | VARIABLE_TYPE.BOOLEAN
+    | VARIABLE_TYPE.COMPLEXUS
+    | VARIABLE_TYPE.NULL
+    | VARIABLE_TYPE.ARRAY;*/
+export function getValueType(value): VARIABLE_TYPE {
+    //设置运算结果的数据类型，只处理非引用型数据类型
+    let valueType;
+    switch (typeof value) {
+        case "boolean":
+            valueType = VARIABLE_TYPE.BOOLEAN;
+            break;
+        case "number":
+            valueType = VARIABLE_TYPE.NUMBER;
+            break;
+        case "string":
+            valueType = VARIABLE_TYPE.STRING;
+            break;
+        case "object":
+            if (Array.isArray(value)) {
+                valueType = VARIABLE_TYPE.ARRAY;
+            } else {
+                valueType = VARIABLE_TYPE.COMPLEXUS;
+            }
+            break;
+        default:
+            valueType = VARIABLE_TYPE.NULL;
+            break;
+    }
+    return valueType;
+}
+
+export class Reference {
+    referencedVar: Variable;//被引用的变量
+    referenceIndex: any;//只有在被引用变量是数组或复合体的时候，该项才有用，但不代表一定存在，反之如果存在，则一定是数组或复合体
+    referencedType: VARIABLE_TYPE;//被引用对象的数据类型
+
+    constructor(referencedVar: Variable, referencedType: VARIABLE_TYPE, referenceIndex?: number | string) {
+        this.referencedVar = referencedVar;
+        this.referenceIndex = referenceIndex;
+        this.referencedType = referencedType;
+    }
+
+    setReferenceValue(varTypePair: VarTypePair) {
+        //对所引用的变量值进行设置
+        if (this.referenceIndex) {
+            //如果存在index
+            if (this.referencedType === VARIABLE_TYPE.ARRAY) {
+                //如果是array，此时referenceIndex是一个数组形式
+                let index = 0;
+                let nowArray = this.referencedVar.getValue();
+                for (; index < this.referenceIndex.length - 1; index++) {//注意-1，此处操作用于将对多维数组的操作转化为对一维数组的操作
+                    nowArray = nowArray[this.referenceIndex[index]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
+                    if (!nowArray) {
+                        printInterpreterError("数组越界！");
+                    }
+                }
+                nowArray[this.referenceIndex[index]] = varTypePair.value;//对一维数组设置值
+            } else {
+                //TODO 复合体
+            }
+        } else {
+            //表示对当前变量重新赋值
+            this.referencedVar.setValue(varTypePair);
+        }
+    }
+
+    getReferenceValue(): any {
+        //获取被引用的变量值
+        let nowValue = this.referencedVar.getValue();
+        if (this.referenceIndex) {
+            //如果存在index
+            if (this.referencedType === VARIABLE_TYPE.ARRAY) {
+                //如果是array，此时referenceIndex是一个数组形式
+                for (let i = 0; i < this.referenceIndex.length; i++) {
+                    nowValue = nowValue[this.referenceIndex[i]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
+                    if (!nowValue) {
+                        printInterpreterError("数组越界！");
+                    }
+                }
+            } else {
+                //TODO 复合体
+            }
+        }
+        return nowValue;
+    }
 }
 
 export class VarTypePair {
     value: any;
     type: VARIABLE_TYPE;
     varName?: string;
+    reference: Reference | null = null;
 
-    constructor(value: any, type: VARIABLE_TYPE, varName?: string) {
-        this.value = value;
+    constructor(type: VARIABLE_TYPE, valueOrReference: any, varName?: string) {
         this.type = type;
         this.varName = varName;
+        if (type === VARIABLE_TYPE.REFERENCE) {
+            this.reference = valueOrReference;
+            this.value = (<Reference>valueOrReference).getReferenceValue();
+        } else {
+            this.value = valueOrReference;
+        }
     }
 
-    copyValue(varTypePair: VarTypePair) {
-        this.value = varTypePair.value;
-        this.type = varTypePair.type;
+    resetValue() {
+        //重置值，因为在加入了对引用变量的索引后，当前的值已经过期了，需要重新检索值
+        if (this.reference){
+            this.value = this.reference.getReferenceValue();
+        }
+    }
+
+    setValueToReference() {
+        //将当前的value值赋值给自己所引用的变量
+        if (this.reference) {
+            this.reference.referencedVar.setValue(this, true)
+        } else {
+            printInterpreterError("引用的变量不存在！");
+        }
     }
 }
 
@@ -74,18 +225,34 @@ export class Variable {
         return this._hasDeclared;
     }
 
-    get variableValue(): any {
-        return this._variableValue;
+    getValue(): any {
+        return this._variableValue
     }
 
     get variableType(): VARIABLE_TYPE {
         return this._variableType;
     }
 
-    setValue(Pair: VarTypePair) {
-        this._variableValue = Pair.value;
-        this._variableType = Pair.type;
+    setValue(varTypePair: VarTypePair, forceSet: boolean = false) {
+        //forceSet表示是否将varTypePair中的值强制赋值给当前variable
+        this._variableType = varTypePair.type;
+        if (varTypePair.type === VARIABLE_TYPE.REFERENCE && !forceSet) {
+            //如果是引用型数据，判断被引用的数据是不是基本型的，如果是基本型的就不进行引用
+            if (varTypePair.reference) {
+                let reference = varTypePair.reference;//获取引用
+                /** 注：此处借用了部分JS的引用机制
+                 *  因为如果value的类型不是基本数据类型的话，也就是对象的话，其实此处保存的是地址
+                 *  但地址TS无法读取，也就无法实现，所以借用了JS对于对象的引用机制
+                 */
+                let value = reference.getReferenceValue();//获取引用的变量值
+                this._variableType = getValueType(value);//获取引用的变量类型
+                this._variableValue = value;
+            }
+        } else {
+            this._variableValue = varTypePair.value;
+        }
     }
+
 
     get variableName(): string {
         return this._variableName;

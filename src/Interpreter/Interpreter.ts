@@ -5,12 +5,15 @@ import {getGlobalSymbolTable, GlobalSymbolTable} from "./SymbolTable";
 import {printInfo, printInterpreterError} from "../error/error";
 import {
     ArithmeticOperator,
+    ArrayExp,
     AssignStmt,
     BinaryExp,
     BlockStmt,
     CallExp,
     Exp,
     Expression,
+    ID_TYPE, IDExp,
+    IfStmt,
     Literal,
     LogicalOperator,
     ModuleFunDefStmt,
@@ -25,7 +28,7 @@ import {
     VariableExp,
     WhileStmt
 } from "../Parser/DataStruct/ASTNode";
-import {Variable, VARIABLE_TYPE, VarTypePair} from "./Variable";
+import {getValueType, IDWrap, Reference, Variable, VARIABLE_TYPE, VarTypePair} from "./Variable";
 import {QSModule} from "./Module";
 import {QSFunMap, runLib} from "../QSLib";
 
@@ -35,9 +38,14 @@ let funRunTimeStack = new Stack<Fun>();//函数运行时栈
 let interpreterInfo: InterpreterInfo;
 let symbolTable: GlobalSymbolTable;
 
-//统一的变量获取函数
-function getVariable(varName: string) {
+//统一的变量获取函数，根据传入变量名列表以及参数，到具体的符号表中读取变量
+//TODO 修改获取方式
+function getVariable(idNameOrWrap: string | IDWrap) {
     //先从当前函数的符号表中获取
+    let varName: string = <string>idNameOrWrap;
+    if (idNameOrWrap instanceof IDWrap) {
+        varName = idNameOrWrap.idName;
+    }
     let fun = curFun();
     let variable: Variable | null = null;
     if (fun) {
@@ -49,6 +57,15 @@ function getVariable(varName: string) {
         variable = symbolTable.getVariable(curModuleName(), varName);
     }
     return variable;
+}
+
+//函数的统一获取
+function getFun(funIDWrap: IDWrap) {
+    let funDefStmt = curModule().getModuleFunDefByFunName(funIDWrap.idName);
+    if (funDefStmt) {
+        return createFunByModuleFunDefStmt(funDefStmt);
+    }
+    return null;
 }
 
 function pushToStack(value) {
@@ -73,8 +90,8 @@ let curModule = (): QSModule => {
 let curFun = (): Fun => {
     return <Fun>interpreterInfo.curFun;
 };
-let wrapToVarTypePair = (value: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
-    return new VarTypePair(value, type, varName);
+let wrapToVarTypePair = (valueOrReference: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
+    return new VarTypePair(type, valueOrReference, varName);
 };
 const nullValue: VarTypePair = wrapToVarTypePair();
 
@@ -105,25 +122,6 @@ export function runInterpreter() {
     }
     console.log("\n");
     printInfo("====================代码执行区输出====================", false);
-}
-
-function getFun(funName: string) {
-    let funDefStmt = curModule().getModuleFunDefByFunName(funName);
-    if (funDefStmt) {
-        return createFunByModuleFunDefStmt(funDefStmt);
-    }
-    return null;
-}
-
-function getAndPushFun(funName: string) {
-    //用函数名获取函数
-    let fun = getFun(funName);
-    if (fun) {
-        pushFun(fun);
-        return fun;
-    }
-    //获取失败
-    return null;
 }
 
 function createFun(funDefStmt: ModuleFunDefStmt) {
@@ -219,14 +217,7 @@ function runBlockStmt(block: BlockStmt) {
     interpreterInfo.curBlock = block;
     for (let index = 0; index < body.length; index++) {
         let statement: Statement = body[index];//获取block中的语句
-        let runner = statementExecutorMap[statement.nodeType];//获取执行器
-        runner(statement);//执行
-        if (curFun().rearOperator) {
-            //如果有后置运算，则执行
-            executeRearOperation()
-        }
-        if (curFun().returnValue) {
-            //如果有值，后续语句则不执行了
+        if (runStmt(statement)) {
             break;
         }
     }
@@ -234,9 +225,14 @@ function runBlockStmt(block: BlockStmt) {
 }
 
 function runAssignStmt(assignStmt: AssignStmt) {
-    let variable = runVariableExp(assignStmt.left);//获取要赋值的变量
-    let value: VarTypePair = runExpression(assignStmt.right);//获取值
-    variable.setValue(value);//赋值
+    let leftVariable: VarTypePair = runVariableExp(assignStmt.left);//获取左值
+    let rightValue: VarTypePair = runExpression(assignStmt.right);//获取右值
+
+    //判断左值variable是否为对一个变量的引用
+    if (leftVariable.type === VARIABLE_TYPE.REFERENCE && leftVariable.reference) {
+        //对引用的变量进行赋值
+        leftVariable.reference.setReferenceValue(rightValue);
+    }
 }
 
 function runVariableDef(variableDef: VariableDef) {
@@ -247,10 +243,10 @@ function runVariableDef(variableDef: VariableDef) {
 function runVarDefStmt(varDefStmt: VarDefStmt) {
     let varName = varDefStmt.id;
     let initExp = varDefStmt.init;
-    let varTypePair = wrapToVarTypePair(null, VARIABLE_TYPE.NULL, varName);
+    let varTypePair: VarTypePair = wrapToVarTypePair(null, VARIABLE_TYPE.NULL, varName);
     if (initExp) {
         //存在初始值
-        varTypePair = runExpression(initExp);
+        varTypePair = runExpression(initExp);//可能返回回来的是一个引用
         varTypePair.varName = varName;
     }
     return varTypePair;
@@ -264,27 +260,45 @@ function runReturnStmt(returnStmt: ReturnStmt) {
     }
 }
 
-function runIfStmt() {
+function runIfStmt(ifStmt: IfStmt) {
+    //读取测试条件
+    let testVal = runExpression(ifStmt.test);//获取结果值
+    let statement;//要执行的语句
+    if (testVal.value) {
+        statement = ifStmt.consequent;
+    } else {
+        statement = ifStmt.alternate;//可能为null
+    }
+    if (statement) {
+        runStmt(statement)
+    }
+}
 
+function runStmt(statement: Statement): boolean {
+    let runner = statementExecutorMap[statement.nodeType];//获取执行器
+    runner(statement);//执行
+
+    if (curFun().rearOperator) {
+        //如果有后置运算，则执行
+        executeRearOperation()
+    }
+    return curFun().returnValue;//返回是否存在返回值
 }
 
 function runWhileStmt(whileStmt: WhileStmt) {
     let getTestRes = () => {
         let testRes: VarTypePair = runExpression(whileStmt.test);
-        if (testRes.type === VARIABLE_TYPE.BOOLEAN) {
-            return testRes.value
-        } else {
-            return false;
-        }
+        return testRes.value
     };
     while (getTestRes()) {
-        statementExecutorMap[whileStmt.body.nodeType](whileStmt.body);
+        runStmt(whileStmt.body);
     }
 }
 
 let expressionExecutorMap = {
     [NODE_TYPE.CALL_EXPRESSION]: runCallExp,
     [NODE_TYPE.ARRAY_EXP]: runArrayExp,
+    // TODO [NODE_TYPE.ARRAY_MEMBER]: runArrayMemberExp,
     [NODE_TYPE.BINARY_EXP]: runBinaryExp,
     [NODE_TYPE.UNARY_EXP]: runUnaryExp,
     [NODE_TYPE.LITERAL]: runLiteral,
@@ -306,54 +320,61 @@ function runExpression(exp: Expression): VarTypePair {
 
 function runCallExp(callExp: CallExp): VarTypePair {
     //构造要调用的函数，并保存该函数到栈中
-    let funName = callExp.callee;
+    let funIDWrap: IDWrap = runIDExp(callExp.callee);
+    let fun: Fun = <Fun>getFun(funIDWrap);//获取并构造fun
     let args: Array<VarTypePair> = [];
     //计算所有实参的值，并转化为值类型的表示法
     callExp.argList.forEach(argExp => {
         args.push(runExpression(argExp));
     });
-    let libCall = QSFunMap[funName];
-    if (libCall) {
-        //如果是原生方法
-        let value = runLib(libCall, args);
-        if (value) {
-            //如果有值
-            return wrapToVarTypePair(value, getValueType(value));
+    if (fun) {
+        //如果存在，也就是说不是原生函数
+        if (fun.paramList.length === callExp.argList.length) {
+            //函数存在，且参数匹配
+            while (args.length > 0) {
+                pushToStack(args.pop());//将实参从右至左压入栈中，栈顶为最左边的元素
+            }
+            pushFun(fun);//压入栈
+            //调用函数执行，并获取返回结果
+            let value = runFun();
+            //恢复上下文环境
+            popAndSetFun();
+            return value;//返回执行结果
         } else {
+            printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！");
             return nullValue;
         }
     } else {
-        //不是原生方法
-        let fun: Fun = <Fun>getFun(callExp.callee);
-        if (fun) {
-            if (fun.paramList.length === callExp.argList.length) {
-                //函数存在，且参数匹配
-                while (args.length > 0) {
-                    pushToStack(args.pop());//将实参从右至左压入栈中，栈顶为最左边的元素
-                }
-                pushFun(fun);//压入栈
-                //调用函数执行，并获取返回结果
-                let value = runFun();
-                //恢复上下文环境
-                popAndSetFun();
-                return value;//返回执行结果
+        //处理原生函数
+        let libCall = QSFunMap[funIDWrap.idName];
+        if (libCall) {
+            //如果是原生函数
+            let value = runLib(libCall, args);
+            if (value) {
+                //如果有值
+                return wrapToVarTypePair(value, getValueType(value));
             } else {
-                printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！");
                 return nullValue;
             }
         } else {
+            //既不是原生函数也不是自定义函数
             printInterpreterError(callExp.callee + "函数未定义 ");
             return nullValue;
         }
     }
 }
 
-function runArrayExp() {
-
+function runArrayExp(arrayExp: ArrayExp) {
+    //计算array里的数值内容
+    let array: Array<any> = [];
+    for (let i = arrayExp.elements.length - 1; i >= 0; i--) {
+        array.push(runExpression(arrayExp.elements[i]).value)
+    }
+    return wrapToVarTypePair(array, VARIABLE_TYPE.ARRAY)
 }
 
 function handleArithmetic(left: VarTypePair, right: VarTypePair, operatorType: ArithmeticOperator): VarTypePair {
-    let resValue: VarTypePair = new VarTypePair(null, VARIABLE_TYPE.NULL);//默认为null
+    let resValue: VarTypePair = wrapToVarTypePair();//默认为null
     switch (operatorType) {
         case OPERATOR.ADD:
             resValue.value = left.value + right.value;
@@ -384,7 +405,7 @@ function handleArithmetic(left: VarTypePair, right: VarTypePair, operatorType: A
 }
 
 function handleLogic(left: VarTypePair, right: VarTypePair, operatorType: LogicalOperator): VarTypePair {
-    let resValue: VarTypePair = new VarTypePair(null, VARIABLE_TYPE.NULL);//默认为null
+    let resValue: VarTypePair = wrapToVarTypePair();//默认为null
     switch (operatorType) {
         case OPERATOR.EQUAL:
             resValue.value = left.value === right.value;
@@ -436,29 +457,25 @@ function executeRearOperation() {
     while (curFun().rearOperator) {
         curFun().subRearOperator();
         let varTypePair: VarTypePair = <VarTypePair>popFromStack();
-        let variable: Variable = <Variable>popFromStack();
-        if (variable && varTypePair) {
-            variable.setValue(varTypePair);
+        if (varTypePair) {
+            varTypePair.setValueToReference();
         } else {
             printInterpreterError("运行时错误，变量丢失！");
         }
     }
 }
 
-function addRearOperation(variable: Variable, varTypePair: VarTypePair) {
+function addRearOperation(varTypePair: VarTypePair) {
     //添加后置运算
     curFun().addRearOperator();
-    pushToStack(variable);
     pushToStack(varTypePair);
 }
 
 function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
-    let operand: VarTypePair | Variable = runExpression(unaryExp.argument);//获取操作数
-    let variable: Variable | null = null;
-    if (operand instanceof Variable) {
-        //如果是variable，进行转换操作
-        variable = operand;
-        operand = wrapToVarTypePair(operand.variableValue, operand.variableType, operand.varName);
+    let operand: VarTypePair = runExpression(unaryExp.argument);//获取操作数
+    let referencedVar: Variable | null = null;//被引用的变量
+    if (operand.reference) {
+        referencedVar = operand.reference.referencedVar
     }
     if (unaryExp.operator) {
         //如果存在运算符
@@ -468,8 +485,8 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
         if (operator) {
             switch (operator) {
                 case OPERATOR.ADD_ONE:
-                    if (variable) {
-                        //只有变量才能进行自增操作
+                    if (referencedVar) {
+                        //只有是对变量的引用才能进行自增操作
                         selfOperator = true;
                         operand.value++;
                     } else {
@@ -484,7 +501,7 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
                     operand.value = !operand.value;
                     break;
                 case OPERATOR.SUB_ONE:
-                    if (variable) {
+                    if (operand.reference) {
                         //只有变量才能进行自减操作
                         selfOperator = true;
                         operand.value--;
@@ -495,17 +512,17 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
                     break;
             }
             operand.type = getValueType(operand.value);
-            if (selfOperator && variable) {
+            if (selfOperator && referencedVar) {
                 //如果是自运算操作，且运算对象是变量
                 if (!unaryExp.isPreOperator) {
                     //后置运算打标记，并将要进行的后置运算加入栈中
-                    addRearOperation(variable, _.clone(operand));
+                    addRearOperation(_.clone(operand));
                     //恢复值
-                    operand.value = variable.variableValue;
-                    operand.type = variable.variableType;
+                    operand.value = referencedVar.getValue();
+                    operand.type = referencedVar.variableType;
                 } else {
                     //前置运算，直接赋值
-                    variable.setValue(operand);
+                    operand.setValueToReference()
                 }
             }
         }
@@ -513,25 +530,6 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
     return operand;
 }
 
-function getValueType(value): VARIABLE_TYPE {
-    //设置运算结果的数据类型
-    let valueType;
-    switch (typeof value) {
-        case "boolean":
-            valueType = VARIABLE_TYPE.BOOLEAN;
-            break;
-        case "number":
-            valueType = VARIABLE_TYPE.NUMBER;
-            break;
-        case "string":
-            valueType = VARIABLE_TYPE.STRING;
-            break;
-        default:
-            valueType = VARIABLE_TYPE.NULL;
-            break;
-    }
-    return valueType;
-}
 
 function runLiteral(literal: Literal): VarTypePair {
     let value = literal.value;
@@ -539,16 +537,66 @@ function runLiteral(literal: Literal): VarTypePair {
 }
 
 
-// @ts-ignore
-function runVariableExp(variableExp: VariableExp): Variable {
-    //获取变量
-    let varName = variableExp.varName;
-    let variable: Variable;
-    variable = <Variable>getVariable(varName);
-    if (variable && variable.hasDeclared) {
-        //变量存在，并定义了，则返回
-        return variable;
+function runIDExp(idExp: IDExp): IDWrap {
+    let referenceIndex = new Array<string>();//复合体的引用链表
+    let isStatic = idExp.idType === ID_TYPE.STATIC_ID;
+    let isModule = idExp.idType === ID_TYPE.MODULE_ID;
+    let varName: string;//变量名
+    let moduleName: string | undefined = undefined;//变量所处模块名，不为空的前提是引用的是其它模块的变量
+    let idArray = idExp.idArray;
+    let index = 0;
+    if (isModule) {
+        //如果是模块变量，则设置模块名
+        moduleName = idArray[index++];
+        varName = idArray[index++];
     } else {
-        printInterpreterError(varName + "变量未定义！");
+        //如果不是模块变量，则只需要设置varName
+        varName = idArray[index++];
+    }
+    //对IDExp的结果进行包装处理
+    let idWrap: IDWrap = new IDWrap(varName, isStatic, isModule, moduleName);
+    //从id链中读取剩余的id
+    for (; index < idArray.length; index++) {
+        referenceIndex.push(idArray[index]);
+    }
+    idWrap.referenceIndex = referenceIndex;
+    return idWrap;
+}
+
+
+function runVariableExp(variableExp: VariableExp): VarTypePair {
+    //解析idExp
+    let idExp = variableExp.idExp;
+    let varIDWrap: IDWrap = runIDExp(idExp);
+    //从符号表中读取variable
+    let variable: Variable = <Variable>getVariable(varIDWrap);
+
+    if (variable && variable.hasDeclared) {
+        //变量存在，并定义了
+        let reference: Reference = new Reference(variable, variable.variableType);//将变量包装为引用
+        let idVar: VarTypePair = wrapToVarTypePair(reference, VARIABLE_TYPE.REFERENCE, variable.variableName);//将引用包装成统一的格式进行回传
+        if (idVar.reference) {
+            //设置引用链
+            if (variableExp.arraySub) {
+                //如果要获取的是数组变量
+                //解析arraySub
+                let arraySub: Array<number> = [];
+                for (let i = 0; i < variableExp.arraySub.length; i++) {
+                    //@ts-ignore
+                    arraySub.push(runExpression(variableExp.arraySub[i]).value)
+                }
+                idVar.reference.referenceIndex = arraySub;
+            } else if (varIDWrap.referenceIndex.length > 0) {
+                //如果要获取的是一个复合体
+                idVar.reference.referenceIndex = varIDWrap.referenceIndex
+            }
+        } else {
+            printInterpreterError("运行时错误，变量引用丢失！")
+        }
+        idVar.resetValue();
+        return idVar;
+    } else {
+        printInterpreterError(varIDWrap.idName + "变量未定义！");
+        return nullValue;
     }
 }

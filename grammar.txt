@@ -7,30 +7,47 @@ ModuleImportDefine -> IMPORT COLON ID SEMI
 ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
 ModuleExport ->  EXPORT COLON ID SEMI
 ModuleStmts -> ModuleStmts VariableDef | ModuleStmts FunDefStmt  | FunDefStmt | VariableDef | E
-
+# 函数定义语句，包含静态函数与普通函数
+# FunDefStmt -> FunDef | STATIC FunDef
 FunDefStmt -> FunDef
+# 所有函数定义，不区分静态或普通
 FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ParamList COMMA ID | E
 
 Stmts -> Stmts Stmt | E
-Stmt -> BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
+Stmt -> IfStmt | BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
 
-VariableDef -> VarDefStmt
+# 变量定义包括普通变量与静态变量定义
+# VariableDef -> STATIC VarDefStmt | VarDefStmt
+
+VariableDef ->  VarDefStmt
+# 所有变量的定义语句，对变量类型不加区分
 VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
 
-VariableExp -> ID
+# 用于处理是所有的变量表达式
+VariableExp -> IDExp ArraySub | IDExp
+IDExp -> ID | ID DOT IDExp | AT IDExp | ID MODULE_SCOPE IDExp
 
+# 静态函数
+# InnerFunDefStmt -> AT FunDef
 
+IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IfStmt ELSE Stmt
 WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt
 ReturnStmt -> RETURN Exp SEMI | RETURN SEMI
 AssignStmt -> VariableExp ASSIGN Exp SEMI
 
-Exp ->  CalExp
 
-CallExp -> ID LEFT_PAREN ArgumentList RIGHT_PAREN
+Exp ->  ArrayExp | CalExp
+
+ArrayExp -> LEFT_BRACKET ArrayItems RIGHT_BRACKET |  LEFT_BRACKET RIGHT_BRACKET
+ArrayItems -> Exp | Exp COMMA ArrayItems
+ArraySub -> LEFT_BRACKET Exp RIGHT_BRACKET | ArraySub LEFT_BRACKET Exp RIGHT_BRACKET
+
+CallExp -> IDExp LEFT_PAREN ArgumentList RIGHT_PAREN
 ArgumentList -> Exp | ArgumentList COMMA Exp | E
 
+# 可计算表达式，包括数值计算，布尔计算以及位运算
 CalExp -> CalExp LogicOperator LogicExp | LogicExp
 LogicOperator -> LOGIC_OR | LOGIC_AND
 

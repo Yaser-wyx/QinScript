@@ -1,10 +1,14 @@
 //终结符常量表
 export const ID = "ID";
+export const ELSE = "ELSE";
 export const STATIC = "STATIC";
+export const DOT = "DOT";
+
 export const EXP = "Exp";
 export const UNARY_BEFORE_OPERATOR = "UnaryBeforeOperator";
 export const UNARY_AFTER_OPERATOR = "UnaryAfterOperator";
 export const ARRAY_SUB = "ArraySub";
+export const VARIABLE_EXP  = "VariableExp";
 export const COMMA = "COMMA";
 export const NUMBER = "NUMBER";
 export const STRING = "STRING";

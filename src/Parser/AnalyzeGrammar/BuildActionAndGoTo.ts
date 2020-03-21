@@ -23,6 +23,9 @@ function generateProduction(grammar: string) {
     //从指定文法中获取产生式，并将其结构化
     let items = grammar.split(productionSplit);
     items.forEach(item => {
+        if (item.startsWith("#")){
+            return;
+        }
         item = item.replace(/\r\n/g, "");
         if (item.length === 0) return;
         //遍历items
