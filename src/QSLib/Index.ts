@@ -1,4 +1,4 @@
-import {VarTypePair} from "../Interpreter/Variable";
+import {VarTypePair} from "../Interpreter/DataStruct/Variable";
 import {print} from "./Core";
 
 export const QSFunMap = {

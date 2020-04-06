@@ -1,8 +1,8 @@
 import {Variable} from "./Variable";
 import {Fun} from "./Fun";
-import {hashCode} from "../Utils/utils";
-import {BlockStmt} from "../Parser/DataStruct/ASTNode";
-import {printInterpreterError} from "../error/error";
+import {hashCode} from "../../Utils/utils";
+import {BlockStmt} from "../../Parser/DataStruct/ASTNode";
+import {printInterpreterError} from "../../Log";
 
 //符号表抽象类
 abstract class SymbolTable {

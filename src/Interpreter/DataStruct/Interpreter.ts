@@ -1,13 +1,13 @@
 import {QSModule} from "./Module";
 import {Fun} from "./Fun";
-import {kill} from "../Utils/utils";
-import {MAIN} from "../Parser/DataStruct/TConstant";
-import {printFatalError, printInterpreterError} from "../error/error";
-import {BlockStmt, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
+import {kill} from "../../Utils/utils";
+import {MAIN} from "../../Parser/DataStruct/TConstant";
+import {printFatalError, printInterpreterError} from "../../Log";
+import {BlockStmt, ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 
-let interpreterInfo: InterpreterInfo;
+let interpreter: Interpreter;
 
-export class InterpreterInfo {
+export class Interpreter {
     private _moduleMap: Map<string, QSModule> = new Map<string, QSModule>();//模块映射表
     protected _curModule: QSModule | null = null;//当前模块
     protected _enter: ModuleFunDefStmt | null = null;//入口方法
@@ -73,10 +73,10 @@ export class InterpreterInfo {
 }
 
 
-export function getInterpreterInfo(): InterpreterInfo {
-    if (!interpreterInfo) {
-        interpreterInfo = new InterpreterInfo();
+export function getInterpreter(): Interpreter {
+    if (!interpreter) {
+        interpreter = new Interpreter();
     }
 
-    return interpreterInfo;
+    return interpreter;
 }

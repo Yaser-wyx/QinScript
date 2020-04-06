@@ -2,7 +2,7 @@
 import {ActionStatus} from "../DataStruct/FormItem";
 import {E, EOF, Production} from "../DataStruct/Production";
 import {Closure} from "../DataStruct/Closure";
-import {printBuildFormError, printInfo} from "../../error/error";
+import {printBuildFormError, printInfo} from "../../Log";
 import {ActionForm, GotoForm} from "../DataStruct/Form";
 
 let _ = require("lodash");

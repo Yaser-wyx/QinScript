@@ -4,7 +4,7 @@ import {ActionForm, GotoForm} from "../DataStruct/Form";
 import {analyzeGrammar} from "./BuildActionAndGoTo";
 import * as fs from "fs";
 import {HashFile} from "../DataStruct/HashFile";
-import {printBuildFormError, printInfo, printWarn} from "../../error/error";
+import {printBuildFormError, printInfo, printWarn} from "../../Log";
 
 export async function buildLRAnalyzeForm(grammarFile: string): Promise<object | null> {
     printInfo("读取语法文件...");

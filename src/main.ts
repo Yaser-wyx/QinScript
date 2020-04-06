@@ -1,26 +1,52 @@
+/*
+ * Copyright (c) 2020. yaser. All rights reserved
+ * Description: 主程序
+ */
+
 import {cli} from "./Cli/QScli";
-import {GRAMMAR_FILE, TEST_FILE} from "./Cli/config";
-import {parseModule} from "./Parser/ParseModule";
-import {getInterpreterInfo} from "./Interpreter/InterpreterInfo";
+import {GRAMMAR_FILE, PROJECT_DIR} from "./Cli/config";
+import {parseSingleModule} from "./Parser/ParseModule";
+import {getInterpreter} from "./Interpreter/DataStruct/Interpreter";
 import {buildLRAnalyzeForm} from "./Parser/AnalyzeGrammar";
 import {getParsedModule} from "./Parser/BuildAST";
-import {runInterpreter} from "./Interpreter/Interpreter";
-import {printErr, printInfo} from "./error/error";
+import {runInterpreter} from "./Interpreter";
+import {Log, printErr, printInfo} from "./Log";
+import {readProject} from "./Project";
 
-//TODO 测试阶段，略去读取代码文件的获取，直接对指定文件读取
+//TODO 开发阶段，略去读取代码文件的获取
 export async function main() {
     //读取语法文件，并解析出分析表
     let forms = await buildLRAnalyzeForm(GRAMMAR_FILE);
     if (forms) {
-        if (await parseModule(TEST_FILE, forms)) {//解析模块
-            printInfo("语法分析成功！");
-            //TODO 目前仅支持单模块
-            let qsModule = getParsedModule();//获取模块
-            let interpreterInfo = getInterpreterInfo();//获取解释器信息表
-            interpreterInfo.putModule(qsModule);//将解析后的模块加入到解释器信息表中
-            runInterpreter();//执行解释器
+        const QSFiles = await readProject(PROJECT_DIR);//读取项目地址
+        if (QSFiles) {
+            //如果读取列表成功
+            //对每一个文件，也就是模块进行解析操作
+            printInfo(`当前项目路径下,共识别出${QSFiles.length}个模块文件，开始逐个解析。。。`);
+            let interpreterInfo = getInterpreter();//获取解释器信息表
+            let flag = true;
+            for (let i = 0; i < QSFiles.length; i++) {
+                printInfo(`--------开始解析第${i + 1}个模块文件--------`);
+                const filePath = QSFiles[i];
+                printInfo(`模块路径：${filePath}`);
+                if (await parseSingleModule(filePath, forms)) {//解析模块
+                    printInfo(`--------第${i + 1}个模块文件语法分析成功！--------`);
+                    let qsModule = getParsedModule();//获取模块
+                    interpreterInfo.putModule(qsModule);//将解析后的模块加入到解释器信息表中
+                } else {
+                    flag = false;
+                    printErr(`--------第${i + 1}个模块文件语法树构建失败--------`);
+                    break;
+                }
+            }
+            if (flag){
+                printInfo("所有模块解析完毕！");
+                runInterpreter();//执行解释器
+            }else{
+                printErr("项目解析失败！");
+            }
         } else {
-            printErr("语法树构建失败")
+            printErr("项目解析失败！");
         }
     } else {
         printErr("语法文件解析失败！");

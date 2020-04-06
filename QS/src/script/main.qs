@@ -8,7 +8,6 @@ fun main(){
   //a=12;
   print(array);
   print(a);
-
 }
 let a = "测试字符串";
 fun bubble_sort(array , length){//冒泡排序

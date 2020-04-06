@@ -1,23 +1,34 @@
+/*
+ * Copyright (c) 2020. yaser. All rights reserved
+ * Description: 模块解析
+ */
+
 import {getNextToken, initLexer, lookAheadToken, lookAheadXToken} from "../Lexer/Lexer";
-import {printParseModuleError, printErr, printFatalError, printInfo, printWarn} from "../error/error";
+import {printParseModuleError, printErr, printFatalError, printInfo, printWarn} from "../Log";
 import {ActionForm, GotoForm} from "./DataStruct/Form";
 import {Stack} from "./DataStruct/Stack";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
-import {createSampleToken, Token} from "../Lexer/Datastruct/Token";
+import {createSampleToken, Token} from "../Lexer/DataStruct/Token";
 import {T} from "./DataStruct/V_T";
-import {EOF, Production} from "./DataStruct/Production";
+import {EOF} from "./DataStruct/Production";
 import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
 import {initBuildAST, pushBlock, pushFun, transferVTToASTNode} from "./BuildAST";
-import {FUN_TYPE} from "../Interpreter/Fun";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
 let statusStack: Stack<number> = new Stack();//状态栈
+let curModulePath: string = "";//当前解析的模块
 
-//解析模块
+export function getCurParsingModuleInfo(): { moduleName, path } {
+    const moduleName = curModulePath.substr(curModulePath.lastIndexOf("\\") + 1);
+    return {moduleName: moduleName, path: curModulePath};
+}
+
+//解析单一模块
 //使用LR分析器，根据已经生成的LR分析表，构建抽象语法树
-export async function parseModule(filePath: string, forms: object): Promise<boolean> {
+export async function parseSingleModule(filePath: string, forms: object): Promise<boolean> {
     printInfo("解析模块...");
+    curModulePath = filePath;
     let initSuccess = await initLexer(filePath);//初始化词法分析器
     if (initSuccess) {//是否初始化成功
         printInfo("词法分析成功，开始执行语法分析...");
@@ -35,7 +46,7 @@ export async function parseModule(filePath: string, forms: object): Promise<bool
 export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
     let wrapToken = (token: Token) => {
         //将Token包装为V_T_Wrap
-        return new V_T_Wrap(token.tokenType, token);
+        return new V_T_Wrap(token.tokenType, token.lineNo, token);
     };
     printInfo("构建语法树...");
     //开始分析，控制器入口
@@ -102,7 +113,7 @@ export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
                     pushBlock();
                 } else {
                     let tempNextToken = lookAheadToken();//向后读取一个token
-                    if (tempNextToken.tokenType === T.FUN&&(nextToken.tokenType===T.STATIC||nextToken.tokenType===T.AT)) {//如果读取的Token是fun，那么表示再往后一个就是函数名
+                    if (tempNextToken.tokenType === T.FUN && (nextToken.tokenType === T.STATIC || nextToken.tokenType === T.AT)) {//如果读取的Token是fun，那么表示再往后一个就是函数名
                         pushFun(lookAheadXToken(2).value)
                     } else if (nextToken.tokenType === T.FUN) {//如果当前就是fun，那么下一个就是函数名
                         pushFun(tempNextToken.value)

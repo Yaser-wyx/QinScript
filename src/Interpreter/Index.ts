@@ -1,8 +1,8 @@
-import {getInterpreterInfo, InterpreterInfo} from "./InterpreterInfo";
-import {createFunByModuleFunDefStmt, Fun} from "./Fun";
+import {getInterpreter, Interpreter} from "./DataStruct/Interpreter";
+import {createFunByModuleFunDefStmt, Fun} from "./DataStruct/Fun";
 import {Stack} from "../Parser/DataStruct/Stack";
-import {getGlobalSymbolTable, GlobalSymbolTable} from "./SymbolTable";
-import {printInfo, printInterpreterError} from "../error/error";
+import {getGlobalSymbolTable, GlobalSymbolTable} from "./DataStruct/SymbolTable";
+import {printInfo, printInterpreterError} from "../Log";
 import {
     ArithmeticOperator,
     ArrayExp,
@@ -28,15 +28,21 @@ import {
     VariableExp,
     WhileStmt
 } from "../Parser/DataStruct/ASTNode";
-import {getValueType, IDWrap, Reference, Variable, VARIABLE_TYPE, VarTypePair} from "./Variable";
-import {QSModule} from "./Module";
+import {getValueType, IDWrap, Reference, Variable, VARIABLE_TYPE, VarTypePair} from "./DataStruct/Variable";
+import {QSModule} from "./DataStruct/Module";
 import {QSFunMap, runLib} from "../QSLib";
 
 let _ = require("lodash");
 let runTimeStack = new Stack();//运行时栈
 let funRunTimeStack = new Stack<Fun>();//函数运行时栈
-let interpreterInfo: InterpreterInfo;
+let interpreter: Interpreter;
 let symbolTable: GlobalSymbolTable;
+
+export function getCurRunningModule() {
+    if (interpreter.curModule) {
+        return interpreter.curModule.moduleName;
+    }
+}
 
 //统一的变量获取函数，根据传入变量名列表以及参数，到具体的符号表中读取变量
 //TODO 修改获取方式
@@ -77,18 +83,18 @@ function popFromStack() {
 }
 
 let curBlock = (): BlockStmt => {
-    return <BlockStmt>interpreterInfo.curBlock;
+    return <BlockStmt>interpreter.curBlock;
 };
 let curModuleName = (): string => {
     //@ts-ignore
-    return interpreterInfo.curModule.moduleName;
+    return interpreter.curModule.moduleName;
 };
 let curModule = (): QSModule => {
     //@ts-ignore
-    return interpreterInfo.curModule
+    return interpreter.curModule
 };
 let curFun = (): Fun => {
-    return <Fun>interpreterInfo.curFun;
+    return <Fun>interpreter.curFun;
 };
 let wrapToVarTypePair = (valueOrReference: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
     return new VarTypePair(type, valueOrReference, varName);
@@ -97,7 +103,7 @@ const nullValue: VarTypePair = wrapToVarTypePair();
 
 //@ts-ignore
 let getModuleByName = (moduleName: string): QSModule => {
-    let qsModule = interpreterInfo.getModuleByName(moduleName);
+    let qsModule = interpreter.getModuleByName(moduleName);
     if (qsModule) {
         return qsModule;
     } else {
@@ -109,10 +115,10 @@ export function runInterpreter() {
     printInfo("开始执行！");
     printInfo("====================代码执行区输出====================", false);
     console.log("\n");
-    interpreterInfo = getInterpreterInfo();
+    interpreter = getInterpreter();
     symbolTable = getGlobalSymbolTable();
-    if (interpreterInfo.enter) {
-        let mainFunDefStmt = interpreterInfo.enter;//获取main节点
+    if (interpreter.enter) {
+        let mainFunDefStmt = interpreter.enter;//获取main节点
         switchModule(mainFunDefStmt.moduleName);//切换module
         createAndPushFun(mainFunDefStmt);//将函数压栈
         runFun();//执行
@@ -130,7 +136,7 @@ function createFun(funDefStmt: ModuleFunDefStmt) {
 
 function pushFun(fun: Fun) {
     funRunTimeStack.push(fun);//将fun压栈
-    interpreterInfo.curFun = fun;//设置当前fun
+    interpreter.curFun = fun;//设置当前fun
 }
 
 function createAndPushFun(funDefStmt: ModuleFunDefStmt) {
@@ -143,15 +149,14 @@ function popAndSetFun() {
     if (!funRunTimeStack.isEmpty()) {
         funRunTimeStack.pop();
         if (!funRunTimeStack.isEmpty()) {
-            interpreterInfo.curFun = funRunTimeStack.peek();//设置当前fun
+            interpreter.curFun = funRunTimeStack.peek();//设置当前fun
         }
     }
 }
 
-
 function switchModule(moduleName: string) {
     let curModule = getModuleByName(moduleName);//获取要切换的module
-    interpreterInfo.setCurModule(curModule);//设置当前module
+    interpreter.setCurModule(curModule);//设置当前module
     if (!curModule.hasInit) {
         //如果没有初始化
         initModule(curModule);//初始化module
@@ -172,6 +177,9 @@ function initModule(qsModule: QSModule) {
             printInterpreterError(varName + "模块变量缺失！");
         }
     })
+}
+function importModule() {
+
 }
 
 function runFun(): VarTypePair {
@@ -213,15 +221,15 @@ let statementExecutorMap = {
 
 function runBlockStmt(block: BlockStmt) {
     let body = block.body;
-    pushToStack(interpreterInfo.curBlock);//保存当前block
-    interpreterInfo.curBlock = block;
+    pushToStack(interpreter.curBlock);//保存当前block
+    interpreter.curBlock = block;
     for (let index = 0; index < body.length; index++) {
         let statement: Statement = body[index];//获取block中的语句
         if (runStmt(statement)) {
             break;
         }
     }
-    interpreterInfo.curBlock = <BlockStmt>popFromStack();//恢复当前block
+    interpreter.curBlock = <BlockStmt>popFromStack();//恢复当前block
 }
 
 function runAssignStmt(assignStmt: AssignStmt) {
@@ -341,7 +349,7 @@ function runCallExp(callExp: CallExp): VarTypePair {
             popAndSetFun();
             return value;//返回执行结果
         } else {
-            printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！");
+            printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！", callExp.lineNo);
             return nullValue;
         }
     } else {
@@ -358,7 +366,7 @@ function runCallExp(callExp: CallExp): VarTypePair {
             }
         } else {
             //既不是原生函数也不是自定义函数
-            printInterpreterError(callExp.callee + "函数未定义 ");
+            printInterpreterError(callExp.callee + "函数未定义 ", callExp.lineNo);
             return nullValue;
         }
     }
@@ -447,7 +455,7 @@ function runBinaryExp(binaryExp: BinaryExp): VarTypePair {
         case OPERATOR_TYPE.ARITHMETIC_OPERATOR:
             return handleArithmetic(left, right, <ArithmeticOperator>binaryExp.operator.arithmeticOperator);
         default:
-            printInterpreterError(binaryExp.operator + "未定义的运算符！");
+            printInterpreterError(binaryExp.operator + "未定义的运算符！", binaryExp.lineNo);
             return nullValue;
     }
 }
@@ -491,7 +499,7 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
                         operand.value++;
                     } else {
                         //报错
-                        printInterpreterError("只有变量才能进行自增操作");
+                        printInterpreterError("只有变量才能进行自增操作", unaryExp.lineNo);
                     }
                     break;
                 case OPERATOR.BIT_NOT:
@@ -507,7 +515,7 @@ function runUnaryExp(unaryExp: UnaryExp): VarTypePair {
                         operand.value--;
                     } else {
                         //报错
-                        printInterpreterError("只有变量才能进行自减操作");
+                        printInterpreterError("只有变量才能进行自减操作", unaryExp.lineNo);
                     }
                     break;
             }
@@ -591,12 +599,12 @@ function runVariableExp(variableExp: VariableExp): VarTypePair {
                 idVar.reference.referenceIndex = varIDWrap.referenceIndex
             }
         } else {
-            printInterpreterError("运行时错误，变量引用丢失！")
+            printInterpreterError("运行时错误，变量引用丢失！", variableExp.lineNo);
         }
         idVar.resetValue();
         return idVar;
     } else {
-        printInterpreterError(varIDWrap.idName + "变量未定义！");
+        printInterpreterError(varIDWrap.idName + "变量未定义！", variableExp.lineNo);
         return nullValue;
     }
 }

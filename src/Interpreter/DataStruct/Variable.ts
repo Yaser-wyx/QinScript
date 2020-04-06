@@ -1,6 +1,6 @@
 //变量包装类
-import {BlockStmt, Exp, VariableDef} from "../Parser/DataStruct/ASTNode";
-import {printInterpreterError} from "../error/error";
+import {BlockStmt, Exp, VariableDef} from "../../Parser/DataStruct/ASTNode";
+import {printInterpreterError} from "../../Log";
 
 export enum VARIABLE_TYPE {
     STRING,

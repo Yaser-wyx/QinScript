@@ -1,7 +1,7 @@
-import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
+import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 import {Variable, VarTypePair} from "./Variable";
 import {FunSymbolTable} from "./SymbolTable";
-import {printInterpreterError} from "../error/error";
+import {printInterpreterError} from "../../Log";
 
 export enum FUN_TYPE {//函数类型
     GENERAL,//普通函数

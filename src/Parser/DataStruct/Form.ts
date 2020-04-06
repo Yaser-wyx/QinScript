@@ -1,7 +1,8 @@
 import {writeToFile} from "../../Utils/utils";
-import {addBuildFormError, printBuildFormError, printFatalError, printWarn} from "../../error/error";
+import {addBuildFormError, printBuildFormError, printFatalError, printWarn} from "../../Log";
 import {E, Production} from "./Production";
 import {ActionFormItem, ActionStatus, GotoFormItem} from "./FormItem";
+import {ACTION_TABLE_FILE, GOTO_TABLE_FILE} from "../../Cli/config";
 
 export class GotoForm {
     private items: Array<object>;//数组下标表示状态码
@@ -70,7 +71,7 @@ export class GotoForm {
             str += "------------------------------------------------\n";
 
         });
-        writeToFile(str, "Goto.table.txt");
+        writeToFile(str, GOTO_TABLE_FILE);
     }
 }
 
@@ -193,6 +194,6 @@ export class ActionForm {
             }
             str += "------------------------------------------------\n";
         });
-        writeToFile(str, "Action.table.txt");
+        writeToFile(str, ACTION_TABLE_FILE);
     }
 }

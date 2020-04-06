@@ -1,7 +1,7 @@
 //词法分析器
-import {EOF, keywordTable, LexerToken, Token} from "./Datastruct/Token";
+import {EOF, keywordTable, LexerToken, Token} from "./DataStruct/Token";
 import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "./ScannerUtils";
-import {printErr, printInfo, printLexerError} from "../error/error";
+import {printErr, printInfo, printLexerError} from "../Log";
 import {readFromFile} from "../Utils/utils";
 import {T} from "../Parser/DataStruct/V_T";
 
@@ -238,7 +238,7 @@ function skipAnnotation(start: string): boolean | LexerToken {
 }
 
 
-function analyzeCodeToToken() {
+function convertCodeToToken() {
     //读取源代码文件，并识别全部的token，保存到tokens数组中
     let nowChar: string;
     let token: Token;
@@ -292,7 +292,7 @@ export async function initLexer(file: string): Promise<boolean> {
     lineIndex = 1;
     errorTokens = [];
     printInfo("解析Token...");
-    analyzeCodeToToken();
+    convertCodeToToken();
     printInfo("Token解析完成！");
     let EOFToken = new Token();
     EOFToken.tokenType = T.EOF;

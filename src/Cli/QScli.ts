@@ -1,7 +1,7 @@
 import * as readline from "readline"
 import * as fs from "fs";
-import {printFatalError} from "../error/error";
-import {parseModule} from "../Parser/ParseModule";
+import {printFatalError} from "../Log";
+import {parseSingleModule} from "../Parser/ParseModule";
 import {GRAMMAR_FILE} from "./config";
 
 

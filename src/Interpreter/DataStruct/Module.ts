@@ -1,6 +1,6 @@
 //程序中每一个模块的信息
 
-import {ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
+import {ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 
 export class QSModule {
     private _moduleName: string = "";//当前模块名字
