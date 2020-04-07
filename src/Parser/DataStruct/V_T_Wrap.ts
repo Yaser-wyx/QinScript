@@ -1,12 +1,13 @@
 //是一个终结符与非终结符的包装类，用于原始Token的规约，以及转化为AST时使用
 import {V, V_T} from "./V_T";
-import {Token} from "../../Lexer/Datastruct/Token";
+import {Token} from "../../Lexer/DataStruct/Token";
 import {Production} from "./Production";
 import {isArray} from "util";
 
 export class V_T_Wrap {
     private _isT: boolean = false;//是否是终结符，默认是非终结符
     private symbolType: V_T;
+    lineNo: number=0;//行号
     //如果是终结符则有Token，否则没有Token
     token?: Token;
     children: object = {};
@@ -86,8 +87,11 @@ export class V_T_Wrap {
         }
     }
 
-    constructor(symbolType: V_T, token?: Token) {
+    constructor(symbolType: V_T, lineNo?:number,token?: Token) {
         this.symbolType = symbolType;
+        if (lineNo != null) {
+            this.lineNo = lineNo;
+        }
         if (token) {
             //如果是终结符，还需要设置Token
             this.token = token;
@@ -131,6 +135,9 @@ export function createVTByProduction(production: Production, vtList: Array<V_T_W
     let vtWrap = new V_T_Wrap(V[production.key]);
     vtList.forEach(item => {
         vtWrap.pushChild(item);
+        if (!vtWrap.lineNo&&item.lineNo>0){
+            vtWrap.lineNo = item.lineNo
+        }
     });
     return vtWrap;
 }

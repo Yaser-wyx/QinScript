@@ -1,10 +1,6 @@
-import {main} from "../main";
-// main();
-let array = [1, 2, [3, 4, [5, 6, [7, 8]]]];
-let index = [2, 2, 2, 1];
-// console.log(array[2][2][2][1])
-let now:any = array;
-for (let i = 0; i < index.length; i++) {
-    now = now[index[i]];
-}
-console.log(now)
+import {x} from "./test2";
+import {y} from "./test3";
+
+
+console.log("开始执行");
+console.log(x);

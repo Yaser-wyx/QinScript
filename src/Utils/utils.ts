@@ -1,8 +1,6 @@
 //工具包
-
-
 import * as fs from "fs";
-import {printFatalError} from "../error/error";
+import {printFatalError} from "../Log";
 
 export async function readFromFile(path: string): Promise<string> {
     //读取文件流

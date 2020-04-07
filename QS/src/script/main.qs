@@ -1,15 +1,21 @@
 @module:Main;
-let res=[44,53,12,1,6,9,12];
-fun main(){
-  let x = [1,2,3,1,2,2,222222];
-  print(res);
-  let array = [x, true, [3, "asds", [5, null, [7,bubble_sort(res,7)]]]];
-  //let a = array[2][2];
-  //a=12;
-  print(array);
-  print(a);
+import:Test;
 
+let res = revert("这是Main模块的res");
+
+fun main(){
+  print(res);
+  print(Test::revert(res));
 }
+fun revert(str){
+    let temp = "";
+    let index = len(str)-1;
+    while(index>=0){
+        temp = temp + str[index--];
+    }
+    return temp;
+}
+
 let a = "测试字符串";
 fun bubble_sort(array , length){//冒泡排序
     let i;

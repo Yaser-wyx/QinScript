@@ -1,9 +1,9 @@
 //测试词法分析器
 import {getNextToken, hasToken, initLexer} from "../Lexer/Lexer";
-import {Token} from "../Lexer/Datastruct/Token";
+import {Token} from "../Lexer/DataStruct/Token";
 import {T} from "../Parser/DataStruct/V_T";
 import {writeToFile} from "../Utils/utils";
-import {TEST_FILE} from "../Cli/config";
+import {PROJECT_DIR, TOKEN_OUT_FILE} from "../Cli/config";
 
 
 function printToken(token: Token, index: number) {
@@ -25,7 +25,7 @@ async function testLexer(filePath) {
         index++;
         str += printToken(getNextToken(), index);
     }
-    await writeToFile(str, "src/test.out.tokens");
+    await writeToFile(str, TOKEN_OUT_FILE);
 }
 
-testLexer(TEST_FILE);
+testLexer(PROJECT_DIR);

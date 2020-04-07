@@ -1,6 +1,6 @@
 //变量包装类
-import {BlockStmt, Exp, VariableDef} from "../Parser/DataStruct/ASTNode";
-import {printInterpreterError} from "../error/error";
+import {BlockStmt, Exp, VariableDef} from "../../Parser/DataStruct/ASTNode";
+import {printInterpreterError} from "../../Log";
 
 export enum VARIABLE_TYPE {
     STRING,
@@ -12,18 +12,17 @@ export enum VARIABLE_TYPE {
     REFERENCE//引用变量
 }
 
+//ID可能是单独的一个标识符，也可能是其它模块的标识符，也可能是复合体
 export class IDWrap {
-    private _idName: string;
-    private _moduleName?: string;
-    private _isStatic: boolean;
-    private _isModule: boolean;
-    private _referenceIndex: Array<string> = [];
+    private readonly _idName: string;//变量名
+    private readonly _moduleName?: string;//变量所处模块名，如果为空，则表示是当前模块的变量，不为空的表示该变量引用的是其它模块的变量
+    private readonly _isStatic: boolean;//是否是静态变量
+    private _referenceIndex: Array<string> = [];//id引用链
 
-    constructor(idName: string, isStatic: boolean, isModule: boolean, moduleName?: string) {
+    constructor(idName: string, isStatic: boolean, moduleName?: string) {
         this._idName = idName;
         this._moduleName = moduleName;
         this._isStatic = isStatic;
-        this._isModule = isModule;
     }
 
     get idName(): string {
@@ -39,10 +38,6 @@ export class IDWrap {
 
     get isStatic(): boolean {
         return this._isStatic;
-    }
-
-    get isModule(): boolean {
-        return this._isModule;
     }
 
     get referenceIndex(): Array<string> {
@@ -128,7 +123,7 @@ export class Reference {
         let nowValue = this.referencedVar.getValue();
         if (this.referenceIndex) {
             //如果存在index
-            if (this.referencedType === VARIABLE_TYPE.ARRAY) {
+            if (this.referencedType === VARIABLE_TYPE.ARRAY||this.referencedType === VARIABLE_TYPE.STRING) {
                 //如果是array，此时referenceIndex是一个数组形式
                 for (let i = 0; i < this.referenceIndex.length; i++) {
                     nowValue = nowValue[this.referenceIndex[i]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
@@ -136,8 +131,11 @@ export class Reference {
                         printInterpreterError("数组越界！");
                     }
                 }
-            } else {
+            } else if (this.referencedType === VARIABLE_TYPE.COMPLEXUS){
                 //TODO 复合体
+            }else{
+                //不能有数组下标
+                return null;
             }
         }
         return nowValue;
@@ -163,7 +161,7 @@ export class VarTypePair {
 
     resetValue() {
         //重置值，因为在加入了对引用变量的索引后，当前的值已经过期了，需要重新检索值
-        if (this.reference){
+        if (this.reference) {
             this.value = this.reference.getReferenceValue();
         }
     }
@@ -183,8 +181,7 @@ export class Variable {
     private _variableValue: any = null;//变量值在执行的时候赋值
     private _variableType: VARIABLE_TYPE = VARIABLE_TYPE.NULL;//变量类型，默认为null
     private readonly _varInitExp: Exp | null = null;//变量初始化表达式
-    //是否定义了，因为所有变量会在生成语法树的时候加入到符号表中，此时只是占个位置，不属于定义操作
-    private _hasDeclared: boolean = false;
+    private _hasDeclared: boolean = false;//是否定义了，对于模块变量，可能出现定义了，但没有初始化的情况
     private isStatic: boolean = false;//是否为静态变量
     private isModuleVar: boolean = false;//是否是模块变量，只有模块变量是可以导出的
     private readonly _moduleName: string;//所处模块名

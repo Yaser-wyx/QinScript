@@ -1,7 +1,7 @@
-import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../Parser/DataStruct/ASTNode";
+import {BlockStmt, FunDeclaration, ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 import {Variable, VarTypePair} from "./Variable";
 import {FunSymbolTable} from "./SymbolTable";
-import {printInterpreterError} from "../error/error";
+import {printInterpreterError} from "../../Log";
 
 export enum FUN_TYPE {//函数类型
     GENERAL,//普通函数
@@ -48,12 +48,12 @@ export class Fun {//普通函数
         }
     }
 
-    getVariable(varName: string, blockStatement: BlockStmt) {
+    getVariable(varName: string, blockStatement: BlockStmt): Variable | null {
         return this._funSymbolTable.getVariable(this._moduleName, varName, blockStatement);
     }
 
     pushVariable(blockStatement: BlockStmt, varTypePair: VarTypePair) {
-        //添加变量到函数符号表中
+        //添加变量到函数符号表中，函数符号表中的变量均为局部变量
         let variable: Variable = new Variable(this._moduleName);
         variable.initLocalVar(varTypePair, blockStatement);//使用varTypePair来对当前变量进行赋值，varTypePair可能是对变量的一个引用
         this._funSymbolTable.pushVariable(variable);
@@ -92,6 +92,10 @@ export class Fun {//普通函数
     }
 }
 
+/**
+ * 根据函数的语法树构建fun对象
+ * @param moduleFunDefStmt 指定的函数语法树
+ */
 export function createFunByModuleFunDefStmt(moduleFunDefStmt: ModuleFunDefStmt) {
     let funType: FUN_TYPE = moduleFunDefStmt.isStatic ? FUN_TYPE.STATIC : FUN_TYPE.GENERAL;
     return new Fun(moduleFunDefStmt.moduleName, moduleFunDefStmt.getFunName(), funType, moduleFunDefStmt.funDeclaration);

@@ -216,11 +216,11 @@ ID;
 
 ### 语法分析器 
 
-语法分析源码在[parser文件夹下](src/Parser)，主程序是[ParseModule.ts](src/Parser/ParseModule.ts)，使用LR1语法分析方法，主要分为两个部分，一个部分是[解析器](src/Parser/AnalyzeGrammar/Index.ts)，用于解析[语法文件](grammar.txt)，并生成对应的LR1分析表，另一部分是[语法树生成器](src/Parser/BuildAST/Index.ts)，用于构建语法树，供解释器执行时使用。
+语法分析源码在[parser文件夹下](src/Parser)，主程序是[ParseModule.ts](src/Parser/ParseModule.ts)，使用LR1语法分析方法，主要分为两个部分，一个部分是[解析器](src/Parser/AnalyzeGrammar/Index.ts)，用于解析[语法文件](QS/src/grammar/grammar.txt)，并生成对应的LR1分析表，另一部分是[语法树生成器](src/Parser/BuildAST/Index.ts)，用于构建语法树，供解释器执行时使用。
 
 ### 解释器
 
-解释器源码在[Interpreter文件夹](src/Interpreter)下，主程序是[Interpreter.ts](src/Interpreter/Interpreter.ts)。
+解释器源码在[Interpreter文件夹](src/Interpreter)下，主程序是[Index.ts](src/Interpreter/Index.ts)。
 ### 虚拟机
 
 #### TODO
@@ -280,7 +280,7 @@ fun getSum(max){
 
 #### 进度
 
-- [x] [文法设计（初稿）](grammar.temp.txt)
+- [x] [文法设计（初稿）](QS/src/grammar/grammar.temp.txt)
 - [x] 词法分析
 - [x] LR1分析表构建
 - [x] AST部分构建
@@ -295,7 +295,7 @@ fun getSum(max){
 
 - [x] IF语句
 - [x] 多维数组
-- [ ] 多模块加载
+- [x] 多模块加载
 - [ ] 静态函数
 - [ ] QS标准库
 - [ ] 命令行工具

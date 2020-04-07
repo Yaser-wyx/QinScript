@@ -1,8 +1,9 @@
-import {VarTypePair} from "../Interpreter/Variable";
-import {print} from "./Core";
+import {VarTypePair} from "../Interpreter/DataStruct/Variable";
+import {len, print} from "./Core";
 
 export const QSFunMap = {
-    print: print
+    print: print,
+    len: len,
 };
 
 export function runLib(callee: Function, args: Array<VarTypePair>) {
@@ -11,5 +12,5 @@ export function runLib(callee: Function, args: Array<VarTypePair>) {
         //转换参数
         transferredArgs.push(arg.value)
     });
-    callee(transferredArgs);
+    return callee(transferredArgs);
 }

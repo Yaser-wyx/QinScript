@@ -25,7 +25,7 @@ VariableDef ->  VarDefStmt
 # 所有变量的定义语句，对变量类型不加区分
 VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
 
-# 用于处理是所有的变量表达式
+# 用于处理所有的变量表达式
 VariableExp -> IDExp ArraySub | IDExp
 IDExp -> ID | ID DOT IDExp | AT IDExp | ID MODULE_SCOPE IDExp
 

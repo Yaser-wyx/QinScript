@@ -1,5 +1,5 @@
 import {readFromFile, writeToFile} from "../Utils/utils";
-import {GRAMMAR_FILE} from "../Cli/config";
+import {GRAMMAR_FILE, T_FILE, V_FILE} from "../Cli/config";
 
 let v = new Set();
 let t = new Set();
@@ -22,12 +22,12 @@ async function read() {
     let tData = "";
     v.forEach(item => {
         vData += item + ",\n";
-    })
+    });
     t.forEach(item => {
         tData += item + ",\n";
-    })
-    await writeToFile(vData, "V.txt", false);
-    await writeToFile(tData, "T.txt", false);
+    });
+    await writeToFile(vData, V_FILE, false);
+    await writeToFile(tData, T_FILE, false);
 }
 
 read();

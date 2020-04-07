@@ -1,5 +1,5 @@
-import { parseModule} from "../Parser/ParseModule";
-import {GRAMMAR_FILE, TEST_FILE} from "../Cli/config";
+import { parseSingleModule} from "../Parser/ParseModule";
+import {GRAMMAR_FILE, PROJECT_DIR} from "../Cli/config";
 import {tree} from "../Utils/utils";
 import {buildLRAnalyzeForm} from "../Parser/AnalyzeGrammar";
 
