@@ -110,13 +110,13 @@ export function printParseModuleError(Token: Token, formItemErrorMsg: string) {
     printErr(errorMsg);
 }
 
-export function printBuildASTError(ASTError: string,lineNo?:number) {
+export function printBuildASTError(ASTError: string, lineNo?: number) {
     let errorMsg = "====================语法树构建错误====================\n";
     const parsingModule = getCurParsingModuleInfo();
-    errorMsg += `错误模块：${parsingModule.moduleName}\n`;
+    errorMsg += `出错模块：${parsingModule.moduleName}\n`;
     errorMsg += `错误模块路径：${parsingModule.path}\n`;
-    if (lineNo){
-        errorMsg+=`错误行号：${lineNo}\n`
+    if (lineNo) {
+        errorMsg += `错误行号：${lineNo}\n`
     }
     errorMsg += "语法树构建错误信息：\n";
     errorMsg += "   " + ASTError + "\n";
@@ -124,15 +124,14 @@ export function printBuildASTError(ASTError: string,lineNo?:number) {
     printFatalError(errorMsg);
 }
 
-export function printInterpreterError(interpreterError: string,lineNo?:number) {
+export function printInterpreterError(interpreterError: string, lineNo?: number) {
     let errorMsg = "====================解释器运行期错误====================\n";
     const runningModule = getCurRunningModule();
-    if (runningModule){
-        errorMsg += `错误模块：${runningModule}\n`;
-
+    if (runningModule) {
+        errorMsg += `出错模块：${runningModule}\n`;
     }
-    if (lineNo){
-        errorMsg+=`错误行号：${lineNo}\n`
+    if (lineNo) {
+        errorMsg += `错误行号：${lineNo}\n`
     }
     errorMsg += "错误信息：\n";
     errorMsg += "   " + interpreterError + "\n";

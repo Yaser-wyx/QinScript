@@ -1,4 +1,4 @@
-打印时间：Mon Apr 06 2020 10:59:12 GMT+0800 (China Standard Time)
+打印时间：Tue Apr 07 2020 15:10:48 GMT+0800 (China Standard Time)
 
 ====================LR(1)分析表构造错误====================
     Action表发生移进规约冲突；

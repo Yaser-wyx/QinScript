@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2020. yaser. All rights reserved
+ * Description:
+ */
+
 import {getInterpreter, Interpreter} from "./DataStruct/Interpreter";
 import {createFunByModuleFunDefStmt, Fun} from "./DataStruct/Fun";
 import {Stack} from "../Parser/DataStruct/Stack";
@@ -44,30 +49,73 @@ export function getCurRunningModule() {
     }
 }
 
-//统一的变量获取函数，根据传入变量名列表以及参数，到具体的符号表中读取变量
-//TODO 修改获取方式
-function getVariable(idNameOrWrap: string | IDWrap) {
-    //先从当前函数的符号表中获取
-    let varName: string = <string>idNameOrWrap;
-    if (idNameOrWrap instanceof IDWrap) {
-        varName = idNameOrWrap.idName;
+/**
+ * 测试待获取的id是否可以使用，如果不可使用，则直接退出解释器
+ * 可以使用需要满足三个条件
+ * 1. 指定模块是否在当前模块中导入
+ * 2. 这些变量或函数是否进行了导出
+ * 3. 指定模块是否进行了加载
+ * @param moduleName
+ * @param idName 待获取的id
+ */
+
+function testIdIsAvailable(moduleName: string, idName: string) {
+    const targetModule = getModuleByName(moduleName);//获取目标模块
+    if (curModule().moduleHasImport(moduleName)) {//检查当前模块是否导入目标模块
+        if (targetModule.hasExport(idName)) {//检查目标模块是否导出
+            if (!targetModule.hasLoad) {
+                //如果模块没有加载，则执行加载操作
+                loadModule(moduleName);
+            }
+        } else {
+            printInterpreterError(`模块${moduleName}没有导出成员${idName}！`);
+        }
+    } else {
+        printInterpreterError(`模块${moduleName}没有导入！`);
     }
-    let fun = curFun();
+}
+
+/**
+ * 统一的变量获取函数
+ * @param idWrap 待获取的变量信息
+ */
+function getVariable(idWrap: IDWrap): Variable | null {
     let variable: Variable | null = null;
-    if (fun) {
-        //如果存在函数
-        variable = fun.getVariable(varName, curBlock());
+    let varName: string = idWrap.idName;//获取变量名
+    let moduleName = curModuleName();
+    // 如果不存在模块名
+    if (!idWrap.getModuleName()) {
+        //从当前函数的符号表中获取
+        let fun = curFun();
+        if (fun) {
+            //如果当前在函数内，则优先从函数符号表中获取变量
+            variable = fun.getVariable(varName, curBlock());
+        }
+    } else {
+        //如果存在模块名，则需要测试是否可用
+        //@ts-ignore
+        moduleName = idWrap.getModuleName();
+        testIdIsAvailable(moduleName, varName);
     }
     if (!variable) {
-        //从函数中获取变量失败，则从全局符号表中获取
-        variable = symbolTable.getVariable(curModuleName(), varName);
+        //从全局符号表中获取
+        variable = symbolTable.getVariable(moduleName, varName);
     }
     return variable;
 }
 
 //函数的统一获取
 function getFun(funIDWrap: IDWrap) {
-    let funDefStmt = curModule().getModuleFunDefByFunName(funIDWrap.idName);
+    let funDefStmt: ModuleFunDefStmt | null;
+    let moduleName: string | null = funIDWrap.getModuleName();
+    const funName = funIDWrap.idName;
+    if (!moduleName) {//不存在模块名，也就是说实在当前模块中
+        funDefStmt = curModule().getModuleFunDefByFunName(funName);//获取函数AST
+    } else {
+        //存在模块名
+        testIdIsAvailable(moduleName, funName);//测试是否可用
+        funDefStmt = getModuleByName(moduleName).getModuleFunDefByFunName(funName);//获取函数AST
+    }
     if (funDefStmt) {
         return createFunByModuleFunDefStmt(funDefStmt);
     }
@@ -119,10 +167,12 @@ export function runInterpreter() {
     symbolTable = getGlobalSymbolTable();
     if (interpreter.enter) {
         let mainFunDefStmt = interpreter.enter;//获取main节点
-        switchModule(mainFunDefStmt.moduleName);//切换module
-        createAndPushFun(mainFunDefStmt);//将函数压栈
-        runFun();//执行
-        popAndSetFun();//弹出函数
+        const moduleName = mainFunDefStmt.moduleName;
+        loadModule(moduleName);//加载指定模块
+        switchToModule(moduleName);//切换到main函数所在的module
+        createAndPushFun(mainFunDefStmt);//构建main函数
+        runFun();//执行main函数
+        popAndSetFun();//执行完成，弹出main函数
     } else {
         printInterpreterError("缺少main函数！");
     }
@@ -130,6 +180,7 @@ export function runInterpreter() {
     printInfo("====================代码执行区输出====================", false);
 }
 
+//构建函数
 function createFun(funDefStmt: ModuleFunDefStmt) {
     return createFunByModuleFunDefStmt(funDefStmt);//构建fun
 }
@@ -143,43 +194,79 @@ function createAndPushFun(funDefStmt: ModuleFunDefStmt) {
     pushFun(createFun(funDefStmt));
 }
 
+/**
+ * 弹出函数，并将下一个函数设置为当前函数（如果存在的话）
+ */
 function popAndSetFun() {
     //从运行时栈中拿出当前fun，并销毁
     // TODO 对于静态函数不可以直接销毁
     if (!funRunTimeStack.isEmpty()) {
         funRunTimeStack.pop();
         if (!funRunTimeStack.isEmpty()) {
-            interpreter.curFun = funRunTimeStack.peek();//设置当前fun
-        }
-    }
-}
-
-function switchModule(moduleName: string) {
-    let curModule = getModuleByName(moduleName);//获取要切换的module
-    interpreter.setCurModule(curModule);//设置当前module
-    if (!curModule.hasInit) {
-        //如果没有初始化
-        initModule(curModule);//初始化module
-    }
-}
-
-function initModule(qsModule: QSModule) {
-    //初始化模块相关信息，将所有的模块变量做初始化操作
-    qsModule.hasInit = true;
-    qsModule.moduleVar.forEach(varName => {
-        let variable: Variable = <Variable>getVariable(varName);
-        if (variable) {
-            let initExp = variable.initModuleVar();//初始化模块变量
-            if (initExp) {
-                variable.setValue(runExpression(initExp));//给模块变量赋值
+            const fun = funRunTimeStack.peek();
+            if (fun && fun.moduleName === curModuleName()) {//如果函数存在，且是当前模块的函数
+                interpreter.curFun = fun;//设置当前fun
+                return;
             }
-        } else {
-            printInterpreterError(varName + "模块变量缺失！");
         }
-    })
+    }
+    interpreter.curFun = null;//设置为null
 }
-function importModule() {
 
+/**
+ * 切换到目标模块，并保存当前上下文环境
+ * @param moduleName 目标模块
+ */
+function switchToModule(moduleName: string) {
+    if (curModule()) {//如果当前存在模块
+        pushToStack(curModule());//将当前模块压栈
+    }
+    interpreter.curFun = null;//切换到新的模块后，当前函数是应为null，因为函数都保存在函数栈中，所以不需要再次保存
+    let nowModule = getModuleByName(moduleName);//获取要切换的module
+    interpreter.setCurModule(nowModule);//设置当前module
+}
+
+/**
+ * 恢复到之前的模块
+ */
+function recoverModule() {
+    let preModule = popFromStack();
+    if (preModule instanceof QSModule) {
+        interpreter.setCurModule(preModule);//恢复模块
+    } else {
+        printInterpreterError("运行时错误，模块恢复失败！");
+    }
+    const fun = funRunTimeStack.peek();
+    if (fun && fun.moduleName === curModuleName()) {
+        interpreter.curFun = fun;//恢复函数
+    }
+}
+
+function loadModule(moduleName: string) {
+    //加载指定模块，并将所有的模块变量做初始化操作
+    const preModule = curModule();
+    switchToModule(moduleName);//切换到目标模块
+    let nowModule = curModule();
+    if (!nowModule.hasLoad) {
+        //如果没有加载
+        nowModule.moduleVar.forEach(varName => {//对所有模块变量进行逐个初始化操作
+            let idWrap = new IDWrap(varName, false);
+            let variable = getVariable(idWrap);//获取要初始化的模块变量
+            if (variable) {
+                let initExp = variable.initModuleVar();//将该变量初始化为模块变量
+                if (initExp) {
+                    variable.setValue(runExpression(initExp));//给模块变量赋值
+                }
+            } else {
+                printInterpreterError(`模块${moduleName}没有${varName}模块变量！`);
+            }
+        });
+        nowModule.hasLoad = true;//将模块标记为加载完成。
+    }
+    if (preModule) {
+        //如果之前的模块存在，则进行恢复，否则不处理
+        recoverModule();//加载完成，切换为原来的模块
+    }
 }
 
 function runFun(): VarTypePair {
@@ -243,6 +330,7 @@ function runAssignStmt(assignStmt: AssignStmt) {
     }
 }
 
+//定义变量
 function runVariableDef(variableDef: VariableDef) {
     //todo 还可能是静态变量
     curFun().pushVariable(curBlock(), runVarDefStmt(variableDef.VarDefStmt));
@@ -547,8 +635,8 @@ function runLiteral(literal: Literal): VarTypePair {
 
 function runIDExp(idExp: IDExp): IDWrap {
     let referenceIndex = new Array<string>();//复合体的引用链表
-    let isStatic = idExp.idType === ID_TYPE.STATIC_ID;
-    let isModule = idExp.idType === ID_TYPE.MODULE_ID;
+    const isStatic = idExp.idType === ID_TYPE.STATIC_ID;
+    const isModule = idExp.idType === ID_TYPE.MODULE_ID;
     let varName: string;//变量名
     let moduleName: string | undefined = undefined;//变量所处模块名，不为空的前提是引用的是其它模块的变量
     let idArray = idExp.idArray;
@@ -556,13 +644,11 @@ function runIDExp(idExp: IDExp): IDWrap {
     if (isModule) {
         //如果是模块变量，则设置模块名
         moduleName = idArray[index++];
-        varName = idArray[index++];
-    } else {
-        //如果不是模块变量，则只需要设置varName
-        varName = idArray[index++];
     }
+    varName = idArray[index++];//设置变量名
+
     //对IDExp的结果进行包装处理
-    let idWrap: IDWrap = new IDWrap(varName, isStatic, isModule, moduleName);
+    let idWrap: IDWrap = new IDWrap(varName, isStatic, moduleName);
     //从id链中读取剩余的id
     for (; index < idArray.length; index++) {
         referenceIndex.push(idArray[index]);
@@ -583,23 +669,21 @@ function runVariableExp(variableExp: VariableExp): VarTypePair {
         //变量存在，并定义了
         let reference: Reference = new Reference(variable, variable.variableType);//将变量包装为引用
         let idVar: VarTypePair = wrapToVarTypePair(reference, VARIABLE_TYPE.REFERENCE, variable.variableName);//将引用包装成统一的格式进行回传
-        if (idVar.reference) {
-            //设置引用链
-            if (variableExp.arraySub) {
-                //如果要获取的是数组变量
-                //解析arraySub
-                let arraySub: Array<number> = [];
-                for (let i = 0; i < variableExp.arraySub.length; i++) {
-                    //@ts-ignore
-                    arraySub.push(runExpression(variableExp.arraySub[i]).value)
-                }
-                idVar.reference.referenceIndex = arraySub;
-            } else if (varIDWrap.referenceIndex.length > 0) {
-                //如果要获取的是一个复合体
-                idVar.reference.referenceIndex = varIDWrap.referenceIndex
+        //设置引用链
+        if (variableExp.arraySub) {
+            //如果要获取的是数组变量
+            //解析arraySub
+            let arraySub: Array<number> = [];
+            for (let i = 0; i < variableExp.arraySub.length; i++) {
+                //@ts-ignore
+                arraySub.push(runExpression(variableExp.arraySub[i]).value)
             }
-        } else {
-            printInterpreterError("运行时错误，变量引用丢失！", variableExp.lineNo);
+            //@ts-ignore
+            idVar.reference.referenceIndex = arraySub;
+        } else if (varIDWrap.referenceIndex.length > 0) {
+            //如果要获取的是一个复合体
+            //@ts-ignore
+            idVar.reference.referenceIndex = varIDWrap.referenceIndex
         }
         idVar.resetValue();
         return idVar;

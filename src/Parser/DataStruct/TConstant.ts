@@ -3,7 +3,8 @@ export const ID = "ID";
 export const ELSE = "ELSE";
 export const STATIC = "STATIC";
 export const DOT = "DOT";
-
+export const AT = "AT";
+export const MODULE_SCOPE = "MODULE_SCOPE";
 export const EXP = "Exp";
 export const UNARY_BEFORE_OPERATOR = "UnaryBeforeOperator";
 export const UNARY_AFTER_OPERATOR = "UnaryAfterOperator";

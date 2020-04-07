@@ -32,14 +32,14 @@ import {
 import {V_T_Wrap} from "../DataStruct/V_T_Wrap";
 import {T, V} from "../DataStruct/V_T";
 import {
-    ARRAY_SUB,
+    ARRAY_SUB, AT,
     COMMA,
     DOT,
     ELSE,
     EXP,
     FALSE,
     ID,
-    MAIN,
+    MAIN, MODULE_SCOPE,
     NULL,
     NUMBER,
     OPERATOR_LIST,
@@ -203,16 +203,16 @@ function buildModuleSelfDefine(vtWrap: V_T_Wrap) {
     if (moduleName) {
         qsModule.moduleName = moduleName.value;
     } else {
-        printBuildASTError("当前模块名缺失！",vtWrap.lineNo);
+        printBuildASTError("当前模块名缺失！", vtWrap.lineNo);
     }
 }
 
 function buildModuleImportDefine(vtWrap: V_T_Wrap) {
     let importModule: Token = <Token>vtWrap.getChildToken(ID);
     if (importModule) {
-        qsModule.pushImport(importModule.value);
+        qsModule.pushImportModule(importModule.value);
     } else {
-        printBuildASTError("要导入的模块名缺失！",vtWrap.lineNo)
+        printBuildASTError("要导入的模块名缺失！", vtWrap.lineNo)
     }
 }
 
@@ -221,7 +221,7 @@ function buildModuleExport(vtWrap: V_T_Wrap) {
     if (exportName) {
         qsModule.pushExport(exportName.value);
     } else {
-        printBuildASTError("要导出的元素名缺失！",vtWrap.lineNo)
+        printBuildASTError("要导出的元素名缺失！", vtWrap.lineNo)
     }
 }
 
@@ -257,12 +257,12 @@ function buildFunDef(vtWrap: V_T_Wrap) {
                 funDeclaration.params = (<ParamList>nodeList[0]).params;
                 return funDeclaration;
             } else {
-                printBuildASTError("函数定义丢失！",vtWrap.lineNo);
+                printBuildASTError("函数定义丢失！", vtWrap.lineNo);
             }
         }
         printBuildASTError("运行时错误，函数参数列表与函数体节点丢失！");
     } else {
-        printBuildASTError("函数名缺失！",vtWrap.lineNo);
+        printBuildASTError("函数名缺失！", vtWrap.lineNo);
     }
 }
 
@@ -285,7 +285,7 @@ function buildParamList(vtWrap: V_T_Wrap) {
                 return paramList;
             }
         } else {
-            printBuildASTError("形参列表参数名缺失！",vtWrap.lineNo);
+            printBuildASTError("形参列表参数名缺失！", vtWrap.lineNo);
         }
     } else {
         return new ParamList();//返回一个空的paramList用于占位
@@ -362,25 +362,31 @@ function buildIDExp(vtWrap: V_T_Wrap) {
     let testIDTypeBeforeSet = (idExp: IDExp) => {
         //对当前idType进行测试，只有为general时才可以设置
         if (idExp.idType !== ID_TYPE.GENERAL_ID && idExp.idType !== ID_TYPE.GENERAL_ID_LIST) {
-            printBuildASTError("ID有语法错误！",vtWrap.lineNo)
+            printBuildASTError("ID有语法错误！", vtWrap.lineNo)
         }
     };
     switch (vtWrap.childNums) {
-        case 1:
+        case 1: {
             //只有一个表明是单一id
             let idToken: Token = <Token>vtWrap.getChildToken(ID);
             return new IDExp(idToken.value);
-        case 2:
-            //两个表明是静态ID
-            let idExp: IDExp = <IDExp>ASTStack.peek();
-            if (idExp instanceof IDExp) {
-                testIDTypeBeforeSet(idExp);
-                idExp.idType = ID_TYPE.STATIC_ID;
-            } else {
-                printBuildASTError("运行时错误，需要IDExp类型的数据");
+        }
+        case 2: {
+            if (vtWrap.testChild(AT)) {
+                //两个表明是静态ID
+                let idExp: IDExp = <IDExp>ASTStack.peek();
+                if (idExp instanceof IDExp) {
+                    testIDTypeBeforeSet(idExp);
+                    idExp.idType = ID_TYPE.STATIC_ID;
+                } else {
+                    printBuildASTError("运行时错误，需要IDExp类型的数据");
+                }
+            }else{
+                printBuildASTError("无法匹配IDExp！", vtWrap.lineNo);
             }
             break;
-        case 3:
+        }
+        case 3: {
             if (vtWrap.testChild(DOT)) {
                 //是id链
                 let idExp: IDExp = <IDExp>ASTStack.peek();
@@ -392,8 +398,8 @@ function buildIDExp(vtWrap: V_T_Wrap) {
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
-            } else {
-                //只可能是模块ID
+            } else if (vtWrap.testChild(MODULE_SCOPE)){
+                //只可能是其它模块的ID
                 let idExp: IDExp = <IDExp>ASTStack.peek();
                 if (idExp instanceof IDExp) {
                     testIDTypeBeforeSet(idExp);
@@ -403,10 +409,13 @@ function buildIDExp(vtWrap: V_T_Wrap) {
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
+            }else{
+                printBuildASTError("无法匹配IDExp！", vtWrap.lineNo);
             }
             break;
+        }
         default:
-            printBuildASTError("无法匹配IDExp！",vtWrap.lineNo);
+            printBuildASTError("无法匹配IDExp！", vtWrap.lineNo);
     }
 }
 
@@ -425,7 +434,7 @@ function buildVarDefStmt(vtWrap: V_T_Wrap) {
             return new VarDefStmt(idToken.value)
         }
     } else {
-        printBuildASTError("变量定义时，变量名缺失！",vtWrap.lineNo);
+        printBuildASTError("变量定义时，变量名缺失！", vtWrap.lineNo);
     }
 }
 
@@ -494,7 +503,7 @@ function buildAssignStmt(vtWrap: V_T_Wrap) {
         if (exp instanceof Exp && variableExp instanceof VariableExp) {
             return new AssignStmt(variableExp, exp);
         } else {
-            printBuildASTError("赋值语句构建失败！",vtWrap.lineNo);
+            printBuildASTError("赋值语句构建失败！", vtWrap.lineNo);
         }
     } else {
 
@@ -580,7 +589,7 @@ function buildOperator(vtWrap: V_T_Wrap) {
             return operator;
         }
     } else {
-        printBuildASTError("运算符号缺失 ！",vtWrap.lineNo);
+        printBuildASTError("运算符号缺失 ！", vtWrap.lineNo);
     }
 }
 
@@ -681,10 +690,10 @@ function buildArraySub(vtWrap: V_T_Wrap) {
                 arraySub.pushSub(exp);
                 return arraySub;
             } else {
-                printBuildASTError("数据类型不匹配，需要匹配Exp",vtWrap.lineNo);
+                printBuildASTError("数据类型不匹配，需要匹配Exp", vtWrap.lineNo);
             }
         } else {
-            printBuildASTError("数据类型不匹配，需要匹配ArraySub",vtWrap.lineNo);
+            printBuildASTError("数据类型不匹配，需要匹配ArraySub", vtWrap.lineNo);
         }
     } else {
         let exp: Exp = <Exp>ASTStack.pop();
@@ -693,7 +702,7 @@ function buildArraySub(vtWrap: V_T_Wrap) {
             arraySub.pushSub(exp);
             return arraySub;
         } else {
-            printBuildASTError("数据类型不匹配，需要匹配Exp",vtWrap.lineNo);
+            printBuildASTError("数据类型不匹配，需要匹配Exp", vtWrap.lineNo);
         }
     }
 }
@@ -736,7 +745,7 @@ function buildIfStmt(vtWrap: V_T_Wrap) {
                 } else {
                     //如果else子句不是ifStmt，那么就表明出现了语法错误，因为当前else已经有值了，无法再加上另一个else子句
                     //该情况不可能出现。
-                    printBuildASTError("IF语句出现语法错误，else子句无法对应多个子语句",vtWrap.lineNo);
+                    printBuildASTError("IF语句出现语法错误，else子句无法对应多个子语句", vtWrap.lineNo);
                 }
             }
             ifStmt.alternate = alternateSTmt;

@@ -4,18 +4,18 @@ import {ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 
 export class QSModule {
     private _moduleName: string = "";//当前模块名字
-    private _importModules: Array<string> = [];//导入的模块名字
-    private _exportList: Array<string> = [];//需要导出的函数以及变量名
-    private _moduleVar: Array<string> = [];//模块变量名
-    private _moduleFun: object = {};//模块函数AST
-    private _hasInit:boolean=false;
+    private _importModules: Set<string> = new Set<string>();//导入的模块名字
+    private _exportSet: Set<string> = new Set<string>();//需要导出的函数名以及变量名
+    private _moduleVar: Array<string> = [];//该模块的模块变量名
+    private _moduleFun: object = {};//该模块函数的语法树
+    private _hasLoad: boolean = false;//默认是不对模块进行初始化操作
 
-    get hasInit(): boolean {
-        return this._hasInit;
+    get hasLoad(): boolean {
+        return this._hasLoad;
     }
 
-    set hasInit(value: boolean) {
-        this._hasInit = value;
+    set hasLoad(value: boolean) {
+        this._hasLoad = value;
     }
 
     pushModuleVar(varName: string) {
@@ -47,19 +47,19 @@ export class QSModule {
         this._moduleName = value;
     }
 
-    pushImport(importModule: string) {
-        this._importModules.push(importModule);
+    pushImportModule(importModule: string) {
+        this._importModules.add(importModule);
     }
 
     pushExport(exportName: string) {
-        this._exportList.push(exportName);
+        this._exportSet.add(exportName);
     }
 
-    get importModules(): Array<string> {
-        return this._importModules;
+    moduleHasImport(moduleName: string): boolean {
+        return this._importModules.has(moduleName);
     }
 
-    get exportList(): Array<string> {
-        return this._exportList;
+    hasExport(idName: string): boolean {
+        return this._exportSet.has(idName);
     }
 }
