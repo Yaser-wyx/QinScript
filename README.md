@@ -4,7 +4,7 @@
 
 QS全名QinScript，是一门面向过程的脚本语言，语法参考了JS与C，属于个人实验性质项目。
 
-*关于名字由来：51696ee698afe68891e5a5b3e58f8be79a84e5a793efbc88e7a7a6efbc89efbc8ce59ba0e4b8bae698afe8849ae69cace8afade8a880efbc8ce68980e4bba5e58f88e59ca8e5908ee99da2e58aa0e4ba86e4b8aa536372697074efbc8ce8bf99e5b0b1e69e84e68890e4ba8651696e5363726970740a*
+*关于名字由来：e59ba0e4b8bae8bf99e698afe68891e8aebee8aea1e79a84e7acace4b880e4b8aae7bc96e7a88be8afade8a880efbc8ce8808ce68891e78eb0e59ca8e79a84e5a5b3e69c8be58f8be4b99fe698afe68891e79a84e5889de6818befbc8ce68980e4bba5e5b0b1e794a8e4ba86e68891e5a5b3e58f8be79a84e5a793efbc8ce4b99fe5b0b1e698af51696eefbc88e7a7a6efbc89e4bd9ce4b8bae5bc80e5a4b4efbc8ce5908ce697b6e59ba0e4b8bae698afe8849ae69cace8afade8a880efbc8ce68980e4bba5e58f88e59ca8e5908ee99da2e58aa0e4ba86e4b8aa536372697074efbc8ce8bf99e5b0b1e69e84e68890e4ba8651696e5363726970740a*
 
 ## 语言元素
 
@@ -81,11 +81,11 @@ fun main(){
 
 ### 函数
 
-QS语言中函数是第一成员，函数有三种，一种是普通函数，一种是静态函数，还有一种是内部函数。
+QS语言中函数是第一成员，函数有三种，一种是普通函数，一种是静态函数，还有一种是内部函数，在QS中所有类型的函数都可以导出。
 
 #### 普通函数
 
-普通函数就是模块内函数，可以导出，拥有的功能与其他语言中的函数完全一致。
+普通函数拥有的功能与其他语言中的函数完全一致，因此不进行详细说明了，看样例即可。
 
 样例：
 
@@ -95,7 +95,7 @@ fun test(arg1,arg2){//普通函数定义
 }
 ```
 
-#### 静态函数、内部函数*
+#### 静态函数、内部函数
 
 静态函数属于模块内部，使用`static`关键自定义，内部函数属于静态函数内部，定义与普通函数一致，但需要加前缀`@`。
 
@@ -206,9 +206,71 @@ ID;
 [1, 2, 3];
 ```
 
-## QS实现细节
+### 注释
 
-​	QS使用模块化设计，一共有四个模块，词法分析器、语法分析器、解释器以及虚拟机。
+QS中支持单行注释与多行注释，具体的注释方式与C或JS完全一致。
+
+#### 单行注释
+
+```c
+//这是单行注释
+```
+
+#### 多行注释
+
+```c
+/*这是多行注释
+* 这是多行注释
+* 这是多行注释
+*/
+```
+
+## QS实现概述
+
+QS使用模块化设计，一共有四个模块，词法分析器、语法分析器、解释器以及虚拟机。
+
+**注：此处只是简单介绍一下，后续会有相关系列文章对源码进行解读。**
+
+### 开发环境介绍
+
+QS的实现准备分为两部分进行，第一部分包含：词法分析器、语法分析器以及解释器，第二部分为虚拟机，虚拟机包含：字节码执行器、JIT以及GC部分。
+
+对于开发语言的选择方面，我综合考虑了许多语言，包括：C、Java、Python、JavaScript、TypeScript以及C++。
+
+C由于太过基础，实现起来需要写的代码就比较多；Java语法糖实在太繁琐了，写起来束手束脚的；JS与PY虽然写起来比较方便，但没有类型，估计BUG会很难发现，最后敲定用C++和TS，准备第一部分用TS写，因为开发效率高，然后第二部分，也就是虚拟机部分用C++写，性能好。
+
+由于现在写的是第一部分，所以只需要搭建好TS部分的环境即可，在开发中，我没有使用任何辅助性框架，也就是说全部都是自己手写的。
+
+开发工具：WebStrom、Node.js、yarn、Clion、Visual Studio。
+
+前三个用于开发第一部分，后两个用于开发第二部分（暂时用不到）
+
+### 项目核心目录结构介绍
+
+![image-20200408102859776](picture/image-20200408102859776.png)
+
+ 此处简单介绍一下项目整体的目录结构。
+
+1. 根目录下的QS文件夹里面是一个QS项目。
+
+   - out文件夹里面是该QS项目的一些输出文件，包括构建的LR(1)分析表缓存数据，项目日志数据，语言终结符与非终结符和词法分析的Token等。
+
+   - src里面包含当前版本以及后续版本的语法文件和被测试的QS项目文件。
+
+2. 根目录下的Src文件夹里面是对QS实现的具体代码文件。
+
+   - cli是命令行工具，还需要完善。
+   - Interpreter是QS解释器。
+   - Lexer是词法分析器。
+   - Log为日志输出，包含对错误以及警告等信息的日志输出。
+   - Parser是语法分析程序，包含对语法文件的解析，语法树的生成等。
+   - Project主要是对QS项目路径的解析读取。
+   - QSLib是QS的原生库函数。
+   - Test是对一些模块进行单独的测试。
+   - Utils是一些工具类
+   - main是整体项目的入口。
+
+*PS：有一些项目目录下面比较混乱，一直没高兴去整理，还请见谅。*
 
 ### 词法分析器
 
@@ -221,47 +283,73 @@ ID;
 ### 解释器
 
 解释器源码在[Interpreter文件夹](src/Interpreter)下，主程序是[Index.ts](src/Interpreter/Index.ts)。
+
 ### 虚拟机
 
 #### TODO
 
 ## 运行方式
 
-1. 安装[node.js](https://nodejs.org/en/)。
-2. 安装[Yarn](https://classic.yarnpkg.com/en/)。
-3. 使用命令行到项目根目录下。
-4. 执行`yarn install`进行依赖安装。
-5. 执行`yarn run dev`运行。
+>1. 安装[node.js](https://nodejs.org/en/)。
+>2. 安装[Yarn](https://classic.yarnpkg.com/en/)。
+>3. 使用命令行到项目根目录下。
+>4. 执行`yarn install`进行依赖安装。
+>5. 执行`yarn run dev`运行。
 
-
+---
 
 
 ## 开发计划
+整体开发准备分为四个阶段。
 
 ### 当前开发状态：
-**第一阶段已完成。**
+>**第一阶段已完成，正在实现第二阶段的静态函数。**
+
 
 - 当前阶段运行样例
 ```js
 @module:Main;
-let res=100;
+import:Test;
+
+let res = reverseStr("这是Main模块的res");
+
 fun main(){
-    let max = res;
-    res = 0;
-    getSum(max);
-    print(res);
+  print(res);
+  print(Test::reverseStr(res));
 }
-fun getSum(max){
-    while(max>0){
-        res = res + max;
-        max--;
+fun reverseStr(str){
+    let temp = "";
+    let index = len(str)-1;
+    while(index>=0){
+        temp = temp + str[index--];
     }
+    return temp;
+}
+```
+
+```js
+@module:Test;
+export:res;
+export:reverseStr;
+let res=test("这是Test模块的res");
+
+fun test(str){
+    print(str);
+    return str;
+}
+
+fun reverseStr(str){
+    let temp = "";
+    let index = len(str)-1;
+    while(index>=0){
+        temp = temp + str[index--];
+    }
+    return temp;
 }
 ```
 - 输出结果：
 
-![Snipaste_2020-03-05_20-04-54](Snipaste_2020-03-05_20-04-54.png)
-
+![image-20200408104428888](picture/image-20200408104428888.png)
 
 ### 第一阶段
 
@@ -300,9 +388,18 @@ fun getSum(max){
 - [ ] QS标准库
 - [ ] 命令行工具
 
-### 第三阶段
+### 第三阶段（TODO）
 
-- 设计并实现虚拟机，包括设计一套字节码，编写字节码执行器、GC、以及JIT。
+- 设计并实现一部分虚拟机（先支持一些简单的语言元素，保证可以运行起来），包括设计一套字节码，编写字节码执行器、GC、以及JIT。
+
+### 第四阶段（TODO）
+
+- 实现完整的虚拟机
+
+### PS
+
+上述的第三以及第四阶段今年应该没有时间做，因为4月开始要准备考研事宜，所以只准备完成前两个阶段，后两个等考研结束再实现。
+
 
 ## 参考资料
 

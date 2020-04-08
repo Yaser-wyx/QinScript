@@ -1,5 +1,5 @@
 //是一个终结符与非终结符的包装类，用于原始Token的规约，以及转化为AST时使用
-import {V, V_T} from "./V_T";
+import {V, V_T} from "../../Lexer/DataStruct/V_T";
 import {Token} from "../../Lexer/DataStruct/Token";
 import {Production} from "./Production";
 import {isArray} from "util";

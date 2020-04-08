@@ -9,7 +9,7 @@ import {ActionForm, GotoForm} from "./DataStruct/Form";
 import {Stack} from "./DataStruct/Stack";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
 import {createSampleToken, Token} from "../Lexer/DataStruct/Token";
-import {T} from "./DataStruct/V_T";
+import {T} from "../Lexer/DataStruct/V_T";
 import {EOF} from "./DataStruct/Production";
 import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
 import {initBuildAST, pushBlock, pushFun, transferVTToASTNode} from "./BuildAST";

@@ -109,7 +109,7 @@ function getFun(funIDWrap: IDWrap) {
     let funDefStmt: ModuleFunDefStmt | null;
     let moduleName: string | null = funIDWrap.getModuleName();
     const funName = funIDWrap.idName;
-    if (!moduleName) {//不存在模块名，也就是说实在当前模块中
+    if (!moduleName) {//不存在模块名，也就是说是在当前模块中
         funDefStmt = curModule().getModuleFunDefByFunName(funName);//获取函数AST
     } else {
         //存在模块名
@@ -221,7 +221,7 @@ function switchToModule(moduleName: string) {
     if (curModule()) {//如果当前存在模块
         pushToStack(curModule());//将当前模块压栈
     }
-    interpreter.curFun = null;//切换到新的模块后，当前函数是应为null，因为函数都保存在函数栈中，所以不需要再次保存
+    interpreter.curFun = null;//切换到新的模块后，当前函数应为null，因为函数都保存在函数栈中，所以不需要再次保存
     let nowModule = getModuleByName(moduleName);//获取要切换的module
     interpreter.setCurModule(nowModule);//设置当前module
 }
@@ -427,6 +427,13 @@ function runCallExp(callExp: CallExp): VarTypePair {
         //如果存在，也就是说不是原生函数
         if (fun.paramList.length === callExp.argList.length) {
             //函数存在，且参数匹配
+            let preModule;
+            //判断要执行的函数是否在当前模块下，如果是则直接运行，不是则需要切换模块。
+            if (fun.moduleName) {
+                //存在模块名，说明不处于当前模块下，需要切换模块
+                preModule = curModule();
+                switchToModule(fun.moduleName);
+            }
             while (args.length > 0) {
                 pushToStack(args.pop());//将实参从右至左压入栈中，栈顶为最左边的元素
             }
@@ -435,6 +442,10 @@ function runCallExp(callExp: CallExp): VarTypePair {
             let value = runFun();
             //恢复上下文环境
             popAndSetFun();
+            if (preModule){
+                //如果之前的模块存在，则进行恢复，否则不处理
+                recoverModule();//加载完成，切换为原来的模块
+            }
             return value;//返回执行结果
         } else {
             printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！", callExp.lineNo);
@@ -635,14 +646,14 @@ function runLiteral(literal: Literal): VarTypePair {
 
 function runIDExp(idExp: IDExp): IDWrap {
     let referenceIndex = new Array<string>();//复合体的引用链表
-    const isStatic = idExp.idType === ID_TYPE.STATIC_ID;
-    const isModule = idExp.idType === ID_TYPE.MODULE_ID;
+    const isStatic = idExp.idType === ID_TYPE.STATIC_ID;//是否为静态
+    const isModule = idExp.idType === ID_TYPE.MODULE_ID;//是否为其它模块的
     let varName: string;//变量名
     let moduleName: string | undefined = undefined;//变量所处模块名，不为空的前提是引用的是其它模块的变量
     let idArray = idExp.idArray;
     let index = 0;
     if (isModule) {
-        //如果是模块变量，则设置模块名
+        //如果是其它模块的，则设置指定的模块名，表示非本模块id
         moduleName = idArray[index++];
     }
     varName = idArray[index++];//设置变量名
@@ -656,7 +667,6 @@ function runIDExp(idExp: IDExp): IDWrap {
     idWrap.referenceIndex = referenceIndex;
     return idWrap;
 }
-
 
 function runVariableExp(variableExp: VariableExp): VarTypePair {
     //解析idExp

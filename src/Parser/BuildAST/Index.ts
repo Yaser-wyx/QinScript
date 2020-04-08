@@ -30,7 +30,7 @@ import {
     WhileStmt
 } from "../DataStruct/ASTNode";
 import {V_T_Wrap} from "../DataStruct/V_T_Wrap";
-import {T, V} from "../DataStruct/V_T";
+import {T, V} from "../../Lexer/DataStruct/V_T";
 import {
     ARRAY_SUB, AT,
     COMMA,

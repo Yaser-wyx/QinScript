@@ -1,9 +1,14 @@
-//词法分析器
+/*
+ * Copyright (c) 2020. yaser. All rights reserved
+ * Description:词法分析器
+ */
+
 import {EOF, keywordTable, LexerToken, Token} from "./DataStruct/Token";
 import {isID, isIDStart, isKeyword, isNumber, isNumberStart, isSpace, isSymbol} from "./ScannerUtils";
 import {printErr, printInfo, printLexerError} from "../Log";
 import {readFromFile} from "../Utils/utils";
-import {T} from "../Parser/DataStruct/V_T";
+import {T} from "./DataStruct/V_T";
+import {printTokens} from "./PrintToken";
 
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符
@@ -271,20 +276,19 @@ function convertCodeToToken() {
             //换行符
             lineNo++;
             lineIndex = 1;
-        }else{
-            pushToken(createErrorLexerPair("无法识别的Token",nowChar), token);
+        } else {
+            pushToken(createErrorLexerPair("无法识别的Token", nowChar), token);
         }
         skipSpace();//跳过所有空格
     }
 }
 
-
-export async function initLexer(file: string): Promise<boolean> {
+export async function initLexer(filePath: string): Promise<boolean> {
     //初始化词法分析器
     //读取源码文件
     printInfo("初始化词法分析器...");
     printInfo("读取源码文件...");
-    code = await readFromFile(file);
+    code = await readFromFile(filePath);
     code += EOF;//在文件末尾添加标记，表示结束
     curCodeIndex = 0;
     tokens = [];
@@ -297,10 +301,10 @@ export async function initLexer(file: string): Promise<boolean> {
     let EOFToken = new Token();
     EOFToken.tokenType = T.EOF;
     EOFToken.value = "#";
-
     tokens.push(EOFToken);
+    printTokens(tokens,filePath);
     if (errorTokens.length > 0) {
-        printLexerError(errorTokens, file);//打印错误信息
+        printLexerError(errorTokens, filePath);//打印错误信息
         return false;
     }
     return true;//返回词法解析是否成功
@@ -316,7 +320,7 @@ export function lookAheadXToken(step: number): Token {
 }
 
 export function hasToken(): boolean {
-    return tokens.length!==0;
+    return tokens.length !== 0;
 }
 
 export function getNextToken(): Token {

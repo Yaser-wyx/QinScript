@@ -1,3 +1,4 @@
+#后续版本的语法文件，可能会有更改。
 Start -> Module
 Module -> ModuleDefine ModuleStmts
 ModuleDefine ->  ModuleSelfDefine | ModuleSelfDefine ModuleImportDefineList | ModuleSelfDefine ModuleExportList | ModuleSelfDefine ModuleImportDefineList ModuleExportList
