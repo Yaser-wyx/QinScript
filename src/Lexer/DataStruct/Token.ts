@@ -1,4 +1,4 @@
-import {T} from "../../Parser/DataStruct/V_T";
+import {T} from "./V_T";
 
 export const EOF = '\0';//文件结束标记，供词法分析器使用
 

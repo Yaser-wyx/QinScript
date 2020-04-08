@@ -9,7 +9,7 @@ export enum VARIABLE_TYPE {
     NULL,
     BOOLEAN,
     COMPLEXUS,//复合体变量，因为QS是面向过程的语言，不能有对象，所以此处的复合体类似于结构体，具体实现的话还是用js中的对象来实现
-    REFERENCE//引用变量
+    REFERENCE//引用变量，注：不属于可以直接使用的变量类型
 }
 
 //ID可能是单独的一个标识符，也可能是其它模块的标识符，也可能是复合体

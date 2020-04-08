@@ -6,9 +6,9 @@ module.exports = {
   target: 'node',
   entry: { 
     'QS': './src/main.ts',
-    'testLexer':'./src/test/TestLexer.ts',
-    'testGrammar':'./src/test/TestGrammar.ts',
-    'test':'./src/test/test.ts'
+    'testLexer':'./src/Test/TestLexer.ts',
+    'testGrammar':'./src/Test/TestGrammar.ts',
+    'test':'./src/Test/Test.ts'
   },
   output: {
     filename: '[name].js',

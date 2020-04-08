@@ -1,18 +1,15 @@
 @module:Test;
 export:res;
-export:getLen;
-export:revert;
-let res=getLen("这是Test模块的res");
+export:reverseStr;
+let res=test("这是Test模块的res");
 
 fun test(str){
     print(str);
-    return res1;
+    return str;
 }
-fun getLen(str){
-    return len(str);
-}
-
-fun revert(str){
+let temp = 12;
+fun reverseStr(str){
+    print(temp);
     let temp = "";
     let index = len(str)-1;
     while(index>=0){
