@@ -1,8 +1,11 @@
 export class Stack<T> {
     private elements: Array<T>;
 
-    constructor() {
+    constructor(initValue: T | null = null) {
         this.elements = new Array<T>();
+        if (initValue!==null) {
+            this.elements.push(initValue);
+        }
     }
 
     push(element: T) {
@@ -32,6 +35,14 @@ export class Stack<T> {
             return null;
         } else {
             return this.elements[this.elements.length - 1];
+        }
+    }
+
+    peekX(step: number): T | null {
+        if (this.elements.length === 0) {
+            return null;
+        } else {
+            return this.elements[this.elements.length - step];
         }
     }
 

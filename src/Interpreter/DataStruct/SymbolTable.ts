@@ -1,5 +1,5 @@
 import {Variable} from "./Variable";
-import {Fun} from "./Fun";
+import {GeneralFun} from "./Fun";
 import {hashCode} from "../../Utils/utils";
 import {BlockStmt} from "../../Parser/DataStruct/ASTNode";
 import {printInterpreterError} from "../../Log";

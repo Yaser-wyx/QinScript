@@ -1,17 +1,20 @@
 @module:Main;
-import:Test;
-
-let res = reverseStr("这是Main模块的res");
 
 fun main(){
-  print(res);
-  print(Test::reverseStr(res));
+    test(1);
 }
-fun reverseStr(str){
-    let temp = "";
-    let index = len(str)-1;
-    while(index>=0){
-        temp = temp + str[index--];
+
+static fun test(str){
+    static let x = 12;
+    print("测试静态函数");
+
+    if(str==0){
+      @fun test1(t1){
+        print("测试内部函数1");
+      }
+    }else{
+       @fun test2(t2){
+         print("测试内部函数2");
+       }
     }
-    return temp;
 }

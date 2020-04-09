@@ -8,18 +8,20 @@ export enum FUN_TYPE {//函数类型
     STATIC,//静态函数
     INNER//内部函数
 }
+abstract class Fun {
+
+}
 
 //AST中FunDeclaration的包装类
-export class Fun {//普通函数
+export class GeneralFun {//函数类
     private readonly _funBlock?: BlockStmt;//悬挂的函数内部节点
     private readonly _funName: string;//当前函数名
     private readonly _moduleName: string;//所处模块名
     private _paramList: Array<string> = [];//形参名列表
-    private readonly _funType: FUN_TYPE;
+    private readonly _funType: FUN_TYPE=FUN_TYPE.GENERAL;
     private _funSymbolTable: FunSymbolTable;//函数符号表，用于存放函数的局部变量，静态变量以及内部函数
     private _returnValue: any = null;
     private _rearOperator: number = 0;//后置运算数量
-
 
     get rearOperator(): number {
         return this._rearOperator;
@@ -92,11 +94,28 @@ export class Fun {//普通函数
     }
 }
 
+export class InnerFun extends GeneralFun {
+    private readonly _staticFunName: string = "";//如果是内部函数，则还需要其所属的静态函数名
+
+    constructor(moduleName: string, funName: string, funType: FUN_TYPE, staticFunName: string, funDefNode?: FunDeclaration) {
+        super(moduleName, funName, funType, funDefNode);
+        this._staticFunName = staticFunName;
+    }
+
+    get staticFunName(): string {
+        return this._staticFunName;
+    }
+}
+
+export class StaticClass  extends GeneralFun{
+
+}
+
 /**
  * 根据函数的语法树构建fun对象
- * @param moduleFunDefStmt 指定的函数语法树
+ * @param moduleFunDefStmt 指定的模块函数语法树
  */
 export function createFunByModuleFunDefStmt(moduleFunDefStmt: ModuleFunDefStmt) {
     let funType: FUN_TYPE = moduleFunDefStmt.isStatic ? FUN_TYPE.STATIC : FUN_TYPE.GENERAL;
-    return new Fun(moduleFunDefStmt.moduleName, moduleFunDefStmt.getFunName(), funType, moduleFunDefStmt.funDeclaration);
+    return new GeneralFun(moduleFunDefStmt.moduleName, moduleFunDefStmt.getFunName(), funType, moduleFunDefStmt.funDeclaration);
 }

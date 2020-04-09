@@ -9,7 +9,7 @@ export enum NODE_TYPE {
     VAR_DEF_STMT,//基础变量声明语句
     RETURN_STMT,//返回语句
     MODULE_FUN_DECLARATION,//模块函数定义
-    INNER_FUN_STMT,//内部函数定义
+    INNER_FUN_DEF_STMT,//内部函数定义
     FUN_DECLARATION,//基础函数定义
     ID_EXP,//ID表达式
     EXPRESSION_STMT,//表达式语句
@@ -64,16 +64,41 @@ export type Node =
     | Operator
     | Statement;
 
-interface ASTNode {
+abstract class ASTNode {
     //抽象语法树节点接口
-    readonly nodeType: NODE_TYPE;//节点类型
-    lineNo: number;//行号
+    abstract readonly nodeType: NODE_TYPE;//节点类型
+    abstract lineNo: number;//行号
 }
 
+//内部函数的定义节点
 export class InnerFunDefStmt implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.INNER_FUN_STMT;
-    lineNo: number=0;//行号
+    readonly nodeType: NODE_TYPE = NODE_TYPE.INNER_FUN_DEF_STMT;
+    lineNo: number = 0;//行号
+    private readonly _funDeclaration: FunDeclaration;
+    private readonly _moduleName: string;//所属的模块名
+    private readonly _staticFunName: string;//所属的静态函数名
 
+    constructor(funDeclaration: FunDeclaration, moduleName: string, staticFunName: string) {
+        this._funDeclaration = funDeclaration;
+        this._moduleName = moduleName;
+        this._staticFunName = staticFunName;
+    }
+
+    getFunName() {
+        return this._funDeclaration.id;
+    }
+
+    get funDeclaration(): FunDeclaration {
+        return this._funDeclaration;
+    }
+
+    get moduleName(): string {
+        return this._moduleName;
+    }
+
+    get staticFunName(): string {
+        return this._staticFunName;
+    }
 }
 
 //模块函数的定义节点，区分是静态函数，还是普通函数
@@ -82,7 +107,7 @@ export class ModuleFunDefStmt implements ASTNode {
     private readonly _isStatic: boolean;
     private readonly _moduleName: string;//所属的模块名
     private readonly _funDeclaration: FunDeclaration;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(funDeclaration: FunDeclaration, moduleName: string, isStatic: boolean = false) {
         this._moduleName = moduleName;
@@ -114,7 +139,7 @@ export class FunDeclaration implements ASTNode {
     readonly id: string;
     private _params: Array<string> | null = null;//形参列表
     private _body: BlockStmt | null = null;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(id: string) {
         this.id = id;
@@ -144,7 +169,7 @@ export class FunDeclaration implements ASTNode {
 export class ParamList implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.PARAM_LIST;
     private _params: Array<string> = [];
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     pushParam(id: string) {
         this._params.push(id);
@@ -158,16 +183,24 @@ export class ParamList implements ASTNode {
 export class VariableDef implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_DEF;
     //默认是局部变量
-    readonly isStatic: boolean;//是否是静态变量
+    private _isStatic: boolean;//是否是静态变量
     readonly isModuleVar: boolean;//是否是模块变量
     readonly VarDefStmt: VarDefStmt;//变量定义语句
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
 
     constructor(VarDefStmt: VarDefStmt, isModuleVar: boolean = false, isStatic: boolean = false) {
-        this.isStatic = isStatic;
+        this._isStatic = isStatic;
         this.isModuleVar = isModuleVar;
         this.VarDefStmt = VarDefStmt;
+    }
+
+    get isStatic(): boolean {
+        return this._isStatic;
+    }
+
+    set isStatic(value: boolean) {
+        this._isStatic = value;
     }
 }
 
@@ -175,7 +208,7 @@ export class VarDefStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VAR_DEF_STMT;
     readonly id: string;//要被声明的变量
     readonly init?: Exp | null;//要被初始化的值，默认为null，可以初始化为字面量
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(id: string, init?: Exp) {
         this.id = id;
@@ -197,7 +230,7 @@ export type Statement =
 export class ReturnStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.RETURN_STMT;
     private readonly _argument: Expression | null = null;//返回值，默认为空
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     get argument(): Expression | null {
         return this._argument;
@@ -215,7 +248,7 @@ export class IfStmt implements ASTNode {
     private readonly _test: Expression;//测试条件
     private readonly _consequent: Statement;//测试条件成立，则执行
     private _alternate: Statement | null = null;//测试条件不成立，则执行
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(test: Expression, consequent: Statement) {
         this._test = test;
@@ -244,7 +277,7 @@ export class WhileStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.WHILE_STMT;
     readonly test: Expression;//循环条件
     readonly body: Statement;//循环体语句，可以是单个语句，也可以是语句块
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(test: Expression, body: Statement) {
         this.test = test;
@@ -254,11 +287,11 @@ export class WhileStmt implements ASTNode {
 
 export class BlockStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.BLOCK_STMT;
-    private _body: Array<Statement> = [];
-    private readonly _blockID: string;
-    private readonly _blockDepth: number;
+    private _body: Array<Statement> = [];//block的内容
+    private readonly _blockID: string;//当前block的id
+    private readonly _blockDepth: number;//当前block的深度
     private readonly _fatherBlock: BlockStmt | null;//父block
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(blockID: string, blockDepth: number, fatherBlock: BlockStmt | null) {
         this._blockID = blockID;
@@ -302,7 +335,7 @@ export type Expression =
 export class Exp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.EXPRESSION_STMT;
     readonly exp: Expression;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(exp: Expression) {
         this.exp = exp;
@@ -312,7 +345,7 @@ export class Exp implements ASTNode {
 export class ArgumentList implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARGUMENT_LIST;
     private _args: Array<Expression> = [];
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     pushArgs(exp: Expression) {
         this._args.push(exp);
@@ -327,7 +360,7 @@ export class CallExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.CALL_EXPRESSION;
     readonly callee: IDExp;//使用IDExp来代表ID链
     private _args: ArgumentList;//实参列表节点
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(callee: IDExp, argumentList: ArgumentList) {
         this.callee = callee;
@@ -361,7 +394,7 @@ export class CallExp implements ASTNode {
 export class ArraySub implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_SUB;
     private _arraySub: Array<Exp> = [];
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     pushSub(exp: Exp) {
         this._arraySub.push(exp)
@@ -376,7 +409,7 @@ export class ArraySub implements ASTNode {
 export class ArrayExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_EXP;
     private _elements: Array<Expression> = [];//表示数组元素列表
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     pushElement(el: Expression) {
         this._elements.push(el);
@@ -398,7 +431,7 @@ export class IDExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ID_EXP;
     private _idArray: Array<string> = new Array<string>();//ID链
     private _idType: ID_TYPE;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(idName: string) {
         this._idArray.push(idName);
@@ -428,7 +461,7 @@ export class VariableExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.VARIABLE_EXP;
     private readonly _idExp: IDExp;
     private readonly _arraySub?: Array<Exp>;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(_varName: IDExp, arraySub?: ArraySub) {
         this._idExp = _varName;
@@ -450,7 +483,7 @@ export class AssignStmt implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ASSIGN_STMT;
     readonly left: VariableExp;
     readonly right: Expression;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(left: VariableExp, right: Expression) {
         this.left = left;
@@ -485,7 +518,7 @@ export class Operator implements ASTNode {
     readonly unaryOperator?: UnaryOperator;
     readonly logicOperator?: LogicalOperator;
     readonly arithmeticOperator?: ArithmeticOperator;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(operatorType: OPERATOR_TYPE, operator: OPERATOR) {
         this.operatorType = operatorType;
@@ -509,7 +542,7 @@ export class UnaryExp implements ASTNode {
     private _operator?: Operator;
     private _isPreOperator: boolean = false;
     readonly argument: Expression;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(argument: Expression, operator?: Operator) {
         this._operator = operator;
@@ -543,7 +576,7 @@ export class BinaryExp implements ASTNode {
     readonly operator: Operator;
     readonly left: Expression;
     readonly right: Expression;
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(operator: Operator, left: Expression, right: Expression) {
         this.operator = operator;
@@ -556,7 +589,7 @@ export class Literal implements ASTNode {
     //字面量
     readonly nodeType: NODE_TYPE = NODE_TYPE.LITERAL;
     readonly value: string | boolean | number | null;//字面量的值
-    lineNo: number=0;//行号
+    lineNo: number = 0;//行号
 
     constructor(value: string | boolean | number | null) {
         this.value = value;

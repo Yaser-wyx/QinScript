@@ -4,7 +4,7 @@
  */
 
 import {getInterpreter, Interpreter} from "./DataStruct/Interpreter";
-import {createFunByModuleFunDefStmt, Fun} from "./DataStruct/Fun";
+import {createFunByModuleFunDefStmt, GeneralFun} from "./DataStruct/Fun";
 import {Stack} from "../Parser/DataStruct/Stack";
 import {getGlobalSymbolTable, GlobalSymbolTable} from "./DataStruct/SymbolTable";
 import {printInfo, printInterpreterError} from "../Log";
@@ -39,7 +39,7 @@ import {QSFunMap, runLib} from "../QSLib";
 
 let _ = require("lodash");
 let runTimeStack = new Stack();//运行时栈
-let funRunTimeStack = new Stack<Fun>();//函数运行时栈
+let funRunTimeStack = new Stack<GeneralFun>();//函数运行时栈
 let interpreter: Interpreter;
 let symbolTable: GlobalSymbolTable;
 
@@ -141,8 +141,8 @@ let curModule = (): QSModule => {
     //@ts-ignore
     return interpreter.curModule
 };
-let curFun = (): Fun => {
-    return <Fun>interpreter.curFun;
+let curFun = (): GeneralFun => {
+    return <GeneralFun>interpreter.curFun;
 };
 let wrapToVarTypePair = (valueOrReference: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
     return new VarTypePair(type, valueOrReference, varName);
@@ -185,7 +185,7 @@ function createFun(funDefStmt: ModuleFunDefStmt) {
     return createFunByModuleFunDefStmt(funDefStmt);//构建fun
 }
 
-function pushFun(fun: Fun) {
+function pushFun(fun: GeneralFun) {
     funRunTimeStack.push(fun);//将fun压栈
     interpreter.curFun = fun;//设置当前fun
 }
@@ -270,9 +270,9 @@ function loadModule(moduleName: string) {
 }
 
 function runFun(): VarTypePair {
-    //执行fun
+    //执行函数，要执行的函数可能有三种，普通函数、静态函数和内部函数
     //读取当前函数的参数
-    let nowFun = curFun();
+    let nowFun:GeneralFun = curFun();
     let block = nowFun.funBlock;
     if (block) {
         for (let i = 0; i < nowFun.paramList.length; i++) {
@@ -394,7 +394,6 @@ function runWhileStmt(whileStmt: WhileStmt) {
 let expressionExecutorMap = {
     [NODE_TYPE.CALL_EXPRESSION]: runCallExp,
     [NODE_TYPE.ARRAY_EXP]: runArrayExp,
-    // TODO [NODE_TYPE.ARRAY_MEMBER]: runArrayMemberExp,
     [NODE_TYPE.BINARY_EXP]: runBinaryExp,
     [NODE_TYPE.UNARY_EXP]: runUnaryExp,
     [NODE_TYPE.LITERAL]: runLiteral,
@@ -417,7 +416,7 @@ function runExpression(exp: Expression): VarTypePair {
 function runCallExp(callExp: CallExp): VarTypePair {
     //构造要调用的函数，并保存该函数到栈中
     let funIDWrap: IDWrap = runIDExp(callExp.callee);
-    let fun: Fun = <Fun>getFun(funIDWrap);//获取并构造fun
+    let fun: GeneralFun = <GeneralFun>getFun(funIDWrap);//获取并构造fun
     let args: Array<VarTypePair> = [];
     //计算所有实参的值，并转化为值类型的表示法
     callExp.argList.forEach(argExp => {

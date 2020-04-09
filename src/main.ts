@@ -2,7 +2,6 @@
  * Copyright (c) 2020. yaser. All rights reserved
  * Description: 主程序
  */
-
 import {cli} from "./Cli/QScli";
 import {GRAMMAR_FILE, PROJECT_DIR} from "./Cli/config";
 import {parseSingleModule} from "./Parser/ParseModule";
@@ -31,6 +30,7 @@ export async function main() {
                 printInfo(`模块路径：${filePath}`);
                 if (await parseSingleModule(filePath, forms)) {//解析模块
                     printInfo(`--------第${i + 1}个模块文件语法分析成功！--------`);
+
                     let qsModule = getParsedModule();//获取模块
                     interpreterInfo.putModule(qsModule);//将解析后的模块加入到解释器信息表中
                 } else {

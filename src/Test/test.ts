@@ -1,4 +1,15 @@
-import {Log} from "../Log";
+class node {
+    left: node | null = null;
+    value: number;
+    right: node | null = null;
 
-let s = [1,2,3,4,5];
-Log(s.reverse());
+    constructor(value: number) {
+        this.value = value;
+    }
+}
+
+let root = new node(0);
+const depth = 100;
+for (let i = 0; i < depth; i++) {
+
+}

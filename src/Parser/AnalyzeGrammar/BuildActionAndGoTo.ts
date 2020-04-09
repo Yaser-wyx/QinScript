@@ -23,7 +23,7 @@ function generateProduction(grammar: string) {
     //从指定文法中获取产生式，并将其结构化
     let items = grammar.split(productionSplit);
     items.forEach(item => {
-        if (item.startsWith("#")){
+        if (item.startsWith("#")) {
             return;
         }
         item = item.replace(/\r\n/g, "");
@@ -119,7 +119,7 @@ function getLR1() {
     }
 }
 
-function fillForm(): object | null {
+function fillForm(): { actionForm, gotoForm } | null {
     //填Action与Goto表
     if (LR1) {
         let actionForm = new ActionForm(LRIndex);//创建action表
@@ -169,7 +169,7 @@ function fillForm(): object | null {
     return null
 }
 
-export function analyzeGrammar(grammar: string): object | null {
+export function analyzeGrammar(grammar: string): { actionForm, gotoForm } | null {
     //开始解析语法
     printInfo("开始解析语法...");
     printInfo("读取语法并结构化产生式...");

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. yaser. All rights reserved
+ * Description: 构建语法树
+ */
 import {Stack} from "../DataStruct/Stack";
 import {
     ArgumentList,
@@ -12,7 +16,7 @@ import {
     FunDeclaration,
     ID_TYPE,
     IDExp,
-    IfStmt,
+    IfStmt, InnerFunDefStmt,
     Literal,
     ModuleFunDefStmt,
     Node,
@@ -64,26 +68,35 @@ let funStack: Stack<FunDeclaration>;
 let hasImport = false;
 let qsModule: QSModule;
 let globalSymbolTable: GlobalSymbolTable;
-let curScopeState: SCOPE_STATE;
+let scopeStateStack: Stack<SCOPE_TYPE>;
 let curBlockDepth: number = 0;//当前所处scope的深度
 let curBlockID: string = "";//当前所处scope的ID
 let interpreter: Interpreter;
 
-//构建AST时目前所处的作用域
-enum SCOPE_STATE {
-    MODULE,//模块作用域
-    FUN,//函数作用域，不区分是何种函数
+const curScope = () => {
+    return scopeStateStack.peek();
+}
+const preScope = () => {
+    return scopeStateStack.peekX(2);
 }
 
-export function pushFun(funName: string) {
+//构建AST时目前所处的作用域
+export enum SCOPE_TYPE {
+    MODULE,//模块作用域
+    GENERATE_FUN,//普通函数作用域
+    STATIC_FUN,//静态函数作用域
+    INNER_FUN//内部函数作用域
+}
+
+export function pushFun(funName: string, scopeType: SCOPE_TYPE) {
     let newFun: FunDeclaration = new FunDeclaration(funName);
-    curScopeState = SCOPE_STATE.FUN;//进入到函数作用域中
+    scopeStateStack.push(scopeType);//进入到函数作用域中
     funStack.push(newFun);
 }
 
 export function pushBlock() {
-    curBlockDepth++;
-    curBlockID = createUniqueId();
+    curBlockDepth++;//block层次加深
+    curBlockID = createUniqueId();//给新的block设置id
     let blockStatement: BlockStmt = new BlockStmt(curBlockID, curBlockDepth, blockStack.peek());
     blockStack.push(blockStatement);
 }
@@ -126,8 +139,9 @@ export function initBuildAST() {
     qsModule = new QSModule();
     globalSymbolTable = getGlobalSymbolTable();
     curBlockDepth = 0;
-    curScopeState = SCOPE_STATE.MODULE;//默认是处于模块作用域中
+    scopeStateStack = new Stack<SCOPE_TYPE>(SCOPE_TYPE.MODULE);//默认是处于模块作用域中
     curBlockID = "";
+    printInfo("语法树构造器初始化完成。");
 }
 
 //状态树构建方法表
@@ -190,13 +204,6 @@ export function transferVTToASTNode(vtWrap: V_T_Wrap) {
     }
 }
 
-
-function notSupport(notSupportEl: string) {
-    printWarn("当前还不支持" + notSupportEl + "语法，请删除，或等待后续版本！");
-    kill();
-}
-
-
 //以下为各个非终结符节点的构建方式，同时添加程序的语义
 function buildModuleSelfDefine(vtWrap: V_T_Wrap) {
     let moduleName: Token = <Token>vtWrap.getChildToken(ID);
@@ -225,19 +232,18 @@ function buildModuleExport(vtWrap: V_T_Wrap) {
     }
 }
 
-function buildModuleFunDefStmt() {
+function buildModuleFunDefStmt(vtWrap: V_T_Wrap) {
     //构建模块函数定义节点
     let funDeclaration: FunDeclaration = <FunDeclaration>ASTStack.pop();
     if (funDeclaration) {
         globalSymbolTable.pushFun(funDeclaration.id, qsModule.moduleName);
-        //TODO 先不管静态函数
-        let funDefStmt: ModuleFunDefStmt = new ModuleFunDefStmt(funDeclaration, qsModule.moduleName);
+        let funDefStmt: ModuleFunDefStmt = new ModuleFunDefStmt(funDeclaration, qsModule.moduleName, vtWrap.testChild(STATIC));
         qsModule.pushModuleFunDef(funDefStmt);//将函数加入到模块中
         if (funDefStmt.getFunName() === MAIN) {
             //main函数入口
             interpreter.setEnter(funDefStmt);
         }
-        curScopeState = SCOPE_STATE.MODULE;//退出到模块作用域中
+        scopeStateStack.pop();//退出到模块作用域中
     } else {
         printBuildASTError("运行时错误，函数定义节点丢失！");
     }
@@ -251,7 +257,7 @@ function buildFunDef(vtWrap: V_T_Wrap) {
         let nodeList = ASTStack.popX(2);
         if (!hasNull(nodeList)) {
             //没有空值
-            let funDeclaration = funStack.pop();
+            let funDeclaration = funStack.pop();//弹出一个函数
             if (funDeclaration) {
                 funDeclaration.body = <BlockStmt>nodeList[1];
                 funDeclaration.params = (<ParamList>nodeList[0]).params;
@@ -319,20 +325,29 @@ function buildBlockStmt() {
     }
 }
 
-
-function buildVariableDef() {
+function buildVariableDef(vtWrap: V_T_Wrap) {
     //模块、局部以及静态变量定义
     let varDefStmt: any = <VarDefStmt>ASTStack.pop();
     if (varDefStmt instanceof VarDefStmt) {
-        let variableDef: VariableDef = new VariableDef(varDefStmt, true);
-        if (curScopeState === SCOPE_STATE.MODULE) {
-            //处于模块作用域中，则将模块变量加入到全局符号表中
-            let variable: Variable = new Variable(qsModule.moduleName, variableDef);
-            globalSymbolTable.pushVariable(variable);
-            qsModule.pushModuleVar(varDefStmt.id);
+        if (vtWrap.testChild(STATIC)) {
+            //是静态变量
+            if (curScope() === SCOPE_TYPE.STATIC_FUN) {
+                return new VariableDef(varDefStmt, false, true);
+            } else {
+                printBuildASTError("静态变量只可在静态函数中声明", vtWrap.lineNo);
+            }
         } else {
-            //否则就是局部或静态变量，添加到AST中
-            return variableDef;
+            //是普通变量
+            if (curScope() === SCOPE_TYPE.MODULE) {
+                let variableDef: VariableDef = new VariableDef(varDefStmt, true);
+                //处于模块作用域中，那么就是模块变量，加入到全局符号表中
+                let variable: Variable = new Variable(qsModule.moduleName, variableDef);
+                globalSymbolTable.pushVariable(variable);
+                qsModule.pushModuleVar(varDefStmt.id);
+            } else {
+                //否则就是局部变量，添加到AST中
+                return new VariableDef(varDefStmt);
+            }
         }
     } else {
         printBuildASTError("运行时错误，语法树节点无法匹配，当前需要VarDefStmt节点，获取到的是" + varDefStmt.constructor.name);
@@ -381,7 +396,7 @@ function buildIDExp(vtWrap: V_T_Wrap) {
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
-            }else{
+            } else {
                 printBuildASTError("无法匹配IDExp！", vtWrap.lineNo);
             }
             break;
@@ -398,7 +413,7 @@ function buildIDExp(vtWrap: V_T_Wrap) {
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
-            } else if (vtWrap.testChild(MODULE_SCOPE)){
+            } else if (vtWrap.testChild(MODULE_SCOPE)) {
                 //只可能是其它模块的ID
                 let idExp: IDExp = <IDExp>ASTStack.peek();
                 if (idExp instanceof IDExp) {
@@ -409,7 +424,7 @@ function buildIDExp(vtWrap: V_T_Wrap) {
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
-            }else{
+            } else {
                 printBuildASTError("无法匹配IDExp！", vtWrap.lineNo);
             }
             break;
@@ -707,16 +722,21 @@ function buildArraySub(vtWrap: V_T_Wrap) {
     }
 }
 
-/*function buildArrayMemberExp() {
-    let arrayMemberList = ASTStack.popX(2);
-    if (!hasNull(arrayMemberList)) {
-        return new ArrayMemberExp(<VariableExp>arrayMemberList[0], <ArraySub>arrayMemberList[1]);
+function buildInnerFunDefStmt(vtWrap: V_T_Wrap) {
+    if (preScope() === SCOPE_TYPE.STATIC_FUN) {
+        //说明是内部函数
+        let funDeclaration: FunDeclaration = <FunDeclaration>ASTStack.pop();
+        if (funDeclaration) {
+            const staticFun = <FunDeclaration>funStack.peek()
+            let innerFunDefStmt: InnerFunDefStmt = new InnerFunDefStmt(funDeclaration, qsModule.moduleName, staticFun.id);
+            scopeStateStack.pop();//退出到静态作用域中
+            return innerFunDefStmt;
+        } else {
+            printBuildASTError("运行时错误，函数定义节点丢失！");
+        }
+    } else {
+        printBuildASTError("内部函数必须在静态函数内部！", vtWrap.lineNo);
     }
-}*/
-
-
-function buildInnerFunDefStmt() {
-    notSupport("内部函数")
 }
 
 function buildIfStmt(vtWrap: V_T_Wrap) {

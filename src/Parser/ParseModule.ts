@@ -3,8 +3,8 @@
  * Description: 模块解析
  */
 
-import {getNextToken, initLexer, lookAheadToken, lookAheadXToken} from "../Lexer/Lexer";
-import {printParseModuleError, printErr, printFatalError, printInfo, printWarn} from "../Log";
+import {getNextToken, getPreToken, initLexer, lookAheadToken} from "../Lexer/Lexer";
+import {printErr, printFatalError, printInfo, printParseModuleError, printWarn} from "../Log";
 import {ActionForm, GotoForm} from "./DataStruct/Form";
 import {Stack} from "./DataStruct/Stack";
 import {createVTByProduction, V_T_Wrap} from "./DataStruct/V_T_Wrap";
@@ -12,7 +12,7 @@ import {createSampleToken, Token} from "../Lexer/DataStruct/Token";
 import {T} from "../Lexer/DataStruct/V_T";
 import {EOF} from "./DataStruct/Production";
 import {ActionFormItem, ActionStatus} from "./DataStruct/FormItem";
-import {initBuildAST, pushBlock, pushFun, transferVTToASTNode} from "./BuildAST";
+import {initBuildAST, pushBlock, pushFun, SCOPE_TYPE, transferVTToASTNode} from "./BuildAST";
 
 let actionForm: ActionForm, gotoForm: GotoForm;
 let symbolStack: Stack<V_T_Wrap> = new Stack();//符号栈
@@ -104,19 +104,35 @@ export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
             case ActionStatus.SHIFT:
                 //移进处理
                 symbolStack.push(wrapToken(getNextToken()));
+                let nowToken = nextToken;//移进处理后，此时的nextToken指代的是当前已经移进的Token
                 // @ts-ignore
                 statusStack.push(actionItem.shiftTo);
-                //移进后处理，注意此时的nextToken指代的是当前已经移进的Token
-                if (nextToken.tokenType === T.LEFT_BRACE) {
+                if (nowToken.tokenType === T.LEFT_BRACE) {
                     //如果移进的是左大括号
                     //则表示需要一个block
                     pushBlock();
-                } else {
-                    let tempNextToken = lookAheadToken();//向后读取一个token
-                    if (tempNextToken.tokenType === T.FUN && (nextToken.tokenType === T.STATIC || nextToken.tokenType === T.AT)) {//如果读取的Token是fun，那么表示再往后一个就是函数名
-                        pushFun(lookAheadXToken(2).value)
-                    } else if (nextToken.tokenType === T.FUN) {//如果当前就是fun，那么下一个就是函数名
-                        pushFun(tempNextToken.value)
+                } else if (nowToken.tokenType === T.FUN) {
+                    //如果当前就是fun，那么下一个就是函数名
+                    const funNameToken = lookAheadToken();//向后读取一个token
+                    //根据前一个token的值来判断函数类型
+                    const preToken = getPreToken();
+                    if (preToken) {
+                        let scopeType;
+                        switch (preToken.tokenType) {
+                            case T.STATIC: {
+                                scopeType = SCOPE_TYPE.STATIC_FUN;
+                                break;
+                            }
+                            case T.AT: {
+                                scopeType = SCOPE_TYPE.INNER_FUN;
+                                break;
+                            }
+                            default: {
+                                scopeType = SCOPE_TYPE.GENERATE_FUN;
+                                break;
+                            }
+                        }
+                        pushFun(funNameToken.value, scopeType);
                     }
                 }
                 break;
