@@ -9,20 +9,17 @@ ModuleExportList -> ModuleExportList ModuleExport | ModuleExport
 ModuleExport ->  EXPORT COLON ID SEMI
 ModuleStmts -> ModuleStmts VariableDef | ModuleStmts FunDefStmt  | FunDefStmt | VariableDef | E
 # 函数定义语句，包含静态函数与普通函数
-# FunDefStmt -> FunDef | STATIC FunDef
-FunDefStmt -> FunDef
+FunDefStmt -> FunDef | STATIC FunDef
 # 所有函数定义，不区分静态或普通
 FunDef -> FUN ID LEFT_PAREN ParamList RIGHT_PAREN BlockStmt
 ParamList -> ID | ParamList COMMA ID | E
 
 Stmts -> Stmts Stmt | E
-Stmt -> IfStmt | BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
+Stmt -> InnerFunDefStmt | IfStmt | BlockStmt | VariableDef | WhileStmt | ReturnStmt | AssignStmt | Exp SEMI
 BlockStmt -> LEFT_BRACE Stmts RIGHT_BRACE
 
 # 变量定义包括普通变量与静态变量定义
-# VariableDef -> STATIC VarDefStmt | VarDefStmt
-
-VariableDef ->  VarDefStmt
+VariableDef -> STATIC VarDefStmt | VarDefStmt
 # 所有变量的定义语句，对变量类型不加区分
 VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
 
@@ -30,8 +27,8 @@ VarDefStmt -> LET ID ASSIGN Exp SEMI | LET ID SEMI
 VariableExp -> IDExp ArraySub | IDExp
 IDExp -> ID | ID DOT IDExp | AT IDExp | ID MODULE_SCOPE IDExp
 
-# 静态函数
-# InnerFunDefStmt -> AT FunDef
+# 内部函数
+InnerFunDefStmt -> AT FunDef
 
 IfStmt -> IF LEFT_PAREN Exp RIGHT_PAREN Stmt | IfStmt ELSE Stmt
 WhileStmt -> WHILE LEFT_PAREN Exp RIGHT_PAREN Stmt

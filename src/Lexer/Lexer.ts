@@ -13,6 +13,7 @@ import {printTokens} from "./PrintToken";
 let code: string;//源码
 let curCodeIndex: number;//源码指针，指向下一个要读取的字符
 let tokens: Array<Token>;//所有token列表
+let usedToken: Array<Token>;//用于保存已使用过的Token，但至多只保存两个，一个是前一个token，另一个是当前的token
 let errorTokens: Array<LexerToken>;//所有出错的token
 let lineNo: number;//当前行号
 let lineIndex: number;//行中的位置
@@ -288,6 +289,7 @@ export async function initLexer(filePath: string): Promise<boolean> {
     //读取源码文件
     printInfo("初始化词法分析器...");
     printInfo("读取源码文件...");
+    usedToken = [];
     code = await readFromFile(filePath);
     code += EOF;//在文件末尾添加标记，表示结束
     curCodeIndex = 0;
@@ -302,7 +304,7 @@ export async function initLexer(filePath: string): Promise<boolean> {
     EOFToken.tokenType = T.EOF;
     EOFToken.value = "#";
     tokens.push(EOFToken);
-    printTokens(tokens,filePath);
+    printTokens(tokens, filePath);
     if (errorTokens.length > 0) {
         printLexerError(errorTokens, filePath);//打印错误信息
         return false;
@@ -315,15 +317,21 @@ export function lookAheadToken(): Token {
     return tokens[0];
 }
 
-export function lookAheadXToken(step: number): Token {
-    return tokens[step - 1];
-}
-
-export function hasToken(): boolean {
-    return tokens.length !== 0;
+export function getPreToken(): Token | null {
+    if (usedToken.length < 2) {//如果长度小于2，则表示没有前一个token，只有当前的token
+        return null;
+    }
+    return usedToken[0];
 }
 
 export function getNextToken(): Token {
     // @ts-ignore
-    return tokens.shift();
+    const nowToken = tokens.shift()
+    // @ts-ignore
+    usedToken.push(nowToken);
+    if (usedToken.length > 2) {//usedToken的长度永远小于等于2，当长度为2时，第1个为前一个token，第2个为当前token
+        usedToken.shift();
+    }
+    // @ts-ignore
+    return nowToken;
 }

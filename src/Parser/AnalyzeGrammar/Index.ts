@@ -6,7 +6,7 @@ import * as fs from "fs";
 import {HashFile} from "../DataStruct/HashFile";
 import {printBuildFormError, printInfo, printWarn} from "../../Log";
 
-export async function buildLRAnalyzeForm(grammarFile: string): Promise<object | null> {
+export async function buildLRAnalyzeForm(grammarFile: string): Promise<{ actionForm, gotoForm } | null> {
     printInfo("读取语法文件...");
     let grammar = await readFromFile(grammarFile);//读取需要分析的文法
     printInfo("语法文件读取成功！");
