@@ -1,6 +1,7 @@
 //变量包装类
 import {BlockStmt, Exp, VariableDef} from "../../Parser/DataStruct/ASTNode";
 import {printInterpreterError} from "../../Log";
+import {Reference} from "./Reference";
 
 export enum VARIABLE_TYPE {
     STRING,
@@ -14,15 +15,15 @@ export enum VARIABLE_TYPE {
 
 //ID可能是单独的一个标识符，也可能是其它模块的标识符，也可能是复合体
 export class IDWrap {
-    private readonly _idName: string;//变量名
-    private readonly _moduleName?: string;//变量所处模块名，如果为空，则表示是当前模块的变量，不为空的表示该变量引用的是其它模块的变量
-    private readonly _isStatic: boolean;//是否是静态变量
-    private _referenceIndex: Array<string> = [];//id引用链
+    private readonly _idName: string;//ID名
+    private readonly _moduleName?: string;//ID所处模块名，如果为空，则表示是当前模块的ID，不为空的表示该变量引用的是其它模块的ID
+    private readonly _hasAt: boolean;//是否有AT前缀，如果有则表示可能访问当前静态函数的静态变量，或调用当前静态函数的其它内部函数
+    private _referenceList: Array<string> = [];//id引用链
 
-    constructor(idName: string, isStatic: boolean, moduleName?: string) {
+    constructor(idName: string, hasAt: boolean=false, moduleName?: string) {
         this._idName = idName;
         this._moduleName = moduleName;
-        this._isStatic = isStatic;
+        this._hasAt = hasAt;
     }
 
     get idName(): string {
@@ -36,16 +37,16 @@ export class IDWrap {
         return null;
     }
 
-    get isStatic(): boolean {
-        return this._isStatic;
+    get hasAt(): boolean {
+        return this._hasAt;
     }
 
-    get referenceIndex(): Array<string> {
-        return this._referenceIndex;
+    get referenceList(): Array<string> {
+        return this._referenceList;
     }
 
-    set referenceIndex(value: Array<string>) {
-        this._referenceIndex = value;
+    set referenceList(value: Array<string>) {
+        this._referenceList = value;
     }
 }
 
@@ -83,64 +84,7 @@ export function getValueType(value): VARIABLE_TYPE {
     return valueType;
 }
 
-export class Reference {
-    referencedVar: Variable;//被引用的变量
-    referenceIndex: any;//只有在被引用变量是数组或复合体的时候，该项才有用，但不代表一定存在，反之如果存在，则一定是数组或复合体
-    referencedType: VARIABLE_TYPE;//被引用对象的数据类型
 
-    constructor(referencedVar: Variable, referencedType: VARIABLE_TYPE, referenceIndex?: number | string) {
-        this.referencedVar = referencedVar;
-        this.referenceIndex = referenceIndex;
-        this.referencedType = referencedType;
-    }
-
-    setReferenceValue(varTypePair: VarTypePair) {
-        //对所引用的变量值进行设置
-        if (this.referenceIndex) {
-            //如果存在index
-            if (this.referencedType === VARIABLE_TYPE.ARRAY) {
-                //如果是array，此时referenceIndex是一个数组形式
-                let index = 0;
-                let nowArray = this.referencedVar.getValue();
-                for (; index < this.referenceIndex.length - 1; index++) {//注意-1，此处操作用于将对多维数组的操作转化为对一维数组的操作
-                    nowArray = nowArray[this.referenceIndex[index]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
-                    if (!nowArray) {
-                        printInterpreterError("数组越界！");
-                    }
-                }
-                nowArray[this.referenceIndex[index]] = varTypePair.value;//对一维数组设置值
-            } else {
-                //TODO 复合体
-            }
-        } else {
-            //表示对当前变量重新赋值
-            this.referencedVar.setValue(varTypePair);
-        }
-    }
-
-    getReferenceValue(): any {
-        //获取被引用的变量值
-        let nowValue = this.referencedVar.getValue();
-        if (this.referenceIndex) {
-            //如果存在index
-            if (this.referencedType === VARIABLE_TYPE.ARRAY||this.referencedType === VARIABLE_TYPE.STRING) {
-                //如果是array，此时referenceIndex是一个数组形式
-                for (let i = 0; i < this.referenceIndex.length; i++) {
-                    nowValue = nowValue[this.referenceIndex[i]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
-                    if (!nowValue) {
-                        printInterpreterError("数组越界！");
-                    }
-                }
-            } else if (this.referencedType === VARIABLE_TYPE.COMPLEXUS){
-                //TODO 复合体
-            }else{
-                //不能有数组下标
-                return null;
-            }
-        }
-        return nowValue;
-    }
-}
 
 export class VarTypePair {
     value: any;

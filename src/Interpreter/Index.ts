@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020. yaser. All rights reserved
- * Description:
+ * Description: 解释器
  */
 
 import {getInterpreter, Interpreter} from "./DataStruct/Interpreter";
-import {createFunByModuleFunDefStmt, GeneralFun} from "./DataStruct/Fun";
+import {createFunByFunDefStmt, FUN_TYPE, GeneralFun, InnerFun, StaticFun} from "./DataStruct/Fun";
 import {Stack} from "../Parser/DataStruct/Stack";
 import {getGlobalSymbolTable, GlobalSymbolTable} from "./DataStruct/SymbolTable";
 import {printInfo, printInterpreterError} from "../Log";
@@ -33,9 +33,10 @@ import {
     VariableExp,
     WhileStmt
 } from "../Parser/DataStruct/ASTNode";
-import {getValueType, IDWrap, Reference, Variable, VARIABLE_TYPE, VarTypePair} from "./DataStruct/Variable";
+import {getValueType, IDWrap, Variable, VARIABLE_TYPE, VarTypePair} from "./DataStruct/Variable";
 import {QSModule} from "./DataStruct/Module";
 import {QSFunMap, runLib} from "../QSLib";
+import {Reference} from "./DataStruct/Reference";
 
 let _ = require("lodash");
 let runTimeStack = new Stack();//运行时栈
@@ -99,27 +100,25 @@ function getVariable(idWrap: IDWrap): Variable | null {
     }
     if (!variable) {
         //从全局符号表中获取
-        variable = symbolTable.getVariable(moduleName, varName);
+        variable = symbolTable.getVariableSymbol(moduleName, varName);
     }
     return variable;
 }
 
-//函数的统一获取
-function getFun(funIDWrap: IDWrap) {
-    let funDefStmt: ModuleFunDefStmt | null;
+//获取普通函数与静态函数，对与内部函数不进行获取
+function getFun(funIDWrap: IDWrap): StaticFun | GeneralFun | null {
+    let moduleFun: StaticFun | GeneralFun | null;
     let moduleName: string | null = funIDWrap.getModuleName();
     const funName = funIDWrap.idName;
     if (!moduleName) {//不存在模块名，也就是说是在当前模块中
-        funDefStmt = curModule().getModuleFunDefByFunName(funName);//获取函数AST
+        moduleFun = curModule().createModuleFunByFunName(funName);//获取函数AST
     } else {
         //存在模块名
         testIdIsAvailable(moduleName, funName);//测试是否可用
-        funDefStmt = getModuleByName(moduleName).getModuleFunDefByFunName(funName);//获取函数AST
+        moduleFun = getModuleByName(moduleName).createModuleFunByFunName(funName);//获取函数AST
     }
-    if (funDefStmt) {
-        return createFunByModuleFunDefStmt(funDefStmt);
-    }
-    return null;
+
+    return moduleFun;
 }
 
 function pushToStack(value) {
@@ -130,21 +129,26 @@ function popFromStack() {
     return runTimeStack.pop();
 }
 
-let curBlock = (): BlockStmt => {
+const curBlock = (): BlockStmt => {
     return <BlockStmt>interpreter.curBlock;
 };
-let curModuleName = (): string => {
+const curModuleName = (): string => {
     //@ts-ignore
     return interpreter.curModule.moduleName;
 };
-let curModule = (): QSModule => {
+const curModule = (): QSModule => {
     //@ts-ignore
     return interpreter.curModule
 };
-let curFun = (): GeneralFun => {
-    return <GeneralFun>interpreter.curFun;
+const curFun = (): GeneralFun | StaticFun | InnerFun => {
+    return <GeneralFun | StaticFun | InnerFun>interpreter.curFun;
 };
-let wrapToVarTypePair = (valueOrReference: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
+const curFunType = (): FUN_TYPE => {
+    //@ts-ignore
+    return interpreter.curFun.funType
+}
+
+const wrapToVarTypePair = (valueOrReference: any = null, type: VARIABLE_TYPE = VARIABLE_TYPE.NULL, varName?: string): VarTypePair => {
     return new VarTypePair(type, valueOrReference, varName);
 };
 const nullValue: VarTypePair = wrapToVarTypePair();
@@ -182,7 +186,7 @@ export function runInterpreter() {
 
 //构建函数
 function createFun(funDefStmt: ModuleFunDefStmt) {
-    return createFunByModuleFunDefStmt(funDefStmt);//构建fun
+    return createFunByFunDefStmt(funDefStmt);//构建fun
 }
 
 function pushFun(fun: GeneralFun) {
@@ -250,7 +254,7 @@ function loadModule(moduleName: string) {
     if (!nowModule.hasLoad) {
         //如果没有加载
         nowModule.moduleVar.forEach(varName => {//对所有模块变量进行逐个初始化操作
-            let idWrap = new IDWrap(varName, false);
+            let idWrap = new IDWrap(varName);
             let variable = getVariable(idWrap);//获取要初始化的模块变量
             if (variable) {
                 let initExp = variable.initModuleVar();//将该变量初始化为模块变量
@@ -272,10 +276,10 @@ function loadModule(moduleName: string) {
 function runFun(): VarTypePair {
     //执行函数，要执行的函数可能有三种，普通函数、静态函数和内部函数
     //读取当前函数的参数
-    let nowFun:GeneralFun = curFun();
+    let nowFun: GeneralFun | StaticFun | InnerFun = curFun();
     let block = nowFun.funBlock;
     if (block) {
-        for (let i = 0; i < nowFun.paramList.length; i++) {
+        for (let i = 0; i < nowFun.paramList.length; i++) {//读取函数的实参，并添加到函数的符号表下
             let varTypePair = <VarTypePair>popFromStack();
             varTypePair.varName = nowFun.paramList[i];
             //每读取一个实参，就将其保存到符号表中
@@ -307,6 +311,7 @@ let statementExecutorMap = {
 };
 
 function runBlockStmt(block: BlockStmt) {
+    // printInfo(curFunType());
     let body = block.body;
     pushToStack(interpreter.curBlock);//保存当前block
     interpreter.curBlock = block;
@@ -416,56 +421,64 @@ function runExpression(exp: Expression): VarTypePair {
 function runCallExp(callExp: CallExp): VarTypePair {
     //构造要调用的函数，并保存该函数到栈中
     let funIDWrap: IDWrap = runIDExp(callExp.callee);
-    let fun: GeneralFun = <GeneralFun>getFun(funIDWrap);//获取并构造fun
-    let args: Array<VarTypePair> = [];
-    //计算所有实参的值，并转化为值类型的表示法
-    callExp.argList.forEach(argExp => {
-        args.push(runExpression(argExp));
-    });
-    if (fun) {
-        //如果存在，也就是说不是原生函数
-        if (fun.paramList.length === callExp.argList.length) {
-            //函数存在，且参数匹配
-            let preModule;
-            //判断要执行的函数是否在当前模块下，如果是则直接运行，不是则需要切换模块。
-            if (fun.moduleName) {
-                //存在模块名，说明不处于当前模块下，需要切换模块
-                preModule = curModule();
-                switchToModule(fun.moduleName);
-            }
-            while (args.length > 0) {
-                pushToStack(args.pop());//将实参从右至左压入栈中，栈顶为最左边的元素
-            }
-            pushFun(fun);//压入栈
-            //调用函数执行，并获取返回结果
-            let value = runFun();
-            //恢复上下文环境
-            popAndSetFun();
-            if (preModule){
-                //如果之前的模块存在，则进行恢复，否则不处理
-                recoverModule();//加载完成，切换为原来的模块
-            }
-            return value;//返回执行结果
-        } else {
-            printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！", callExp.lineNo);
-            return nullValue;
-        }
+    if (funIDWrap.hasAt) {
+        //存在有AT前缀，则是调用内部函数
+        // todo 需要检查当前是否在某个内部函数中，因为该调用方式只可在内部函数中使用
+        return nullValue;//先返回一个空值
     } else {
-        //处理原生函数
-        let libCall = QSFunMap[funIDWrap.idName];
-        if (libCall) {
-            //如果是原生函数
-            let value = runLib(libCall, args);
-            if (value) {
-                //如果有值
-                return wrapToVarTypePair(value, getValueType(value));
+        //调用的可能是普通函数，也可能是静态函数
+        let fun: GeneralFun | StaticFun | null = getFun(funIDWrap);//获取并构造fun
+        //获取到了函数
+        let args: Array<VarTypePair> = [];
+        //计算所有实参的值，并转化为值类型的表示法
+        callExp.argList.forEach(argExp => {
+            args.push(runExpression(argExp));
+        });
+        if (fun) {
+            //如果存在，也就是说不是原生函数
+            if (fun.paramList.length === callExp.argList.length) {
+                //函数存在，且参数匹配
+                let preModule;
+                //判断要执行的函数是否在当前模块下，如果是则直接运行，不是则需要切换模块。
+                if (fun.moduleName) {
+                    //存在模块名，说明不处于当前模块下，需要切换模块
+                    preModule = curModule();
+                    switchToModule(fun.moduleName);
+                }
+                while (args.length > 0) {
+                    pushToStack(args.pop());//将实参从右至左压入栈中，栈顶为最左边的元素
+                }
+                pushFun(fun);//压入栈
+                //调用函数执行，并获取返回结果
+                let value = runFun();
+                //恢复上下文环境
+                popAndSetFun();
+                if (preModule) {
+                    //如果之前的模块存在，则进行恢复，否则不处理
+                    recoverModule();//加载完成，切换为原来的模块
+                }
+                return value;//返回执行结果
             } else {
+                printInterpreterError(callExp.callee + "函数在调用时的实参与定义的形参个数不匹配！", callExp.lineNo);
                 return nullValue;
             }
         } else {
-            //既不是原生函数也不是自定义函数
-            printInterpreterError(callExp.callee + "函数未定义 ", callExp.lineNo);
-            return nullValue;
+            //处理原生函数
+            let libCall = QSFunMap[funIDWrap.idName];
+            if (libCall) {
+                //如果是原生函数
+                let value = runLib(libCall, args);
+                if (value) {
+                    //如果有值
+                    return wrapToVarTypePair(value, getValueType(value));
+                } else {
+                    return nullValue;
+                }
+            } else {
+                //既不是原生函数也不是自定义函数
+                printInterpreterError(callExp.callee + "函数未定义 ", callExp.lineNo);
+                return nullValue;
+            }
         }
     }
 }
@@ -644,12 +657,12 @@ function runLiteral(literal: Literal): VarTypePair {
 
 
 function runIDExp(idExp: IDExp): IDWrap {
-    let referenceIndex = new Array<string>();//复合体的引用链表
-    const isStatic = idExp.idType === ID_TYPE.STATIC_ID;//是否为静态
+    let referenceIndex = new Array<string>();//引用链
+    const hasAt = idExp.idType === ID_TYPE.AT_ID;//是否有AT
     const isModule = idExp.idType === ID_TYPE.MODULE_ID;//是否为其它模块的
     let varName: string;//变量名
     let moduleName: string | undefined = undefined;//变量所处模块名，不为空的前提是引用的是其它模块的变量
-    let idArray = idExp.idArray;
+    let idArray = idExp.idList;
     let index = 0;
     if (isModule) {
         //如果是其它模块的，则设置指定的模块名，表示非本模块id
@@ -658,12 +671,12 @@ function runIDExp(idExp: IDExp): IDWrap {
     varName = idArray[index++];//设置变量名
 
     //对IDExp的结果进行包装处理
-    let idWrap: IDWrap = new IDWrap(varName, isStatic, moduleName);
+    let idWrap: IDWrap = new IDWrap(varName, hasAt, moduleName);
     //从id链中读取剩余的id
     for (; index < idArray.length; index++) {
         referenceIndex.push(idArray[index]);
     }
-    idWrap.referenceIndex = referenceIndex;
+    idWrap.referenceList = referenceIndex;
     return idWrap;
 }
 
@@ -688,11 +701,11 @@ function runVariableExp(variableExp: VariableExp): VarTypePair {
                 arraySub.push(runExpression(variableExp.arraySub[i]).value)
             }
             //@ts-ignore
-            idVar.reference.referenceIndex = arraySub;
-        } else if (varIDWrap.referenceIndex.length > 0) {
+            idVar.reference.referenceList = arraySub;
+        } else if (varIDWrap.referenceList.length > 0) {
             //如果要获取的是一个复合体
             //@ts-ignore
-            idVar.reference.referenceIndex = varIDWrap.referenceIndex
+            idVar.reference.referenceList = varIDWrap.referenceList
         }
         idVar.resetValue();
         return idVar;

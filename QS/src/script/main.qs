@@ -1,14 +1,22 @@
 @module:Main;
-
+import:Test;
+let x = test("123ads12");
 fun main(){
-    test(1);
+    print(x,len(x));
+    x = Test::reverseStr(x);
+    print(x);
 }
 
+fun test(str){
+    print(str);
+    return str;
+}
+/*
 static fun test(str){
-    static let x = 12;
     print("测试静态函数");
 
-    if(str==0){
+    if(str>0){
+      static let x = test(str-1);//静态变量的递归构造
       @fun test1(t1){
         print("测试内部函数1");
       }
@@ -18,3 +26,4 @@ static fun test(str){
        }
     }
 }
+*/

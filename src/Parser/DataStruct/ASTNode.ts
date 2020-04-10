@@ -1,6 +1,4 @@
 //AST节点定义
-import exp = require("constants");
-import {Stack} from "./Stack";
 
 export enum NODE_TYPE {
     VARIABLE_EXP,
@@ -423,28 +421,28 @@ export class ArrayExp implements ASTNode {
 export enum ID_TYPE {
     GENERAL_ID,//普通的id，单个的
     GENERAL_ID_LIST,//普通ID链表
-    STATIC_ID,//如果有前缀AT，就代表是静态的ID，根据后缀，可能是静态变量也可能是静态函数
+    AT_ID,//如果有前缀AT，就代表是可能是对静态变量的访问，也可能是对内部函数的访问
     MODULE_ID//如果有中缀::，就代表是外部模块的变量或函数，那么ID链表中的第一个ID就是模块名，后面的就是相关的ID引用
 }
 
 export class IDExp implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ID_EXP;
-    private _idArray: Array<string> = new Array<string>();//ID链
+    private _idList: Array<string> = new Array<string>();//ID链
     private _idType: ID_TYPE;
     lineNo: number = 0;//行号
 
     constructor(idName: string) {
-        this._idArray.push(idName);
+        this._idList.push(idName);
         this._idType = ID_TYPE.GENERAL_ID
     }
 
     pushID(idName: string) {
-        this._idArray.unshift(idName);
+        this._idList.unshift(idName);//注意：此处是逆序加入
     }
 
 
-    get idArray(): Array<string> {
-        return this._idArray;
+    get idList(): Array<string> {
+        return this._idList;
     }
 
     set idType(value: ID_TYPE) {

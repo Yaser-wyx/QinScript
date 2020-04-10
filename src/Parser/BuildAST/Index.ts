@@ -58,9 +58,9 @@ import {QSModule} from "../../Interpreter/DataStruct/Module";
 import {Token} from "../../Lexer/DataStruct/Token";
 import {getGlobalSymbolTable, GlobalSymbolTable} from "../../Interpreter/DataStruct/SymbolTable";
 import {Variable} from "../../Interpreter/DataStruct/Variable";
-import {createUniqueId, kill} from "../../Utils/utils";
+import {createUniqueId} from "../../Utils/utils";
 import {getInterpreter, Interpreter} from "../../Interpreter/DataStruct/Interpreter";
-import {printBuildASTError, printInfo, printWarn} from "../../Log";
+import {printBuildASTError, printInfo} from "../../Log";
 
 let ASTStack: Stack<Node>;
 let blockStack: Stack<BlockStmt>;
@@ -236,7 +236,7 @@ function buildModuleFunDefStmt(vtWrap: V_T_Wrap) {
     //构建模块函数定义节点
     let funDeclaration: FunDeclaration = <FunDeclaration>ASTStack.pop();
     if (funDeclaration) {
-        globalSymbolTable.pushFun(funDeclaration.id, qsModule.moduleName);
+        globalSymbolTable.pushSymbol(qsModule.moduleName,funDeclaration.id);
         let funDefStmt: ModuleFunDefStmt = new ModuleFunDefStmt(funDeclaration, qsModule.moduleName, vtWrap.testChild(STATIC));
         qsModule.pushModuleFunDef(funDefStmt);//将函数加入到模块中
         if (funDefStmt.getFunName() === MAIN) {
@@ -342,7 +342,7 @@ function buildVariableDef(vtWrap: V_T_Wrap) {
                 let variableDef: VariableDef = new VariableDef(varDefStmt, true);
                 //处于模块作用域中，那么就是模块变量，加入到全局符号表中
                 let variable: Variable = new Variable(qsModule.moduleName, variableDef);
-                globalSymbolTable.pushVariable(variable);
+                globalSymbolTable.pushSymbol(variable);
                 qsModule.pushModuleVar(varDefStmt.id);
             } else {
                 //否则就是局部变量，添加到AST中
@@ -388,11 +388,11 @@ function buildIDExp(vtWrap: V_T_Wrap) {
         }
         case 2: {
             if (vtWrap.testChild(AT)) {
-                //两个表明是静态ID
+                //存在AT
                 let idExp: IDExp = <IDExp>ASTStack.peek();
                 if (idExp instanceof IDExp) {
                     testIDTypeBeforeSet(idExp);
-                    idExp.idType = ID_TYPE.STATIC_ID;
+                    idExp.idType = ID_TYPE.AT_ID;
                 } else {
                     printBuildASTError("运行时错误，需要IDExp类型的数据");
                 }
