@@ -1,7 +1,6 @@
 import {Production} from "./Production";
 import {hashCode} from "../../Utils/utils";
 
-//TODO 如果有时间可以构造两个接口，一个是formItem，另一个是Form，以便实现面向接口编程
 export class GotoFormItem {
     //LR分析表中Goto子表的项目
     expected: string;

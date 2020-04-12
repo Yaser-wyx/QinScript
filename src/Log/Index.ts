@@ -27,15 +27,19 @@ export function Log(...text) {
     }
 }
 
-export function printErr(errMsg) {
+export function printErr(errMsg,needTime=true) {
     //通用报错打印
-    errMsg = getTime() + errMsg;
+    if (needTime){
+        errMsg = getTime() + errMsg;
+    }
     console.log(errMsg.red)
 }
 
-export function printWarn(warnMsg) {
+export function printWarn(warnMsg,needTime=true) {
     //通用警告打印
-    warnMsg = getTime() + warnMsg;
+    if (needTime){
+        warnMsg = getTime() + warnMsg;
+    }
     console.log(warnMsg.yellow);
 }
 

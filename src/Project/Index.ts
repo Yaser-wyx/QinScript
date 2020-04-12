@@ -6,18 +6,14 @@ import {SUFFIX} from "../Cli/config";
 let QSFiles: Array<string> = [];//存储所有的QS文件地址
 
 //读入项目
-export async function readProject(projectDir: string): Promise<Array<string>|null > {
+export async function readProject(projectDir: string): Promise<Array<string>> {
+    QSFiles = [];//清空。
     printInfo("开始解析项目路径。。。");
     const projectPath = path.resolve(projectDir);
-    let state = await fs.statSync(projectPath);
-    if (state.isDirectory()) {
-        await readFiles(projectPath);
-        printInfo("项目路径解析完毕。。。");
-        return QSFiles;
-    } else {
-        printErr("非法的项目根目录路径！");
-        return null;
-    }
+    await readFiles(projectPath);
+    printInfo("项目路径解析完毕。。。");
+    return QSFiles;
+
 }
 
 //遍历当前根目录下的文件

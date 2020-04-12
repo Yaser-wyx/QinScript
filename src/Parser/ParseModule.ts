@@ -69,7 +69,7 @@ export function BuildAST(action: ActionForm, goto: GotoForm): boolean {
         }
         switch (actionItem.action) {
             case ActionStatus.ACC:
-                printInfo("语法树生成成功完毕！");
+                printInfo("语法树生成完毕！");
                 flag = false;
                 break;
             case ActionStatus.ERROR:

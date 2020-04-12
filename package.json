@@ -1,6 +1,8 @@
 {
-  "name": "QinScript",
-  "version": "v0.0.1",
+  "name": "qin_script",
+  "version": "1.0.0",
+  "author": "yaser",
+  "license": "copyright",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "dev": "npm run build && node ./out/QS.js",
