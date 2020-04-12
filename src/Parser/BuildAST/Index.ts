@@ -190,6 +190,7 @@ let ASTBuildMap = {
 export function getParsedModule(): QSModule {
     //获取解析后的模块
     return qsModule;
+
 }
 
 export function transferVTToASTNode(vtWrap: V_T_Wrap) {
