@@ -4,22 +4,21 @@
  */
 
 import {printInterpreterError} from "../../Log";
-import {Variable, VARIABLE_TYPE, VarTypePair} from "./Variable";
+import {Variable, VARIABLE_TYPE, VariableMeta} from "./Variable";
 
 export class Reference {
     referencedVar: Variable;//被引用的变量
-    referenceList: any;//只有在被引用变量是数组或复合体的时候，该项才有用，但不代表一定存在，反之如果存在，则一定是数组或复合体
+    referenceList: Array<any> = [];//只有在被引用变量是数组或复合体的时候，该项才有用，但不代表一定存在，反之如果存在，则一定是数组或复合体
     referencedType: VARIABLE_TYPE;//被引用对象的数据类型
 
-    constructor(referencedVar: Variable, referencedType: VARIABLE_TYPE, referenceIndex?: number | string) {
+    constructor(referencedVar: Variable, referencedType: VARIABLE_TYPE) {
         this.referencedVar = referencedVar;
-        this.referenceList = referenceIndex;
         this.referencedType = referencedType;
     }
 
-    setReferenceValue(varTypePair: VarTypePair) {
+    setReferenceValue(varTypePair: VariableMeta) {
         //对所引用的变量值进行设置
-        if (this.referenceList) {
+        if (this.referenceList.length>0) {
             //如果存在index
             if (this.referencedType === VARIABLE_TYPE.ARRAY) {
                 //如果是array，此时referenceIndex是一个数组形式
@@ -33,7 +32,8 @@ export class Reference {
                 }
                 nowArray[this.referenceList[index]] = varTypePair.value;//对一维数组设置值
             } else {
-                //TODO 复合体
+                //复合体变量
+                this.referencedVar.getValue().setData(this.referenceList, varTypePair);
             }
         } else {
             //表示对当前变量重新赋值
@@ -44,21 +44,21 @@ export class Reference {
     getReferenceValue(): any {
         //获取被引用的变量值
         let nowValue = this.referencedVar.getValue();
-        if (this.referenceList) {
+        if (this.referenceList.length > 0) {
             //如果存在index
             if (this.referencedType === VARIABLE_TYPE.ARRAY) {
                 //如果是array，此时referenceIndex是一个数组形式
                 for (let i = 0; i < this.referenceList.length; i++) {
                     nowValue = nowValue[this.referenceList[i]];//使用循环来读取多维数组中的数据，不断替换指向的数组，从最外层逐层向内读取
-                    if (!nowValue) {
+                    if (nowValue===undefined) {
                         printInterpreterError("数组越界！");
                     }
                 }
-            } else if (this.referencedType === VARIABLE_TYPE.STRING&&this.referenceList.length===1) {
+            } else if (this.referencedType === VARIABLE_TYPE.STRING && this.referenceList.length === 1) {
                 //字符串允许有一个下标
                 nowValue = nowValue[this.referenceList[0]]
             } else if (this.referencedType === VARIABLE_TYPE.COMPLEXUS) {
-                //TODO 复合体
+                nowValue = nowValue.getRawData(this.referenceList);
             } else {
                 //不能有数组下标
                 return null;

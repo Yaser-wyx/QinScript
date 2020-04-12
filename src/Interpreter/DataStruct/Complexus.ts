@@ -3,27 +3,89 @@
  * Description: 复合体数据结构
  */
 
-import {Variable, VARIABLE_TYPE} from "./Variable";
-import {FunDeclaration} from "../../Parser/DataStruct/ASTNode";
-import {Stack} from "../../Parser/DataStruct/Stack";
-import {createUniqueId, hashCode} from "../../Utils/utils";
+
+import {printInterpreterError, printWarn} from "../../Log";
+import {Variable, VARIABLE_TYPE, VariableMeta} from "./Variable";
+import {InnerFunDefStmt} from "../../Parser/DataStruct/ASTNode";
+import _ = require("lodash");
 
 export class Complexus {
 
     private readonly _moduleName: string;
     private readonly _staticFunName: string;
-    private complexusValueTree: ComplexusValueTree;
-    private cacheTable: ComplexusCacheTable;
-
+    private _data: object = {};//先使用JS原生的Object来代替
     constructor(moduleName: string, staticFunName: string) {
         this._moduleName = moduleName;
         this._staticFunName = staticFunName;
-        this.cacheTable = new ComplexusCacheTable();
-        this.complexusValueTree = new ComplexusValueTree(staticFunName);
     }
 
+    get data(): object {
+        return this._data;
+    }
+
+    getInnerFunAndBotherData(funReferenceList: Array<string>): { brotherComplexus, innerFun } {
+        //用于获取指定的内部函数，以及与该内部函数同级的所有静态变量与内部函数
+        let dataReferenceList = _.clone(funReferenceList);
+        dataReferenceList.pop();
+        let innerFun = this.getRawData(funReferenceList);
+        let newComplexus;
+        if (innerFun instanceof InnerFunDefStmt) {
+            newComplexus = new Complexus(this._moduleName, innerFun.staticFunName);//包装一个新的复合体给内部函数
+            newComplexus._data = this.getRawData(dataReferenceList)//获取值，此处传递的是引用
+        } else {
+            printInterpreterError("无法找到指定内部函数" + funReferenceList.pop());
+        }
+        return {
+            brotherComplexus: newComplexus,
+            innerFun: innerFun
+        }
+    }
+
+    getComplexusData(referenceList: Array<string>): Complexus {
+        let newComplexus = new Complexus(this._moduleName, this._staticFunName);
+        newComplexus._data = this.getRawData(referenceList);
+        return newComplexus;
+    }
+
+    getRawData(referenceList: Array<string>) {
+        let index = 0;
+        let nowValue = this._data;
+        for (; index < referenceList.length; index++) {
+            nowValue = nowValue[referenceList[index]];
+            if (nowValue === undefined) {
+                //当前值不存在
+                printInterpreterError("指定属性" + referenceList[index] + "不存在！");
+            }
+        }
+        return nowValue;
+    }
+
+    setData(referenceList: Array<string>, varTypePair: VariableMeta) {
+        let index = 0;
+        let nowValue = this._data;
+        for (; index < referenceList.length - 1; index++) {
+            nowValue = nowValue[referenceList[index]];
+            if (!nowValue) {
+                printInterpreterError("要设置的属性名不存在！");
+            }
+        }
+        nowValue[referenceList[index]] = varTypePair.value;//对一维数组设置值
+    }
+
+    setStaticVar(variable: Variable) {
+        if (variable.variableType === VARIABLE_TYPE.COMPLEXUS) {
+            this._data[variable.variableName] = variable.getValue().data;
+        } else {
+            this._data[variable.variableName] = variable.getValue();
+        }
+    }
+
+    setInnerFun(innerFunDefStmt: InnerFunDefStmt) {
+        this._data[innerFunDefStmt.getFunName()] = innerFunDefStmt;
+    }
 }
 
+/*
 //复合体缓存表
 export class ComplexusCacheTable {
     //使用二级缓存
@@ -138,4 +200,4 @@ class ComplexusValueNode {
     get idName(): string {
         return this._idName;
     }
-}
+}*/

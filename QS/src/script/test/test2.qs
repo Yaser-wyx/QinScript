@@ -8,10 +8,8 @@ fun test(str){
 
     return str;
 }
-let temp = 12;
 
 fun reverseStr(str){
-    print(temp);
     let temp = "";
     let index = len(str)-1;
     while(index>=0){

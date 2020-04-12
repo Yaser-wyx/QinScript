@@ -2,6 +2,7 @@
 import {BlockStmt, Exp, VariableDef} from "../../Parser/DataStruct/ASTNode";
 import {printInterpreterError} from "../../Log";
 import {Reference} from "./Reference";
+import {Complexus} from "./Complexus";
 
 export enum VARIABLE_TYPE {
     STRING,
@@ -16,11 +17,11 @@ export enum VARIABLE_TYPE {
 //ID可能是单独的一个标识符，也可能是其它模块的标识符，也可能是复合体
 export class IDWrap {
     private readonly _idName: string;//ID名
-    private readonly _moduleName?: string;//ID所处模块名，如果为空，则表示是当前模块的ID，不为空的表示该变量引用的是其它模块的ID
+    private readonly _moduleName: string;//ID所处模块名
     private readonly _hasAt: boolean;//是否有AT前缀，如果有则表示可能访问当前静态函数的静态变量，或调用当前静态函数的其它内部函数
     private _referenceList: Array<string> = [];//id引用链
 
-    constructor(idName: string, hasAt: boolean=false, moduleName?: string) {
+    constructor(idName: string, moduleName: string, hasAt: boolean=false) {
         this._idName = idName;
         this._moduleName = moduleName;
         this._hasAt = hasAt;
@@ -30,11 +31,9 @@ export class IDWrap {
         return this._idName;
     }
 
-    getModuleName(): string | null {
-        if (this._moduleName) {
-            return this._moduleName;
-        }
-        return null;
+
+    get moduleName(): string {
+        return this._moduleName;
     }
 
     get hasAt(): boolean {
@@ -86,8 +85,9 @@ export function getValueType(value): VARIABLE_TYPE {
 
 
 
-export class VarTypePair {
-    value: any;
+export class VariableMeta {
+    //用于描述变量的数据
+    private _value: any;
     type: VARIABLE_TYPE;
     varName?: string;
     reference: Reference | null = null;
@@ -97,16 +97,24 @@ export class VarTypePair {
         this.varName = varName;
         if (type === VARIABLE_TYPE.REFERENCE) {
             this.reference = valueOrReference;
-            this.value = (<Reference>valueOrReference).getReferenceValue();
+            this._value = (<Reference>valueOrReference).getReferenceValue();
         } else {
-            this.value = valueOrReference;
+            this._value = valueOrReference;
         }
+    }
+
+    get value(): any {
+        return this._value;
+    }
+
+    set value(value: any) {
+        this._value = value;
     }
 
     resetValue() {
         //重置值，因为在加入了对引用变量的索引后，当前的值已经过期了，需要重新检索值
         if (this.reference) {
-            this.value = this.reference.getReferenceValue();
+            this._value = this.reference.getReferenceValue();
         }
     }
 
@@ -146,12 +154,11 @@ export class Variable {
         }
     }
 
-    initLocalVar(varTypePair: VarTypePair, block: BlockStmt, isStatic: boolean = false) {
+    initLocalVar(varTypePair: VariableMeta, block: BlockStmt, isStatic: boolean = false) {
         this.setValue(varTypePair);
         this._blockDepth = block.blockDepth;
         this._blockID = block.blockID;
         this.isStatic = isStatic;
-        this._hasDeclared = true;//已定义
         if (varTypePair.varName) {
             this._variableName = varTypePair.varName;
         }
@@ -174,9 +181,13 @@ export class Variable {
         return this._variableType;
     }
 
-    setValue(varTypePair: VarTypePair, forceSet: boolean = false) {
+    setValue(varTypePair: VariableMeta, forceSet: boolean = false) {
         //forceSet表示是否将varTypePair中的值强制赋值给当前variable
         this._variableType = varTypePair.type;
+        this._hasDeclared = true;//已定义
+        if (varTypePair.varName){
+            this._variableName = varTypePair.varName;
+        }
         if (varTypePair.type === VARIABLE_TYPE.REFERENCE && !forceSet) {
             //如果是引用型数据，判断被引用的数据是不是基本型的，如果是基本型的就不进行引用
             if (varTypePair.reference) {
@@ -190,7 +201,12 @@ export class Variable {
                 this._variableValue = value;
             }
         } else {
-            this._variableValue = varTypePair.value;
+            if (this._variableValue instanceof Complexus){
+                //@ts-ignore
+                this._variableValue.setData(varTypePair.reference.referenceList,varTypePair)
+            }else{
+                this._variableValue = varTypePair.value;
+            }
         }
     }
 

@@ -9,4 +9,3 @@ export const T_FILE = "QS/out/T.txt";
 export const ACTION_TABLE_FILE = "QS/out/Action.table.txt";
 export const GOTO_TABLE_FILE = "QS/out/Goto.table.txt";
 export const SUFFIX = ".qs";
-//todo 后期做成JSON配置文件

@@ -238,7 +238,7 @@ QS中支持单行注释与多行注释，具体的注释方式与C或JS完全一
 
 QS使用模块化设计，一共有四个模块，词法分析器、语法分析器、解释器以及虚拟机。
 
-**注：此处只是简单介绍一下，后续会有相关系列文章对源码进行解读。**
+**注：此处只是简单介绍一下，正在准备相关[系列文章](https://zhuanlan.zhihu.com/p/126741399)对源码进行解读。**
 
 ### 开发环境介绍
 
@@ -270,13 +270,13 @@ C由于太过基础，实现起来需要写的代码就比较多；Java语法糖
 
 2. 根目录下的Src文件夹里面是对QS实现的具体代码文件。
 
-   - cli是命令行工具，还需要完善。
+   - cli是命令行工具。
    - Interpreter是QS解释器。
    - Lexer是词法分析器。
    - Log为日志输出，包含对错误以及警告等信息的日志输出。
    - Parser是语法分析程序，包含对语法文件的解析，语法树的生成等。
    - Project主要是对QS项目路径的解析读取。
-   - QSLib是QS的原生库函数。
+   - QSLib是QS的原生库函数（TS版比较简单，不准备再添加了，后期准备C++版）。
    - Test是对一些模块进行单独的测试。
    - Utils是一些工具类
    - main是整体项目的入口。
@@ -311,41 +311,74 @@ C由于太过基础，实现起来需要写的代码就比较多；Java语法糖
 
 
 ## 开发计划
-整体开发准备分为4+1个阶段。
+整体开发准备分为五个阶段。
 
 ### 当前开发状态：
->**第一阶段已完成，正在实现第二阶段的静态函数。**
+>前两阶段开发完成，由于精力有限，可能会有一些未知的bug，还请在issues中提出。
 
 
 - 当前阶段运行样例
 ```js
 @module:Main;
 import:Test;
-
-let res = reverseStr("这是Main模块的res");
+static fun Stack(len) {
+    static let x = array(len,0);
+    static let index = 0;
+    @fun push(el){
+        @x[@index++] = el;
+    }
+    @fun pop(){
+        return @x[@index--];
+    }
+    @fun getX(){
+        //只返回有值的部分
+        let res = array(@index);
+        let index = 0;
+        while(index < @index){
+            res[index] = @x[index++];
+        }
+        return res;
+    }
+    @fun getSize(){
+        return @index;
+    }
+}
 
 fun main(){
-  print(res);
-  print(Test::reverseStr(res));
-}
-fun reverseStr(str){
-    let temp = "";
-    let index = len(str)-1;
-    while(index>=0){
-        temp = temp + str[index--];
+    //测试静态函数、多维数组
+    let stack = Stack(100);
+    let x= array(100,0);
+    x[0]=[1,2,3];
+    x[1]=11;
+    print(x[0][2],x[1]);
+    stack.push("WYX");
+    stack.push("LOVE");
+    stack.push("QSN");
+    let len = 10;
+    let index = 0;
+    while(index++<len){
+        let value = randomInteger(0,100);
+        print("随机数：",index,value);
+        stack.push(value);
     }
-    return temp;
+    print(stack.getX());
+    //测试多模块
+    let str = "abc";
+    str = Test::reverseStr(str);
+    print(str);
 }
+
 ```
 
 ```js
 @module:Test;
 export:res;
+export:test;
 export:reverseStr;
 let res=test("这是Test模块的res");
 
 fun test(str){
-    print(str);
+
     return str;
 }
 
@@ -360,7 +393,7 @@ fun reverseStr(str){
 ```
 - 输出结果：
 
-![image-20200408104428888](picture/image-20200408104428888.png)
+![image-20200412215415982](picture/image-20200412215415982.png)
 
 ### 第一阶段
 
@@ -379,7 +412,7 @@ fun reverseStr(str){
 
 #### 进度
 
-- [x] [文法设计（初稿）](QS/src/grammar/grammar.temp.txt)
+- [x] [文法设计](QS/src/grammar/grammar.txt)
 - [x] 词法分析
 - [x] LR1分析表构建
 - [x] AST部分构建
@@ -388,26 +421,29 @@ fun reverseStr(str){
 
 ### 第二阶段
 
-- 计划实现AST的全部构建，解释器的全部构建，实现全部语言功能，包含一个QS标准库，发布正式版V1
+- 计划实现AST的全部构建，解释器的全部构建，实现TS版的全部语言功能，发布V1.0.0
 
 #### 功能进度
 
 - [x] IF语句
 - [x] 多维数组
 - [x] 多模块加载
-- [ ] 静态函数
-- [ ] QS标准库**（不准备写TS版）**
-- [ ] 命令行工具
+- [x] 静态函数
+- [x] 命令行工具
 
-### 第二点五阶段（TODO）
-
-- 之前是没有这个阶段的，但后来发现TS虽然效率不错，但性能着实捉急，而且根本没法做优化（这也是脚本语言的通病，毕竟效率与性能不可兼得），准备等前两阶段完成后，再用C++全部重构一遍，并做优化处理。
+**PS：对于数组与静态函数的实现上，由于没法用指针，用了些取巧的办法，所以并不稳定，二者一起用的时候极有可能出现bug。**
 
 ### 第三阶段（TODO）
 
-- 设计并实现一部分虚拟机（先支持一些简单的语言元素，保证可以运行起来），包括设计一套字节码，编写字节码执行器、GC、以及JIT。
+- 计划实现C++版，但不实现解释器，解释部分由虚拟机来承担，添加字节码生成器。
+
+PS：之前是没有这个阶段的，但后来发现TS虽然效率不错，但性能着实捉急，然后在写复合体这个功能的时候加剧了我这一想法，本来准备参考V8对object的实现的，然而发现，V8里面object的实现各种指针，完全没法参考，现在的实现相当于给js原生的object套了几层壳。。准备等前两阶段完成后，再用C++全部重构一遍，并做优化处理。
 
 ### 第四阶段（TODO）
+
+- 设计并实现一部分虚拟机（先支持一些简单的语言元素，保证可以运行起来），包括设计一套字节码，编写字节码执行器、GC、以及JIT。
+
+### 第五阶段（TODO）
 
 - 实现完整的虚拟机
 

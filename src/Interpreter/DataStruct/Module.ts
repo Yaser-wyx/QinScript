@@ -4,8 +4,6 @@
  */
 
 import {ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
-import {IDWrap} from "./Variable";
-import {printInterpreterError} from "../../Log";
 import {createFunByFunDefStmt, GeneralFun, StaticFun} from "./Fun";
 
 export class QSModule {
@@ -39,7 +37,7 @@ export class QSModule {
     createModuleFunByFunName(funName): StaticFun | GeneralFun | null {
         let moduleFunDefStmt: ModuleFunDefStmt = this._moduleFun[funName];
         if (moduleFunDefStmt) {
-            return createFunByFunDefStmt(moduleFunDefStmt);
+            return <GeneralFun | StaticFun>createFunByFunDefStmt(moduleFunDefStmt);
         } else {
             return null;
         }

@@ -1,33 +1,16 @@
 import * as readline from "readline"
 import * as fs from "fs";
-import {printFatalError} from "../Log";
+import {printErr, printInfo, printWarn} from "../Log";
 import {parseSingleModule} from "../Parser/ParseModule";
-import {GRAMMAR_FILE} from "./config";
-
-
-export async function readFileList(dir: string): Promise<string[]> {
-    //读取文件列表
-    let dirList = await fs.readdirSync(dir, "utf8");
-    let fileList: string[] = [];
-    for (let index = 0; index < dirList.length; index++) {
-        if (dirList[index].includes(".qs")) {
-            let path = dir + "\\" + dirList[index];
-            let stat = await fs.statSync(path);
-            if (stat.isDirectory()) {
-                let fileDirList = await readFileList(path);
-                fileDirList.forEach(value => {
-                    fileList.push(value);
-                })
-            } else {
-                fileList.push(path)
-            }
-        }
-    }
-    return fileList;
-}
+import {PROJECT_DIR} from "./config";
+import {readProject} from "../Project";
+import {getInterpreter} from "../Interpreter/DataStruct/Interpreter";
+import {getParsedModule} from "../Parser/BuildAST";
+import {runInterpreter} from "../Interpreter";
+import {grammarForms} from "../main";
 
 export function cli() {
-    let version = "QinScript Version 1.0"
+    let version = "QinScript Version  1.0"
     console.log(version);
     console.log("该项目仅供学习使用，请勿用于任何实际项目中，否则后果自负！");
     console.log("-------------------------------------------------");
@@ -41,65 +24,86 @@ export function cli() {
         let command = commands.split(" ");
         switch (command[0]) {
             case "-help":
-                console.log("-version\t版本号\nrun -dir dirPath\t执行项目\nrun -file filePath\t执行文件\nquit\t退出\n-help\t查看命令");
+                printInfo("-version\t版本号\nrun  (projectPath)\t执行指定路径的项目，路径可选，没有则自动执行默认参数\n-quit\t退出\n-help\t查看命令", false);
+                rl.prompt();
                 break;
             case "-version":
-                console.log(version);
+                printInfo(version, false);
+                rl.prompt();
                 break;
             case "run":
-                if (command[1] === '-dir' && command.length === 3) {
-                    fs.stat(command[2], (err, stat) => {
+                if (command.length === 1) {
+                    readProject(PROJECT_DIR).then(async fileList => {
+                        await runProject(fileList);
+                        rl.prompt();
+                    })
+                } else if (command.length === 2) {
+                    fs.stat(command[1], async (err, stat) => {
                         if (err) {
-                            console.log("非法的文件路径！");
+                            printErr("非法的文件路径！", false);
+                            rl.prompt();
                         } else {
                             if (stat.isDirectory()) {
-                                readFileList(command[2]).then(fileList => {
-                                    console.log(fileList);
-                                    run(fileList);
+                                readProject(command[1]).then(async fileList => {
+                                    await runProject(fileList);
+                                    rl.prompt();
                                 })
                             } else {
-                                console.log("请输入项目文件夹路径！");
-                            }
-                        }
-                    })
-                } else if (command[1] === '-file' && command.length === 3) {
-                    fs.stat(command[2], (err, stat) => {
-                        if (err) {
-                            console.log("非法的文件路径！");
-                        } else {
-                            if (stat.isFile()) {
-                                if (command[2].includes(".qs")) {
-                                    console.log(command[2]);
-                                    run([command[2]])
-                                } else {
-                                    console.log("要执行的文件必须以.qs结尾！");
-                                }
-                            } else {
-                                console.log("请输入正确的文件路径！");
+                                printWarn("非法的项目根目录路径！", false);
+                                rl.prompt();
                             }
                         }
                     })
                 } else {
-                    console.log(commands + "非法的命令！");
+                    printErr(commands + " 非法的命令！", false);
+                    rl.prompt();
                 }
                 break;
-            case "quit":
+            case "-quit":
                 rl.close();
                 break;
             default:
-                console.log(commands + " 该命令不存在！");
+                printErr(commands + " 非法的命令！", false);
+                rl.prompt();
         }
-        rl.prompt();
     }).on('close', () => {
-        console.log('再见!');
+        printInfo('再见!');
         process.exit(0);
     });
-
-
 }
 
-async function run(filePathList: Array<string>) {
-    for (const filePath of filePathList) {
-        // await parseModule(filePath);
+
+async function runProject(filePathList: Array<string>) {
+    //读取语法文件，并解析出分析表
+    if (grammarForms) {
+        //如果读取列表成功
+        //对每一个文件，也就是模块进行解析操作
+        printInfo(`当前项目路径下,共识别出${filePathList.length}个模块文件，开始逐个解析。。。`);
+        let interpreterInfo = getInterpreter();//获取解释器信息表
+        let flag = true;
+        for (let i = 0; i < filePathList.length; i++) {
+            printInfo(`--------开始解析第${i + 1}个模块文件--------`);
+            const filePath = filePathList[i];
+            printInfo(`模块路径：${filePath}`);
+            if (await parseSingleModule(filePath, grammarForms)) {//解析模块
+                printInfo(`--------第${i + 1}个模块文件语法分析成功！--------`);
+                let qsModule = getParsedModule();//获取模块
+                interpreterInfo.putModule(qsModule);//将解析后的模块加入到解释器信息表中
+            } else {
+                flag = false;
+                printErr(`--------第${i + 1}个模块文件语法树构建失败--------`);
+                break;
+            }
+        }
+        if (flag) {
+            printInfo("所有模块解析完毕！");
+            runInterpreter();//执行解释器
+        } else {
+            printErr("项目解析失败！");
+        }
+    } else {
+        printErr("语法文件解析失败！");
     }
+    printInfo("项目运行结束！")
 }
+

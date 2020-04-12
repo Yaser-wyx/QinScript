@@ -1,16 +1,16 @@
 import {QSModule} from "./Module";
-import {GeneralFun, InnerFun, StaticFun} from "./Fun";
+import {FUN_CLASSES, GeneralFun, InnerFun, StaticFun} from "./Fun";
 import {MAIN} from "../../Parser/DataStruct/TConstant";
 import {printInterpreterError} from "../../Log";
 import {BlockStmt, ModuleFunDefStmt} from "../../Parser/DataStruct/ASTNode";
 
-let interpreter: Interpreter;
+let interpreter: Interpreter|null;
 
 export class Interpreter {
     private _moduleMap: Map<string, QSModule> = new Map<string, QSModule>();//模块映射表
     protected _curModule: QSModule | null = null;//当前模块
     protected _enter: ModuleFunDefStmt | null = null;//入口方法
-    private _curFun: GeneralFun|StaticFun|InnerFun | null = null;//当前所处函数
+    private _curFun: FUN_CLASSES | null = null;//当前所处函数
     private _curBlock: BlockStmt | null = null;//当前所处scope的深度
 
     //添加模块
@@ -53,11 +53,11 @@ export class Interpreter {
         this._moduleMap = value;
     }
 
-    get curFun(): GeneralFun|StaticFun|InnerFun | null {
+    get curFun(): FUN_CLASSES | null {
         return this._curFun;
     }
 
-    set curFun(value: GeneralFun|StaticFun|InnerFun | null) {
+    set curFun(value: FUN_CLASSES | null) {
         this._curFun = value;
     }
 
@@ -78,4 +78,8 @@ export function getInterpreter(): Interpreter {
     }
 
     return interpreter;
+}
+
+export function cleanInterpreter() {
+    interpreter = null;
 }

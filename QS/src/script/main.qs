@@ -1,29 +1,49 @@
 @module:Main;
 import:Test;
-let x = test("123ads12");
-fun main(){
-    print(x,len(x));
-    x = Test::reverseStr(x);
-    print(x);
-}
-
-fun test(str){
-    print(str);
-    return str;
-}
-/*
-static fun test(str){
-    print("测试静态函数");
-
-    if(str>0){
-      static let x = test(str-1);//静态变量的递归构造
-      @fun test1(t1){
-        print("测试内部函数1");
-      }
-    }else{
-       @fun test2(t2){
-         print("测试内部函数2");
-       }
+static fun Stack(len) {
+    static let x = array(len,0);
+    static let index = 0;
+    @fun push(el){
+        @x[@index++] = el;
+    }
+    @fun pop(){
+        return @x[@index--];
+    }
+    @fun getX(){
+        //只返回有值的部分
+        let res = array(@index);
+        let index = 0;
+        while(index < @index){
+            res[index] = @x[index++];
+        }
+        return res;
+    }
+    @fun getSize(){
+        return @index;
     }
 }
-*/
+
+fun main(){
+    //测试静态函数、多维数组
+    let stack = Stack(100);
+    let x= array(100,0);
+    x[0]=[1,2,3];
+    x[1]=11;
+    print(x[0][2],x[1]);
+    stack.push("WYX");
+    stack.push("LOVE");
+    stack.push("QSN");
+    let len = 5;
+    let index = 0;
+    while(index++<len){
+        let value = randomInteger(0,100);
+        print("随机数：",index,value);
+        stack.push(value);
+    }
+    print(stack.getX());
+    //测试多模块
+    let str = "abc";
+    str = Test::reverseStr(str);
+    print(str);
+}
+

@@ -1,5 +1,1 @@
-let x = 12;
-{
-    let z = 12;
-}
-console.log(x);
+console.log(typeof 0)

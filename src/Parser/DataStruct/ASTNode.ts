@@ -77,6 +77,9 @@ export class InnerFunDefStmt implements ASTNode {
     private readonly _staticFunName: string;//所属的静态函数名
 
     constructor(funDeclaration: FunDeclaration, moduleName: string, staticFunName: string) {
+        if (funDeclaration.body){
+            funDeclaration.body.clearFather();//内部函数不需要外层
+        }
         this._funDeclaration = funDeclaration;
         this._moduleName = moduleName;
         this._staticFunName = staticFunName;
@@ -288,7 +291,7 @@ export class BlockStmt implements ASTNode {
     private _body: Array<Statement> = [];//block的内容
     private readonly _blockID: string;//当前block的id
     private readonly _blockDepth: number;//当前block的深度
-    private readonly _fatherBlock: BlockStmt | null;//父block
+    private _fatherBlock: BlockStmt | null;//父block
     lineNo: number = 0;//行号
 
     constructor(blockID: string, blockDepth: number, fatherBlock: BlockStmt | null) {
@@ -316,6 +319,9 @@ export class BlockStmt implements ASTNode {
 
     get blockDepth(): number {
         return this._blockDepth;
+    }
+    clearFather(){
+        this._fatherBlock = null;
     }
 }
 
@@ -370,24 +376,7 @@ export class CallExp implements ASTNode {
     }
 }
 
-/*export class ArrayMemberExp implements ASTNode {
-    readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_MEMBER;
-    private readonly _variableExp: VariableExp;
-    private readonly _arraySub: ArraySub;
 
-    constructor(variableExp: VariableExp, arraySub: ArraySub) {
-        this._variableExp = variableExp;
-        this._arraySub = arraySub;
-    }
-
-    get variableExp(): VariableExp {
-        return this._variableExp;
-    }
-
-    get arraySub(): ArraySub {
-        return this._arraySub;
-    }
-}*/
 
 export class ArraySub implements ASTNode {
     readonly nodeType: NODE_TYPE = NODE_TYPE.ARRAY_SUB;

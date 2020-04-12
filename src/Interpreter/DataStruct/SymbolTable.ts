@@ -1,7 +1,7 @@
 import {Variable} from "./Variable";
 import {hashCode} from "../../Utils/utils";
 import {BlockStmt} from "../../Parser/DataStruct/ASTNode";
-import {printFatalError, printInterpreterError} from "../../Log";
+import {Log, printFatalError, printInterpreterError} from "../../Log";
 
 //符号表抽象类
 abstract class SymbolTable {
@@ -83,18 +83,27 @@ export class FunSymbolTable extends SymbolTable {
         }
         return null;
     }
+
+    clearBlockVariable(block: BlockStmt) {
+        let blockDepth: number = block.blockDepth;//获取深度
+        let blockID: string = block.blockID;//获取blockID
+        if (this.variablesValue[blockDepth]) {
+            //如果该层block存在变量，那么进行清除操作
+            const varNames = Object.keys(this.variablesValue[blockDepth][blockID]);//获取所有要清除的变量名
+            for (let i = 0; i < varNames.length; i++) {
+                const varName = varNames[i];
+                let variableHash = wrapFunVariableToSymbolKey(blockDepth, blockID, varName);
+                this.symbolsSet.delete(variableHash);//从set中删除
+            }
+
+            delete this.variablesValue[blockDepth][blockID];
+
+        }
+    }
 }
 
 //全局符号表，用于存放模块函数与模块变量
 export class GlobalSymbolTable extends SymbolTable {
-
-
-    //是否存在函数，似乎用处不大，如果没有用到，准备考虑删除
-    hasFun(moduleName, funName): boolean {
-        let funHash = wrapModuleSymbolToSymbolKey(moduleName, funName);
-        return this.symbolsSet.has(funHash);
-    }
-
 
     pushSymbol(varOrModuleName: Variable | string, funName?: string) {
         if (varOrModuleName instanceof Variable) {
@@ -137,7 +146,7 @@ export class GlobalSymbolTable extends SymbolTable {
     }
 }
 
-let globalSymbolTable: GlobalSymbolTable;//全局符号表
+let globalSymbolTable: GlobalSymbolTable | null;//全局符号表
 
 const SPLIT = ";";
 
@@ -168,4 +177,8 @@ export function getGlobalSymbolTable(): GlobalSymbolTable {
         globalSymbolTable = new GlobalSymbolTable();
     }
     return globalSymbolTable;
+}
+
+export function cleanGlobalSymbolTable() {
+    globalSymbolTable = null;
 }
